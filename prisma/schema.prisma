@@ -6,3 +6,68 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id        String      @id @default(cuid())
+  name      String
+  email     String      @unique
+  Interview Interview[]
+}
+
+model Interview {
+  id String @id @default(cuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  jobRole        String
+  jobDescription String
+  jobExperience  Int //Years of experience or "rank" such as ssr or senior?
+  taken          Boolean
+  createdAt      DateTime @default(now())
+
+  Question         Question[]
+  InterviewAttempt InterviewAttempt[]
+
+  @@index([userId])
+}
+
+model Question {
+  id       String @id @default(cuid())
+  question String
+  tip      String
+
+  interviewId String
+  interview   Interview @relation(fields: [interviewId], references: [id])
+
+  Answer Answer[]
+
+  @@index([interviewId])
+}
+
+model InterviewAttempt {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  interviewId String
+  interview   Interview @relation(fields: [interviewId], references: [id])
+
+  Answer Answer[]
+
+  @@index([interviewId])
+}
+
+model Answer {
+  id           String @id @default(cuid())
+  userResponse String
+  feedback     String
+  score        Int
+
+  questionId         String
+  question           Question         @relation(fields: [questionId], references: [id])
+  interviewAttemptId String
+  interviewAttempt   InterviewAttempt @relation(fields: [interviewAttemptId], references: [id])
+
+  @@index([questionId])
+  @@index([interviewAttemptId])
+}
