@@ -5,5 +5,5 @@ export default function middleware(req: NextRequest) {
   return withAuth(req);
 }
 export const config = {
-  matcher: ['/dashboard/:path', '/interview/:path'],
+  matcher: ['/dashboard', '/interview/:path', '/code-interview/:path'],
 };
