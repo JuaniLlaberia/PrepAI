@@ -1,113 +1,81 @@
-import Image from "next/image";
+import { HiSparkles } from 'react-icons/hi2';
 
-export default function Home() {
+import CallToAction from '@/components/CallToAction';
+import Navbar from '@/components/Navbar';
+import TextRevealByWord from '@/components/ui/text-reveal';
+import AnimatedShinyText from '@/components/ui/text-shiny';
+import { cn } from '@/lib/utils';
+
+const Home = () => {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <>
+      <Navbar />
+      <header
+        className="bg-red-100flex flex-col items-center justify-center px-6 pt-28 mb-6 lg:pt-52 lg:mb-20 w-full bg-[url('/grid.svg')] dark:bg-[url('/grid-dark.svg')]"
+        id='hero'
+      >
+        <div className='mb-7'>
+          <div className='z-10 flex items-center justify-center mb-2'>
+            <div
+              className={cn(
+                'group rounded-full border border-black/5 bg-neutral-100 text-xs text-white transition-all ease-in hover:cursor-pointer hover:bg-neutral-200 dark:border-white/5 dark:bg-neutral-900 dark:hover:bg-neutral-800'
+              )}
+            >
+              <AnimatedShinyText className='inline-flex items-center justify-center px-4 py-1 transition ease-out hover:text-neutral-600 hover:duration-300 hover:dark:text-neutral-400'>
+                <HiSparkles className='size-3 mr-1.5 fill-yellow-400' />
+                <span>Powered by Google Gemini</span>
+              </AnimatedShinyText>
+            </div>
+          </div>
+          <h1 className='flex items-center gap-1 text-4xl font-medium'>
+            Master your Interview Skills
+          </h1>
+          <h2 className='text-4xl font-medium'>with AI-Driven Practice</h2>
         </div>
-      </div>
-
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+        <p className='text-start text-xl text-muted-foreground/90 dark:text-muted-foreground/80 max-w-[600px]'>
+          Dive into AI fully customizable interviews based on your needs with AI
+          generated challenges.
+        </p>
+        <div className='py-12'>{/* BUTTONS/IMAGE */}</div>
+        <div className='h-24'></div>
+      </header>
+      <section className='px-4'>
+        <h2 className='text-sm text-center uppercase font-medium text-muted-foreground mb-2'>
+          Our Features
+        </h2>
+        <p className='text-center text-2xl font-medium'>
+          Wondering if there is a more efficient way to practice for your
+          interviews?
+        </p>
+        <ul className='grid gap-3 grid-cols-1 lg:grid-cols-4 my-8'>
+          <li className='relative overflow-hidden w-full h-72 bg-background-2 border border-border rounded-xl lg:col-span-2'>
+            <h4 className='absolute text-9xl font-medium -bottom-10 left-8'>
+              01
+            </h4>
+          </li>
+          <li className='relative overflow-hidden w-full h-72 bg-background-2 border border-border rounded-xl lg:col-span-2'>
+            <h4 className='absolute text-9xl font-medium -bottom-10 left-8'>
+              02
+            </h4>
+          </li>
+          <li className='relative overflow-hidden w-full h-72 bg-background-2 border border-border rounded-xl lg:col-span-2'>
+            <h4 className='absolute text-9xl font-medium -bottom-10 left-8'>
+              03
+            </h4>
+          </li>
+        </ul>
+      </section>
+      <section className='z-10 flex min-h-[16rem] items-center justify-center bg-background'>
+        <TextRevealByWord text='MockAI will change the way you prepare for interviews.' />
+      </section>
+      <CallToAction />
+      <footer className='px-4 pb-4'>
+        <p className='text-xs text-center text-muted-foreground'>
+          MockAI &copy; {new Date().getFullYear()} All rights reserved
+        </p>
+      </footer>
+    </>
   );
-}
+};
+
+export default Home;
