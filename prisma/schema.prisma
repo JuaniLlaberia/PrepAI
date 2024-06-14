@@ -7,6 +7,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Experience {
+  intership
+  junior
+  ssr
+  senior
+  lead
+  executive
+}
+
 model User {
   id        String      @id @default(cuid())
   name      String
@@ -22,9 +31,9 @@ model Interview {
 
   jobRole        String
   jobDescription String
-  jobExperience  Int //Years of experience or "rank" such as ssr or senior?
+  jobExperience  Experience
   taken          Boolean
-  createdAt      DateTime @default(now())
+  createdAt      DateTime   @default(now())
 
   Question         Question[]
   InterviewAttempt InterviewAttempt[]
@@ -35,7 +44,7 @@ model Interview {
 model Question {
   id       String @id @default(cuid())
   question String
-  tip      String
+  hint     String
 
   interviewId String
   interview   Interview @relation(fields: [interviewId], references: [id])
