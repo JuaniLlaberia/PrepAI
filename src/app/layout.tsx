@@ -5,6 +5,7 @@ import type { Metadata } from 'next';
 
 import './globals.css';
 import ReactQueryProvider from '@/components/ReactQueryProvider';
+import { Toaster } from '@/components/ui/sonner';
 
 const roboto = Roboto({
   subsets: ['latin'],
@@ -28,6 +29,7 @@ export default function RootLayout({
     <html lang='en'>
       <body className={roboto.className}>
         <NextTopLoader />
+        <Toaster richColors />
         <ThemeProvider
           attribute='class'
           defaultTheme='system'
