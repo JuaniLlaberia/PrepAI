@@ -1,9 +1,10 @@
 import Link from 'next/link';
+import { HiChevronRight } from 'react-icons/hi2';
+
 import Marquee from './ui/marquee';
 import ReviewCard from './ui/review-card';
 import { cn } from '@/lib/utils';
 import { buttonVariants } from './ui/button';
-import { HiChevronRight } from 'react-icons/hi2';
 
 const reviews = [
   {
@@ -21,25 +22,25 @@ const reviews = [
   {
     name: 'John',
     username: '@john',
-    body: "I'm at a loss for words. This is amazing. I love it.",
+    body: "It's an amazing product and super helpfull.",
     img: 'https://avatar.vercel.sh/john',
   },
   {
     name: 'Jane',
     username: '@jane',
-    body: "I'm at a loss for words. This is amazing. I love it.",
+    body: 'I would use it again 100%. I love it.',
     img: 'https://avatar.vercel.sh/jane',
   },
   {
     name: 'Jenny',
     username: '@jenny',
-    body: "I'm at a loss for words. This is amazing. I love it.",
+    body: "It's amazing. I really recommend it.",
     img: 'https://avatar.vercel.sh/jenny',
   },
   {
     name: 'James',
     username: '@james',
-    body: "I'm at a loss for words. This is amazing. I love it.",
+    body: 'It helped me pass my interview and land a new job.',
     img: 'https://avatar.vercel.sh/james',
   },
 ];
@@ -49,9 +50,20 @@ const CallToAction = () => {
   const secondRow = reviews.slice(reviews.length / 2);
 
   return (
-    <section className='px-4 py-8'>
-      <div className='relative overflow-hidden flex flex-col justify-center items-center border border-border rounded-3xl p-8 py-4'>
-        <div className='rotate-[30deg]'>
+    <section className='px-4 md:px-24 lg:px-40 xl:px-80 py-8'>
+      <div className='relative overflow-hidden flex flex-col justify-center items-center border border-border rounded-3xl'>
+        <div className='rotate-[10deg]'>
+          <Marquee
+            pauseOnHover
+            className='[--duration:20s]'
+          >
+            {firstRow.map(review => (
+              <ReviewCard
+                key={review.username}
+                {...review}
+              />
+            ))}
+          </Marquee>
           <Marquee
             pauseOnHover
             className='[--duration:20s]'
@@ -77,7 +89,7 @@ const CallToAction = () => {
           </Marquee>
           <Marquee
             pauseOnHover
-            className='[--duration:20s]'
+            className='[--duration:20s] hidden md:flex'
           >
             {firstRow.map(review => (
               <ReviewCard
