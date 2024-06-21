@@ -37,6 +37,7 @@ model Interview {
 
   Question         Question[]
   InterviewAttempt InterviewAttempt[]
+  Answer           Answer[]
 
   @@index([userId])
 }
@@ -76,6 +77,8 @@ model Answer {
   question           Question         @relation(fields: [questionId], references: [id])
   interviewAttemptId String
   interviewAttempt   InterviewAttempt @relation(fields: [interviewAttemptId], references: [id])
+  interviewId        String
+  interview          Interview        @relation(fields: [interviewId], references: [id])
 
   @@index([questionId])
   @@index([interviewAttemptId])
