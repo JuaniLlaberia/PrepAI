@@ -1,20 +1,52 @@
 'use server';
 
-import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 import { Interview } from '@prisma/client';
+import { revalidatePath } from 'next/cache';
 
 import { db } from '@/db';
 import { model } from '@/gemini/index';
+import { authAction } from './auth';
+
+export const getUserInterviews = async ({
+  sort,
+  filter,
+}: {
+  sort: 'createdAt' | 'name';
+  filter: string;
+}) => {
+  const user = await authAction();
+
+  return await db.interview.findMany({
+    where: { userId: user.id },
+    select: {
+      jobRole: true,
+      taken: true,
+      createdAt: true,
+      id: true,
+      jobExperience: true,
+    },
+    orderBy: sort === 'createdAt' ? { createdAt: 'desc' } : { jobRole: 'desc' },
+  });
+};
+
+export const getInterviewById = async ({
+  interviewId,
+}: {
+  interviewId: string;
+}) => {
+  const user = await authAction();
+
+  return await db.interview.findUnique({
+    where: { id: interviewId, userId: user.id },
+  });
+};
 
 export const createInterview = async ({
   data,
 }: {
   data: Partial<Interview>;
 }) => {
-  const { getUser } = getKindeServerSession();
-  const user = await getUser();
-
-  if (!user) throw new Error('You need to log in');
+  const user = await authAction();
 
   const { jobRole, jobExperience, jobDescription } = data;
   if (!jobRole || !jobExperience || !jobDescription)
@@ -53,4 +85,31 @@ export const createInterview = async ({
   await db.question.createMany({ data: questionsWithId });
 
   return id;
+};
+
+//Remove the interview and all data related
+export const deleteInterview = async ({
+  interviewId,
+}: {
+  interviewId: string;
+}) => {
+  const user = await authAction();
+
+  const interview = await db.interview.findUnique({
+    where: { id: interviewId },
+    select: { userId: true, id: true },
+  });
+  if (!interview) throw new Error('Interview not found');
+
+  if (interview?.userId !== user.id)
+    throw new Error('This interview does not belong to you');
+
+  await db.$transaction([
+    // db.answer.deleteMany({ where: { interviewId: interview.id } }),
+    db.interviewAttempt.deleteMany({ where: { interviewId: interview.id } }),
+    db.question.deleteMany({ where: { interviewId: interview.id } }),
+    db.interview.delete({ where: { id: interview.id } }),
+  ]);
+
+  revalidatePath('/dashboard');
 };
