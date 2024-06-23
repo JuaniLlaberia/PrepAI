@@ -5,7 +5,7 @@ import { revalidatePath } from 'next/cache';
 
 import { db } from '@/db';
 import { model } from '@/gemini/index';
-import { authAction } from './auth';
+import { authAction, belongsToUser } from './auth';
 
 export const getUserInterviews = async ({
   sort,
@@ -94,22 +94,29 @@ export const deleteInterview = async ({
   interviewId: string;
 }) => {
   const user = await authAction();
-
-  const interview = await db.interview.findUnique({
-    where: { id: interviewId },
-    select: { userId: true, id: true },
-  });
-  if (!interview) throw new Error('Interview not found');
-
-  if (interview?.userId !== user.id)
-    throw new Error('This interview does not belong to you');
+  await belongsToUser(user.id, interviewId);
 
   await db.$transaction([
-    // db.answer.deleteMany({ where: { interviewId: interview.id } }),
-    db.interviewAttempt.deleteMany({ where: { interviewId: interview.id } }),
-    db.question.deleteMany({ where: { interviewId: interview.id } }),
-    db.interview.delete({ where: { id: interview.id } }),
+    db.interviewAttempt.deleteMany({ where: { interviewId } }),
+    db.question.deleteMany({ where: { interviewId } }),
+    db.interview.delete({ where: { id: interviewId } }),
+    db.answer.deleteMany({ where: { interviewId } }),
   ]);
 
   revalidatePath('/dashboard');
+};
+
+export const getInterviewQuestions = async ({
+  interviewId,
+}: {
+  interviewId: string;
+}) => {
+  const user = await authAction();
+  await belongsToUser(user.id, interviewId);
+
+  const questions = await db.question.findMany({
+    where: { interviewId },
+  });
+
+  return questions;
 };
