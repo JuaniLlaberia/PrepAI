@@ -8,7 +8,7 @@ const InputWrapper = ({
   error,
 }: {
   children: ReactNode;
-  label: string;
+  label?: string;
   inputId: string;
   error?: string;
 }) => {
