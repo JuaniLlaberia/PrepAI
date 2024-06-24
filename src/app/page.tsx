@@ -14,7 +14,7 @@ const Home = () => {
     <>
       <Navbar />
       <header
-        className='relative overflow-hidden flex flex-col items-center justify-center px-6 pt-28 mb-6 md:pt-48 md:mb-16 lg:pt-60 lg:mb-20 w-full'
+        className='relative overflow-hidden flex flex-col items-center justify-center px-6 pt-28 mb-6 md:pt-48 md:mb-16 lg:pt-52 lg:mb-20 w-full'
         id='hero'
       >
         <div className='mb-7 z-10'>
@@ -46,10 +46,7 @@ const Home = () => {
           </p>
         </div>
         <div className='flex justify-start w-full md:justify-center md:w-auto gap-2 py-12 z-10'>
-          <Link
-            href='/dashboard'
-            className={cn(buttonVariants({}), 'group')}
-          >
+          <Link href='/dashboard' className={cn(buttonVariants({}), 'group')}>
             Start practicing
             <HiMiniArrowLongRight className='size-4 ml-1.5 group-hover:translate-x-1 transition-transform' />
           </Link>
@@ -65,10 +62,7 @@ const Home = () => {
         <DotPattern className='pointer-events-none absolute inset-0 h-full w-full fill-neutral-400/70 [mask-image:linear-gradient(to_bottom_right,white,transparent)]' />
         <div className='w-full absolute bottom-0 bg-gradient-to-b from-transparent to-white dark:to-black h-10'></div>
       </header>
-      <section
-        className='px-4 md:px-16 lg:px-32 xl:px-56'
-        id='features'
-      >
+      <section className='px-4 md:px-16 lg:px-32 xl:px-56' id='features'>
         <h2 className='text-sm md:text-base lg:text-lg text-center uppercase font-medium text-muted-foreground mb-2'>
           Our Features
         </h2>
