@@ -17,11 +17,16 @@ const FeedbackPage = async ({
   searchParams,
 }: {
   params: { interviewId: string };
-  searchParams: { interviewAttemptId: string };
+  searchParams: { attemptId: string };
 }) => {
-  // const feedback = await getAttemptFeedback();
+  const feedback = await getAttemptFeedback({
+    interviewAttemptId: searchParams.attemptId,
+    interviewId: params.interviewId,
+  });
 
-  const hasPassed = true;
+  const totalScore =
+    feedback.reduce((prev, crr) => prev + crr.score, 0) / feedback.length;
+  const hasPassed = totalScore >= 6;
 
   return (
     <>
@@ -38,7 +43,7 @@ const FeedbackPage = async ({
           Go to dashboard
         </Link>
 
-        <h2>MockAI</h2>
+        <h2>MockAI </h2>
       </header>
       <div className='flex flex-col items-center mt-2'>
         <section className='tracking-tight pb-3 max-w-[700px]'>
@@ -60,44 +65,40 @@ const FeedbackPage = async ({
               <h2 className='text-sm lg:text-base xl:text-lg font-semibold'>
                 Your questions
               </h2>
-              <p className='text-sm text-muted-foreground'>7/10</p>
+              <p className='text-sm text-muted-foreground'>{totalScore}/10</p>
             </div>
-            <Progress value={70} className='h-3' />
+            <Progress value={totalScore * 10} className='h-3' />
           </div>
           <div className='mt-6'>
             <h2 className='mb-1 text-sm lg:text-base xl:text-lg font-semibold'>
               Your questions
             </h2>
             <ul className='flex flex-col gap-3'>
-              <li>
-                <Collapsible>
-                  <CollapsibleTrigger className='flex w-full items-center justify-between gap-3 shadow bg-background-2 rounded-lg p-2'>
-                    <p className='font-medium line-clamp-1'>
-                      Describe how would you implement server side rendering in
-                      React?
-                    </p>
-                    <HiOutlineChevronUpDown className='size-7' />
-                  </CollapsibleTrigger>
-                  <CollapsibleContent asChild>
-                    <div className='bg-background-2 shadow p-4 mt-1 lg:mt-2 rounded-lg'>
-                      <h3 className='mb-1 text-sm lg:text-base xl:text-lg font-semibold'>
-                        Feedback
-                      </h3>
-                      <p>
-                        Lorem Ipsum is simply dummy text of the printing and
-                        typesetting industry. Lorem Ipsum has been the industrys
-                        standard dummy text ever since the 1500s, when an
-                        unknown printer took a galley of type and scrambled it
-                        to make a type specimen book.
+              {feedback.map(feedback => (
+                <li key={feedback.id}>
+                  <Collapsible>
+                    <CollapsibleTrigger className='flex w-full items-center justify-between gap-3 shadow bg-background-2 rounded-lg p-2'>
+                      <p className='font-medium line-clamp-1 text-start'>
+                        {feedback.question.question}
                       </p>
-                      <h3 className='mb-1 mt-4 text-sm lg:text-base xl:text-lg font-semibold'>
-                        Score
-                      </h3>
-                      <p className='text-lg font-medium'>5/10</p>
-                    </div>
-                  </CollapsibleContent>
-                </Collapsible>
-              </li>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent asChild>
+                      <div className='bg-background-2 shadow p-4 mt-1 lg:mt-2 rounded-lg'>
+                        <h3 className='mb-1 text-sm lg:text-base xl:text-lg font-semibold'>
+                          Feedback
+                        </h3>
+                        <p>{feedback.feedback}</p>
+                        <h3 className='mb-1 mt-4 text-sm lg:text-base xl:text-lg font-semibold'>
+                          Score
+                        </h3>
+                        <p className='text-lg font-medium'>
+                          {feedback.score}/10
+                        </p>
+                      </div>
+                    </CollapsibleContent>
+                  </Collapsible>
+                </li>
+              ))}
             </ul>
           </div>
           <div className='mt-6'>
