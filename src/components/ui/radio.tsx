@@ -24,7 +24,7 @@ const Radio = ({ options, register, fieldName }: RadioProps) => {
           />
           <label
             htmlFor={option.value}
-            className='peer-checked:bg-blue-500 peer-checked:text-white peer-checked:border-blue-500 border border-border flex gap-5 items-center px-4 py-2 rounded-lg shadow cursor-pointer tracking-tight lg:px-10 lg:py-3 font-medium hover:bg-muted transition-colors'
+            className='peer-checked:bg-blue-500 peer-checked:text-white peer-checked:border-blue-500 border border-input flex gap-5 items-center px-4 py-2 rounded-lg shadow cursor-pointer tracking-tight dark:bg-background-2/40 lg:px-10 lg:py-3 font-medium hover:bg-muted transition-colors'
           >
             <div>
               <h3>{option.label}</h3>

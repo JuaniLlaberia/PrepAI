@@ -41,7 +41,7 @@ const Navbar = () => {
         },
       }}
       transition={{ duration: 0.2 }}
-      className='fixed top-0 pt-3 px-2.5 z-10 flex w-full justify-center z-50'
+      className='fixed top-0 pt-3 px-2.5 flex w-full justify-center z-50'
     >
       <nav className='flex items-center p-1 justify-between gap-3 rounded-full bg-secondary border border-border w-full max-w-[650px] shadow-sm'>
         <span className='px-5 font-bold tracking-tight text-foreground'>
@@ -54,7 +54,7 @@ const Navbar = () => {
             <>
               <Link
                 href='/login'
-                className='hidden md:flex'
+                className='hidden md:flex text-white dark:text-black'
               >
                 Login
               </Link>
