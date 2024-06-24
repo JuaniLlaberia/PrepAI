@@ -20,21 +20,21 @@ const ThemeMenu = () => {
         <PiPalette className='size-4 mr-1.5' />
         Theme
       </DropdownMenuSubTrigger>
-      <DropdownMenuSubContent>
+      <DropdownMenuSubContent className='flex flex-col gap-1'>
         <DropdownMenuItem
-          className={cn(theme === 'light' ? 'bg-muted' : '')}
+          className={cn(theme === 'light' ? 'bg-accent' : '')}
           onClick={() => setTheme('light')}
         >
           Light
         </DropdownMenuItem>
         <DropdownMenuItem
-          className={cn(theme === 'dark' ? 'bg-muted' : '')}
+          className={cn(theme === 'dark' ? 'bg-accent' : '')}
           onClick={() => setTheme('dark')}
         >
           Dark
         </DropdownMenuItem>
         <DropdownMenuItem
-          className={cn(theme === 'system' ? 'bg-muted' : '')}
+          className={cn(theme === 'system' ? 'bg-accent' : '')}
           onClick={() => setTheme('system')}
         >
           System

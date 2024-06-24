@@ -11,7 +11,7 @@ import {
   DrawerContent,
   DrawerTrigger,
 } from '@/components/ui/drawer';
-import { useCreateQueryString } from '@/hooks/UseCreateQueryString';
+import { useCreateQueryString } from '@/hooks/useCreateQueryString';
 import { cn } from '@/lib/utils';
 import {
   Select,
@@ -49,7 +49,7 @@ const Filters = ({
             <DrawerClose asChild aria-label='filter button'>
               <li
                 onClick={() => setSeachParam('sortBy', 'createdAt')}
-                className='py-3 px-2 flex justify-between items-center hover:bg-muted rounded-md'
+                className='py-3 px-2 flex justify-between items-center hover:bg-accent rounded-md'
               >
                 Sort by creation
                 <HiOutlineCheck
@@ -63,7 +63,7 @@ const Filters = ({
             <DrawerClose asChild aria-label='filter button'>
               <li
                 onClick={() => setSeachParam('sortBy', 'name')}
-                className='py-3 px-2 flex justify-between items-center hover:bg-muted rounded-md'
+                className='py-3 px-2 flex justify-between items-center hover:bg-accent rounded-md'
               >
                 Sort by name
                 <HiOutlineCheck
@@ -83,7 +83,7 @@ const Filters = ({
           setSeachParam('sortBy', val);
         }}
       >
-        <SelectTrigger className='w-[240px] bg-background-2 hidden md:flex'>
+        <SelectTrigger className='w-[240px] bg-background hidden md:flex'>
           <SelectValue placeholder='Sort by' />
         </SelectTrigger>
         <SelectContent>

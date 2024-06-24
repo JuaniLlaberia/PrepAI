@@ -34,17 +34,17 @@ const DashboardPage = async ({
   };
 }) => {
   const interviews = await getUserInterviews({
-    sort: searchParams.sortBy,
+    sort: searchParams.sortBy || 'createdAt',
     filter: searchParams.filter,
   });
 
   return (
     <>
-      <nav className='flex justify-between items-center w-full border-b border-border px-4 md:px-16 lg:px-32 xl:px-56 py-2'>
+      <nav className='flex justify-between items-center w-full border-b border-border px-4 md:px-16 lg:px-32 xl:px-56 py-2 h-14'>
         <h1>MockAI</h1>
         <UserMenu />
       </nav>
-      <section className='mt-4 px-4 md:px-16 lg:px-32 xl:px-56'>
+      <section className='pt-4 px-4 md:px-16 lg:px-32 xl:px-56 bg-background-2 dark:bg-background min-h-[calc(100vh-3.5rem-1px)]'>
         <div className='mb-3 flex items-center gap-2 justify-end'>
           <Filters sortBy={searchParams.sortBy} filter={searchParams.filter} />
           <Link
@@ -58,13 +58,13 @@ const DashboardPage = async ({
           <h2 className='mb-2 text-sm lg:text-base xl:text-lg font-medium'>
             Your interviews
           </h2>
-          <ul className='grid grid-cols-1 gap-2'>
+          <ul className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2.5'>
             {interviews.length > 0 ? (
               interviews.map(
                 ({ id, jobExperience, jobRole, createdAt, taken }) => (
                   <li
                     key={id}
-                    className='relative p-4 border border-border rounded-lg shadow'
+                    className='relative bg-background dark:bg-background-2 p-4 border border-border rounded-lg shadow'
                   >
                     <Link
                       href={
