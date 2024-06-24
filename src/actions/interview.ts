@@ -97,10 +97,10 @@ export const deleteInterview = async ({
   await belongsToUser(user.id, interviewId);
 
   await db.$transaction([
+    db.answer.deleteMany({ where: { interviewId } }),
     db.interviewAttempt.deleteMany({ where: { interviewId } }),
     db.question.deleteMany({ where: { interviewId } }),
     db.interview.delete({ where: { id: interviewId } }),
-    db.answer.deleteMany({ where: { interviewId } }),
   ]);
 
   revalidatePath('/dashboard');
