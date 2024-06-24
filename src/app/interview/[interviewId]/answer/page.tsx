@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { HiMiniArrowLongLeft } from 'react-icons/hi2';
 
+import AnswerComponent from '../(components)/AnswerComponent';
 import { Button, buttonVariants } from '@/components/ui/button';
 import {
   Dialog,
@@ -13,14 +14,19 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { getInterviewQuestions } from '@/actions/interview';
-import AnswerComponent from '../(components)/AnswerComponent';
 
-const AnswerPage = async ({ params }: { params: { interviewId: string } }) => {
-  //   const questions = await getInterviewQuestions({
-  //     interviewId: params.interviewId,
-  //   });
+const AnswerPage = async ({
+  params,
+  searchParams,
+}: {
+  params: { interviewId: string };
+  searchParams: { attemptId: string };
+}) => {
+  const questions = await getInterviewQuestions({
+    interviewId: params.interviewId,
+  });
 
-  //   if (!questions) return notFound();
+  if (!questions) return notFound();
 
   return (
     <>
@@ -53,7 +59,11 @@ const AnswerPage = async ({ params }: { params: { interviewId: string } }) => {
         </Dialog>
         <h2>MockAI</h2>
       </header>
-      <AnswerComponent />
+      <AnswerComponent
+        interviewId={params.interviewId}
+        interviewAttemptId={searchParams.attemptId}
+        questions={questions}
+      />
     </>
   );
 };
