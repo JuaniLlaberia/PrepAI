@@ -40,11 +40,12 @@ const NewInterviewForm = () => {
 
   const steps = [['jobRole'], ['jobExperience'], ['jobDescription']];
 
-  const { crrIndex, crrStep, nextStep, prevStep, isFirstStep, isLastStep } =
+  const { crrIndex, crrStep, nextStep, prevStep, isLastStep } =
     useMultiStepForm([
       <motion.div
         initial={{ x: '50%', opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
+        exit={{ x: '-50%', opacity: 0 }}
         transition={{ duration: 0.3, ease: 'easeInOut' }}
         key='role-step'
       >
@@ -60,10 +61,16 @@ const NewInterviewForm = () => {
             className='h-12 lg:mt-4'
           />
         </InputWrapper>
+        <div className='flex justify-end mt-3 md:mt-5'>
+          <Button disabled={isPending} className='w-full md:w-auto px-6'>
+            Next
+          </Button>
+        </div>
       </motion.div>,
       <motion.div
         initial={{ x: '50%', opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
+        exit={{ x: '-50%', opacity: 0 }}
         transition={{ duration: 0.3, ease: 'easeInOut' }}
         key='experience-step'
       >
@@ -88,10 +95,24 @@ const NewInterviewForm = () => {
             />
           </InputWrapper>
         </div>
+        <div className='mt-5 md:mt-7 flex flex-col gap-2 md:flex-row-reverse items-end'>
+          <Button disabled={isPending} className='w-full md:w-auto px-6'>
+            Next
+          </Button>
+          <Button
+            onClick={e => prevStep(e)}
+            variant='ghost'
+            className='w-full md:w-auto px-6'
+          >
+            <HiMiniArrowLongLeft className='size-4 mr-1.5' />
+            Go back
+          </Button>
+        </div>
       </motion.div>,
       <motion.div
         initial={{ x: '50%', opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
+        exit={{ x: '-50%', opacity: 0 }}
         transition={{ duration: 0.3, ease: 'easeInOut' }}
         key='description-step'
       >
@@ -110,6 +131,27 @@ const NewInterviewForm = () => {
             {...register('jobDescription')}
           />
         </InputWrapper>
+        <div className='mt-3 md:mt-5 flex flex-col gap-2 md:flex-row-reverse items-end'>
+          <Button disabled={isPending} className='w-full md:w-auto px-6'>
+            {isPending ? (
+              <LuLoader2
+                strokeWidth={2}
+                className='animate-spin size-4 mr-1.5'
+              />
+            ) : (
+              <HiSparkles className='size-4 mr-1.5' />
+            )}
+            Create with AI
+          </Button>
+          <Button
+            onClick={e => prevStep(e)}
+            variant='ghost'
+            className='w-full md:w-auto px-6'
+          >
+            <HiMiniArrowLongLeft className='size-4 mr-1.5' />
+            Go back
+          </Button>
+        </div>
       </motion.div>,
     ]);
 
@@ -132,32 +174,6 @@ const NewInterviewForm = () => {
       className='flex flex-col gap-2'
     >
       {crrStep}
-      <motion.div
-        initial={{ x: '50%', opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{ duration: 0.3, ease: 'easeInOut' }}
-        className='mt-3 flex flex-col gap-2 md:flex-row-reverse md:justify-between'
-      >
-        <Button disabled={isPending} className='w-full md:w-auto' size='lg'>
-          {isPending ? (
-            <LuLoader2 strokeWidth={2} className='animate-spin size-4 mr-1.5' />
-          ) : isLastStep ? (
-            <HiSparkles className='size-4 mr-1.5' />
-          ) : null}
-          {!isLastStep ? 'Next' : 'Create with AI'}
-        </Button>
-        {!isFirstStep && (
-          <Button
-            onClick={e => prevStep(e)}
-            variant='ghost'
-            size='lg'
-            className='w-full md:w-auto'
-          >
-            <HiMiniArrowLongLeft className='size-4 mr-1.5' />
-            Go back
-          </Button>
-        )}
-      </motion.div>
     </form>
   );
 };
