@@ -12,20 +12,27 @@ export const getUserInterviews = async ({
   filter,
 }: {
   sort: 'createdAt' | 'name';
-  filter: string;
+  filter: 'all' | 'taken' | 'new';
 }) => {
   const user = await authAction();
 
   return await db.interview.findMany({
-    where: { userId: user.id },
+    where: {
+      userId: user.id,
+      taken: filter === 'new' ? false : filter === 'taken' ? true : undefined,
+    },
     select: {
       jobRole: true,
       taken: true,
       createdAt: true,
       id: true,
       jobExperience: true,
+      pinned: true,
     },
-    orderBy: sort === 'createdAt' ? { createdAt: 'desc' } : { jobRole: 'desc' },
+    orderBy:
+      sort === 'createdAt'
+        ? [{ pinned: 'desc' }, { createdAt: 'desc' }]
+        : [{ pinned: 'desc' }, { jobRole: 'desc' }],
   });
 };
 
@@ -64,10 +71,10 @@ export const createInterview = async ({
   });
 
   //Create questions using gemini model
-  const prompt = `Generate job interview questions for the role of ${jobRole} with a 
-    ${jobExperience} level. The job description and content is: "${jobDescription}". 
-    For each question provide the question and a hint (short text to help the 
-    user understand the question) in this json schema format: {questions: [{question, hint}]}. Based on 
+  const prompt = `Generate job interview questions for the role of ${jobRole} with a
+    ${jobExperience} level. The job description and content is: "${jobDescription}".
+    For each question provide the question and a hint (short text to help the
+    user understand the question) in this json schema format: {questions: [{question, hint}]}. Based on
     the experience level generate between 4-6 questions.`;
 
   const result = await model.generateContent(prompt);
@@ -84,7 +91,24 @@ export const createInterview = async ({
   //Store questions in db
   await db.question.createMany({ data: questionsWithId });
 
+  revalidatePath('/dashboard');
+
   return id;
+};
+
+export const updateInterview = async ({
+  interviewId,
+  data,
+}: {
+  interviewId: string;
+  data: Partial<Interview>;
+}) => {
+  const user = await authAction();
+  await belongsToUser(user.id, interviewId);
+
+  await db.interview.update({ where: { id: interviewId }, data });
+
+  revalidatePath('/dashboard');
 };
 
 //Remove the interview and all data related
