@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { HiMiniArrowLongLeft, HiOutlineChevronUpDown } from 'react-icons/hi2';
+import { HiMiniArrowLongLeft } from 'react-icons/hi2';
 
 import ConfettiComponent from './(components)/Confetti';
 import { buttonVariants } from '@/components/ui/button';
@@ -9,8 +9,9 @@ import {
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
 import { cn } from '@/lib/utils';
-import { getAttemptFeedback } from '@/actions/feedback';
+import { getAttemptFeedback, getAttempts } from '@/actions/feedback';
 import { Progress } from '@/components/ui/progress';
+import Attempts from './(components)/Attempts';
 
 const FeedbackPage = async ({
   params,
@@ -19,8 +20,10 @@ const FeedbackPage = async ({
   params: { interviewId: string };
   searchParams: { attemptId: string };
 }) => {
-  const feedback = await getAttemptFeedback({
-    interviewAttemptId: searchParams.attemptId,
+  const attempts = await getAttempts({ interviewId: params.interviewId });
+
+  const { feedback, analysis } = await getAttemptFeedback({
+    interviewAttemptId: searchParams.attemptId ?? attempts[0].id,
     interviewId: params.interviewId,
   });
 
@@ -46,9 +49,14 @@ const FeedbackPage = async ({
         <h2>MockAI </h2>
       </header>
       <div className='flex flex-col items-center mt-2'>
-        <section className='tracking-tight pb-3 max-w-[700px]'>
+        <section className='tracking-tight pb-3 max-w-[700px] overflow-x-hidden w-full'>
+          <Attempts
+            attempts={attempts}
+            crrAttempt={searchParams.attemptId ?? attempts[0].id}
+          />
+
           <div>
-            <h1 className='text-2xl font-medium'>Interviw feedback</h1>
+            <h1 className='text-2xl font-medium'>Interview feedback</h1>
             {hasPassed ? (
               <h2 className='text-xl font-medium text-green-500'>
                 Congratulations, you passed.
@@ -103,16 +111,10 @@ const FeedbackPage = async ({
           </div>
           <div className='mt-6'>
             <h2 className='mb-1 text-sm lg:text-base xl:text-lg font-semibold'>
-              Speech analysis
+              Analysis
             </h2>
             <p className='shadow bg-background-2 p-2 rounded-lg'>
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industrys standard dummy text
-              ever since the 1500s, when an unknown printer took a galley of
-              type and scrambled it to make a type specimen book. It has
-              survived not only five centuries, but also the leap into
-              electronic typesetting, remaining essentially unchanged. It was
-              popularised in the 1960s with
+              {analysis?.speechAnalysis}
             </p>
           </div>
         </section>
