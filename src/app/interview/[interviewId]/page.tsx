@@ -1,67 +1,33 @@
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
 import {
   HiMiniArrowLongLeft,
   HiOutlineInformationCircle,
 } from 'react-icons/hi2';
 
 import StartIntBtn from './(components)/StartIntBtn';
-import { getInterviewById } from '@/actions/interview';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Button, buttonVariants } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
+import { cn } from '@/lib/utils';
 
 const InterviewPage = async ({
   params,
 }: {
   params: { interviewId: string };
 }) => {
-  //   const interviewInfo = await getInterviewById({
-  //     interviewId: params.interviewId,
-  //   });
-
-  //   if (!interviewInfo) return notFound();
-
-  //   const { jobRole, jobExperience, jobDescription } = interviewInfo;
-
   return (
     <>
       <header className='flex items-center justify-between py-3'>
-        <Dialog>
-          <DialogTrigger>
-            <Button className='group' size='sm' variant='ghost'>
-              <HiMiniArrowLongLeft className='size-4 mr-1.5 group-hover:-translate-x-1 transition-transform' />
-              Quit interview
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogTitle>Quit interview</DialogTitle>
-            <DialogDescription>
-              You are about to leave this interview. You can&apos;t resume it
-              after.{' '}
-              <span className='font-medium text-primary'>
-                Are you sure you want to leave?
-              </span>
-            </DialogDescription>
-            <DialogFooter className='flex flex-row justify-end items-center gap-2 mt-2'>
-              <DialogClose asChild>
-                <Button variant='ghost'>Cancel</Button>
-              </DialogClose>
-              <Link href='/dashboard' className={buttonVariants({})}>
-                Quit interview
-              </Link>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <Link
+          href='/dashboard'
+          className={cn(
+            buttonVariants({ size: 'sm', variant: 'ghost' }),
+            'group'
+          )}
+        >
+          <HiMiniArrowLongLeft className='size-4 mr-1.5 group-hover:-translate-x-1 transition-transform' />
+          Go to dashboard
+        </Link>
         <h2>MockAI</h2>
       </header>
       <section className='py-8 flex flex-col items-center w-full'>
@@ -76,7 +42,7 @@ const InterviewPage = async ({
           <ul className='py-6 px-4 flex flex-col gap-4'>
             <li className='font-medium flex items-center gap-2'>
               <div className='size-2 rounded-full bg-blue-600' />
-              Answer between 4-6 questions
+              Answer between 5 questions
             </li>
             <li className='font-medium flex items-center gap-2'>
               <div className='size-2 rounded-full bg-blue-600' />
@@ -85,6 +51,10 @@ const InterviewPage = async ({
             <li className='font-medium flex items-center gap-2'>
               <div className='size-2 rounded-full bg-blue-600' />
               Receive AI feedback
+            </li>
+            <li className='font-medium flex items-center gap-2'>
+              <div className='size-2 rounded-full bg-blue-600' />
+              Score 60% or more to pass
             </li>
           </ul>
         </div>

@@ -103,6 +103,8 @@ const AnswerComponent = ({
       },
     ];
 
+    stopListening();
+
     endInterview({
       interviewId,
       attemptId: interviewAttemptId,
@@ -120,15 +122,15 @@ const AnswerComponent = ({
           {questions[crrQuestion].question}
         </p>
       </section>
-      <section className='flex flex-col justify-center items-center max-w-[600px] w-full'>
+      <section className='flex flex-col justify-center items-center max-w-[500px] w-full'>
         <CameraComponent />
-        <Alert variant='information'>
+        <Alert variant='information' className='mt-1'>
           <HiOutlineLightBulb className='size-5' />
           <AlertTitle>Hint</AlertTitle>
           <AlertDescription>{questions[crrQuestion].hint}</AlertDescription>
         </Alert>
       </section>
-      <div className='w-full fixed bottom-4 left-[50%] translate-x-[-50%] px-4 md:px-0 max-w-[600px]'>
+      <div className='w-full fixed bottom-4 left-[50%] translate-x-[-50%] px-4 md:px-0 max-w-[500px]'>
         {isListening && (
           <Button
             className='w-full'
