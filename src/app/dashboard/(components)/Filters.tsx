@@ -20,12 +20,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Separator } from '@/components/ui/separator';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const Filters = ({
   filter = 'all',
   sortBy = 'createdAt',
 }: {
-  filter: string;
+  filter: 'all' | 'taken' | 'new';
   sortBy: 'createdAt' | 'name';
 }) => {
   const pathname = usePathname();
@@ -75,8 +77,66 @@ const Filters = ({
               </li>
             </DrawerClose>
           </ul>
+          <Separator className='my-3' />
+          <ul>
+            <DrawerClose asChild aria-label='filter button'>
+              <li
+                onClick={() => setSeachParam('filter', 'all')}
+                className='py-3 px-2 flex justify-between items-center hover:bg-accent rounded-md'
+              >
+                All interviews
+                <HiOutlineCheck
+                  className={cn(
+                    'size-4',
+                    filter === 'all' ? 'block' : 'hidden'
+                  )}
+                />
+              </li>
+            </DrawerClose>
+            <DrawerClose asChild aria-label='filter button'>
+              <li
+                onClick={() => setSeachParam('filter', 'new')}
+                className='py-3 px-2 flex justify-between items-center hover:bg-accent rounded-md'
+              >
+                New interviews
+                <HiOutlineCheck
+                  className={cn(
+                    'size-4',
+                    filter === 'new' ? 'block' : 'hidden'
+                  )}
+                />
+              </li>
+            </DrawerClose>
+            <DrawerClose asChild aria-label='filter button'>
+              <li
+                onClick={() => setSeachParam('filter', 'taken')}
+                className='py-3 px-2 flex justify-between items-center hover:bg-accent rounded-md'
+              >
+                Taken interviews
+                <HiOutlineCheck
+                  className={cn(
+                    'size-4',
+                    filter === 'taken' ? 'block' : 'hidden'
+                  )}
+                />
+              </li>
+            </DrawerClose>
+          </ul>
         </DrawerContent>
       </Drawer>
+      <Tabs
+        className='hidden md:flex'
+        onValueChange={val => {
+          setSeachParam('filter', val);
+        }}
+        defaultValue={filter}
+      >
+        <TabsList>
+          <TabsTrigger value='all'>All</TabsTrigger>
+          <TabsTrigger value='new'>New</TabsTrigger>
+          <TabsTrigger value='taken'>Taken</TabsTrigger>
+        </TabsList>
+      </Tabs>
       <Select
         value={sortBy}
         onValueChange={val => {
