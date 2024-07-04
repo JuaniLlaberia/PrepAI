@@ -53,49 +53,24 @@ const CallToAction = () => {
     <section className='px-4 md:px-24 lg:px-40 xl:px-80 py-8'>
       <div className='relative overflow-hidden flex flex-col justify-center items-center border border-border rounded-3xl'>
         <div className='rotate-[10deg]'>
-          <Marquee
-            pauseOnHover
-            className='[--duration:20s]'
-          >
+          <Marquee className='[--duration:20s]'>
             {firstRow.map(review => (
-              <ReviewCard
-                key={review.username}
-                {...review}
-              />
+              <ReviewCard key={review.username} {...review} />
             ))}
           </Marquee>
-          <Marquee
-            pauseOnHover
-            className='[--duration:20s]'
-          >
+          <Marquee reverse className='[--duration:20s]'>
             {firstRow.map(review => (
-              <ReviewCard
-                key={review.username}
-                {...review}
-              />
+              <ReviewCard key={review.username} {...review} />
             ))}
           </Marquee>
-          <Marquee
-            reverse
-            pauseOnHover
-            className='[--duration:20s]'
-          >
+          <Marquee className='[--duration:20s]'>
             {secondRow.map(review => (
-              <ReviewCard
-                key={review.username}
-                {...review}
-              />
+              <ReviewCard key={review.username} {...review} />
             ))}
           </Marquee>
-          <Marquee
-            pauseOnHover
-            className='[--duration:20s] hidden md:flex'
-          >
+          <Marquee reverse className='[--duration:20s] hidden md:flex'>
             {firstRow.map(review => (
-              <ReviewCard
-                key={review.username}
-                {...review}
-              />
+              <ReviewCard key={review.username} {...review} />
             ))}
           </Marquee>
         </div>

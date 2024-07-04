@@ -11,14 +11,14 @@ const CameraComponent = () => {
   const [webcamEnabled, setWebcamEnabled] = useState<boolean>(false);
 
   return (
-    <div className='my-3 w-full'>
+    <div className='w-full'>
       {webcamEnabled ? (
         <div className='flex justify-center'>
           <Webcam
             mirrored
             onUserMedia={() => setWebcamEnabled(true)}
             onUserMediaError={() => setWebcamEnabled(false)}
-            className='rounded-lg h-[258px] lg:h-[390px] lg:rounded-xl'
+            className='rounded-lg h-[258px] md:h-[375px] lg:rounded-xl'
           />
         </div>
       ) : (
