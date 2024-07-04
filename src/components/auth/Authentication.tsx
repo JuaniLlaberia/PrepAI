@@ -1,7 +1,7 @@
 import EmailAuth from './EmailAuth';
 import GithubAuthBtn from './GithubAuthBtn';
-import GitlabAuthBtn from './GitlabAuthBtn';
 import GoogleAuthBtn from './GoogleAuthBtn';
+import LinkedinAuthBtn from './LinkedinAuthBtn';
 import { Separator } from '../ui/separator';
 
 const Authentication = () => {
@@ -10,7 +10,7 @@ const Authentication = () => {
       <div className='flex flex-col gap-2'>
         <GoogleAuthBtn />
         <GithubAuthBtn />
-        <GitlabAuthBtn />
+        <LinkedinAuthBtn />
       </div>
       <Separator className='my-5' />
       <EmailAuth />
