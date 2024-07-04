@@ -33,6 +33,7 @@ model Interview {
   jobDescription String
   jobExperience  Experience
   taken          Boolean
+  pinned         Boolean    @default(false)
   createdAt      DateTime   @default(now())
 
   Question         Question[]
@@ -56,8 +57,9 @@ model Question {
 }
 
 model InterviewAttempt {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
+  id             String   @id @default(cuid())
+  speechAnalysis String?
+  createdAt      DateTime @default(now())
 
   interviewId String
   interview   Interview @relation(fields: [interviewId], references: [id])
