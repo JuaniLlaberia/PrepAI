@@ -10,9 +10,9 @@ import {
 import { PiArrowClockwiseLight } from 'react-icons/pi';
 
 import DeleteInterviewModal from './(components)/DeleteInterviewModal';
-import Filters from './(components)/Filters';
 import Badge from '@/components/ui/badge';
 import PinBtn from './(components)/PinBtn';
+import InterviewsFilters from './(components)/InterviewsFilter';
 import { getUserInterviews } from '@/actions/interview';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
@@ -39,9 +39,12 @@ const DashboardPage = async ({
   });
 
   return (
-    <section className='pt-4 px-4 md:px-16 lg:px-32 xl:px-56 bg-background-2 dark:bg-background min-h-[calc(100vh-3.5rem-1px)]'>
+    <>
       <div className='mb-3 flex items-center gap-2 justify-end'>
-        <Filters sortBy={searchParams.sortBy} filter={searchParams.filter} />
+        <InterviewsFilters
+          sortBy={searchParams.sortBy}
+          filter={searchParams.filter}
+        />
         <Link className={buttonVariants({ size: 'sm' })} href='/interview/new'>
           <HiOutlinePlus className='size-4 mr-2' /> New interview
         </Link>
@@ -156,7 +159,7 @@ const DashboardPage = async ({
           )}
         </ul>
       </div>
-    </section>
+    </>
   );
 };
 
