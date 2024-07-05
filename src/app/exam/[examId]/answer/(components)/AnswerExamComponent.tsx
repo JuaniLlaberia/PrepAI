@@ -65,32 +65,13 @@ const AnswerExamComponent = ({
           <span className='text-lg text-muted-foreground'>15</span>
         </p>
         {crrStep}
-        {/* <h1 className='text-lg font-medium text-center mb-6'>
-          Which of the following methods can be used to display data in some
-          form using Javascript?
-        </h1>
-        <ul className='flex flex-col gap-2'>
-          <li className='border border-blue-500 bg-blue-200 rounded-lg p-2'>
-            constant
-          </li>
-          <li className='border border-border rounded-lg p-2'>let</li>
-          <li className='border border-border rounded-lg p-2'>var</li>
-          <li className='border border-border rounded-lg p-2'>function</li>
-        </ul> */}
       </section>
-      {/* <div className='w-full fixed bottom-4 left-[50%] translate-x-[-50%] px-4 md:px-0 max-w-[500px]'> */}
       <div className='flex flex-col gap-1 w-full'>
         <Button onClick={nextStep}>
           Next question
           <HiMiniArrowLongRight className='size-4 ml-1.5' />
         </Button>
-        {!isFirstStep ? (
-          <Button onClick={prevStep} variant='ghost'>
-            Go back
-          </Button>
-        ) : null}
       </div>
-      {/* </div> */}
     </div>
   );
 };
