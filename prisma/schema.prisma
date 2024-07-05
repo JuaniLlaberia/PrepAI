@@ -21,6 +21,7 @@ model User {
   name      String
   email     String      @unique
   Interview Interview[]
+  Exam      Exam[]
 }
 
 model Interview {
@@ -84,4 +85,25 @@ model Answer {
 
   @@index([questionId])
   @@index([interviewAttemptId])
+}
+
+enum Difficulty {
+  easy
+  medium
+  hard
+}
+
+model Exam {
+  id         String     @id @default(cuid())
+  subject    String
+  difficulty Difficulty
+  passed     Boolean
+  taken      Boolean
+  pinned     Boolean
+  createdAt  DateTime   @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@index([userId])
 }
