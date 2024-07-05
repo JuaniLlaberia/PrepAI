@@ -73,7 +73,7 @@ const DeleteInterviewModal = ({
             {...register('name', {
               validate: {
                 validator: fieldVal =>
-                  fieldVal === jobRole ? true : 'Please confirm form name',
+                  fieldVal === jobRole ? true : 'Please confirm interview role',
               },
             })}
           />

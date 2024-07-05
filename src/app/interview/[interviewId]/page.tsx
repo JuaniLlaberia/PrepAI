@@ -62,7 +62,7 @@ const InterviewPage = async ({
           <HiOutlineInformationCircle className='size-5' />
           <AlertTitle>Information</AlertTitle>
           <AlertDescription>
-            Once the interview has started, it can&apos;t be stopped. video.
+            Once the interview has started, it can&apos;t be stopped.
           </AlertDescription>
         </Alert>
         <div className='w-full fixed bottom-4 left-[50%] translate-x-[-50%] px-4 md:px-0 max-w-[600px]'>

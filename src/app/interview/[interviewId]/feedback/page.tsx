@@ -71,7 +71,7 @@ const FeedbackPage = async ({
           <div className='mt-6'>
             <div className='flex items-center justify-between mb-1'>
               <h2 className='text-sm lg:text-base xl:text-lg font-semibold'>
-                Your questions
+                Your score
               </h2>
               <p className='text-sm text-muted-foreground'>{totalScore}/10</p>
             </div>

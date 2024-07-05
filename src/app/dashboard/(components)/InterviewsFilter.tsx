@@ -23,7 +23,7 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-const Filters = ({
+const InterviewsFilters = ({
   filter = 'all',
   sortBy = 'createdAt',
 }: {
@@ -155,4 +155,4 @@ const Filters = ({
   );
 };
 
-export default Filters;
+export default InterviewsFilters;
