@@ -45,7 +45,10 @@ const DashboardPage = async ({
           sortBy={searchParams.sortBy}
           filter={searchParams.filter}
         />
-        <Link className={buttonVariants({ size: 'sm' })} href='/interview/new'>
+        <Link
+          className={buttonVariants({ size: 'sm' })}
+          href='/interview/new'
+        >
           <HiOutlinePlus className='size-4 mr-2' /> New interview
         </Link>
       </div>
@@ -70,12 +73,20 @@ const DashboardPage = async ({
                       {jobRole}
                     </h3>
                     <div className='flex items-center gap-2'>
-                      <Badge text={`${jobExperience} level`} color='purple' />
+                      <Badge
+                        text={`${jobExperience} level`}
+                        color='purple'
+                      />
                       <Badge
                         text={taken ? 'Taken' : 'New'}
                         color={taken ? 'gray' : 'orange'}
                       />
-                      {pinned ? <Badge text='Pinned' color='blue' /> : null}
+                      {pinned ? (
+                        <Badge
+                          text='Pinned'
+                          color='blue'
+                        />
+                      ) : null}
                     </div>
                     <p className='text-muted-foreground text-sm text-end mt-3'>
                       {createdAt.toDateString()}
@@ -94,12 +105,19 @@ const DashboardPage = async ({
                   <Dialog>
                     <DropdownMenu>
                       <DropdownMenuTrigger className='absolute top-4 right-4'>
-                        <Button size='icon' variant='ghost' className='size-8'>
+                        <Button
+                          size='icon'
+                          variant='ghost'
+                          className='size-8'
+                        >
                           <HiOutlineEllipsisHorizontal className='size-4' />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
-                        <PinBtn interviewId={id} isPinned={pinned} />
+                        <PinBtn
+                          interviewId={id}
+                          isPinned={pinned}
+                        />
                         {!taken ? (
                           <DropdownMenuItem asChild>
                             <Link href={`/interview/${id}`}>
@@ -146,7 +164,7 @@ const DashboardPage = async ({
               )
             )
           ) : (
-            <div className='flex flex-col gap-2 justify-center items-center py-6 text-muted-foreground'>
+            <div className='flex flex-col col-span-full gap-2 justify-center items-center py-6 text-muted-foreground'>
               <p>No interviews found</p>
               <Link
                 className={cn(buttonVariants({ variant: 'default' }), 'group')}

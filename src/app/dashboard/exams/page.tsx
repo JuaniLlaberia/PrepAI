@@ -45,7 +45,10 @@ const ExamsPage = async ({
           sortBy={searchParams.sortBy}
           filter={searchParams.filter}
         />
-        <Link className={buttonVariants({ size: 'sm' })} href='/exam/new'>
+        <Link
+          className={buttonVariants({ size: 'sm' })}
+          href='/exam/new'
+        >
           <HiOutlinePlus className='size-4 mr-2' /> New mock exam
         </Link>
       </div>
@@ -79,7 +82,12 @@ const ExamsPage = async ({
                         text={taken ? 'Taken' : 'New'}
                         color={taken ? 'gray' : 'orange'}
                       />
-                      {pinned ? <Badge text='Pinned' color='blue' /> : null}
+                      {pinned ? (
+                        <Badge
+                          text='Pinned'
+                          color='blue'
+                        />
+                      ) : null}
                     </div>
                     <p className='text-muted-foreground text-sm text-end mt-3'>
                       {createdAt.toDateString()}
@@ -98,7 +106,11 @@ const ExamsPage = async ({
                   <Dialog>
                     <DropdownMenu>
                       <DropdownMenuTrigger className='absolute top-4 right-4'>
-                        <Button size='icon' variant='ghost' className='size-8'>
+                        <Button
+                          size='icon'
+                          variant='ghost'
+                          className='size-8'
+                        >
                           <HiOutlineEllipsisHorizontal className='size-4' />
                         </Button>
                       </DropdownMenuTrigger>
@@ -139,14 +151,17 @@ const ExamsPage = async ({
                       </DropdownMenuContent>
                     </DropdownMenu>
                     <DialogContent>
-                      <DeleteExamModal examId={id} subject={subject} />
+                      <DeleteExamModal
+                        examId={id}
+                        subject={subject}
+                      />
                     </DialogContent>
                   </Dialog>
                 </li>
               )
             )
           ) : (
-            <div className='flex flex-col gap-2 justify-center items-center py-6 text-muted-foreground'>
+            <div className='flex flex-col col-span-full gap-2 justify-center items-center py-6 text-muted-foreground'>
               <p>No exams found</p>
               <Link
                 className={cn(buttonVariants({ variant: 'default' }), 'group')}
