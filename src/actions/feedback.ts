@@ -1,8 +1,11 @@
 'use server';
 
-import { db } from '@/db';
+import mongoose from 'mongoose';
+
+import InterviewAttempt from '@/db/models/InterviewAttempt';
+import Interview from '@/db/models/Interview';
 import { model } from '@/gemini';
-import { authAction, belongsToUser } from './auth';
+import { authAction, interviewAttemptBelongsToUser } from './auth';
 
 type GenerateFeedbackType = {
   userResponses: {
@@ -36,64 +39,41 @@ export const generateFeedback = async ({
     userResponse: string;
     feedback: string;
     score: number;
-    questionId: string;
-    interviewId: string;
-    interviewAttemptId: string;
   }[] = JSON.parse(jsonData).feedbacks;
 
-  await db.$transaction([
-    db.answer.createMany({ data: answers }),
-    db.interview.update({
-      where: { id: interviewId },
-      data: {
-        taken: true,
-      },
-    }),
-    db.interviewAttempt.update({
-      where: { id: attemptId },
-      data: {
-        speechAnalysis: JSON.parse(jsonData).speechAnalysis as string,
-      },
-    }),
-  ]);
+  const speechAnalysis = JSON.parse(jsonData).speechAnalysis as string;
+
+  const mongoSession = await mongoose.startSession();
+  mongoSession.startTransaction();
+
+  try {
+    await Promise.all([
+      InterviewAttempt.findByIdAndUpdate(attemptId, {
+        speechAnalysis,
+        answers,
+      }),
+      Interview.findByIdAndUpdate(interviewId, { taken: true }),
+    ]);
+  } catch (err) {
+    await mongoSession.abortTransaction();
+  } finally {
+    mongoSession.endSession();
+  }
 };
 
 export const getAttempts = async ({ interviewId }: { interviewId: string }) => {
-  const user = await authAction();
-  await belongsToUser(user.id, interviewId);
+  const userId = await authAction();
 
-  return await db.interviewAttempt.findMany({
-    where: { interviewId },
-    select: { id: true },
-  });
+  return await InterviewAttempt.find({ interviewId, userId }).select('_id');
 };
 
 export const getAttemptFeedback = async ({
-  interviewId,
   interviewAttemptId,
 }: {
-  interviewId: string;
   interviewAttemptId: string;
 }) => {
-  const user = await authAction();
-  await belongsToUser(user.id, interviewId);
+  const userId = await authAction();
+  await interviewAttemptBelongsToUser(userId, interviewAttemptId);
 
-  const feedbackQuery = db.answer.findMany({
-    where: { interviewId, interviewAttemptId },
-    include: {
-      question: { select: { question: true } },
-    },
-  });
-
-  const analysisQuery = db.interviewAttempt.findUnique({
-    where: { id: interviewAttemptId },
-    select: { speechAnalysis: true },
-  });
-
-  const [feedback, analysis] = await Promise.all([
-    feedbackQuery,
-    analysisQuery,
-  ]);
-
-  return { feedback, analysis };
+  return await InterviewAttempt.findById(interviewAttemptId);
 };
