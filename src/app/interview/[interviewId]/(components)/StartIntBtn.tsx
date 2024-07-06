@@ -6,8 +6,8 @@ import { LuLoader2 } from 'react-icons/lu';
 import { toast } from 'sonner';
 import { HiMiniArrowLongRight } from 'react-icons/hi2';
 
-import { createInterviewAttempt } from '@/actions/attemps';
 import { Button } from '@/components/ui/button';
+import { createInterviewAttempt } from '@/actions/interviewAttempt';
 
 const StartIntBtn = ({ interviewId }: { interviewId: string }) => {
   const router = useRouter();

@@ -21,10 +21,9 @@ type AnswerComponentPropsType = {
   interviewId: string;
   interviewAttemptId: string;
   questions: {
-    id: string;
+    _id: string;
     question: string;
     hint: string;
-    interviewId: string;
   }[];
 };
 
@@ -83,7 +82,7 @@ const AnswerComponent = ({
       {
         question: questions[crrQuestion].question,
         answer: transcript,
-        questionId: questions[crrQuestion].id,
+        questionId: questions[crrQuestion]._id,
       },
     ]);
     //Reset transcript
@@ -99,7 +98,7 @@ const AnswerComponent = ({
       {
         question: questions[crrQuestion].question,
         answer: transcript,
-        questionId: questions[crrQuestion].id,
+        questionId: questions[crrQuestion]._id,
       },
     ];
 

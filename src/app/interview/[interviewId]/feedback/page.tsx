@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { HiMiniArrowLongLeft } from 'react-icons/hi2';
+import { notFound } from 'next/navigation';
 
 import ConfettiComponent from './(components)/Confetti';
 import { buttonVariants } from '@/components/ui/button';
@@ -22,13 +23,16 @@ const FeedbackPage = async ({
 }) => {
   const attempts = await getAttempts({ interviewId: params.interviewId });
 
-  const { feedback, analysis } = await getAttemptFeedback({
-    interviewAttemptId: searchParams.attemptId ?? attempts[0].id,
-    interviewId: params.interviewId,
+  const interviewAttempt = await getAttemptFeedback({
+    interviewAttemptId: searchParams.attemptId ?? attempts[0]._id,
   });
 
+  if (!interviewAttempt) return notFound();
+
   const totalScore =
-    feedback.reduce((prev, crr) => prev + crr.score, 0) / feedback.length;
+    interviewAttempt.answers.reduce((prev, crr) => prev + crr.score, 0) /
+    interviewAttempt.answers.length;
+
   const hasPassed = totalScore >= 6;
 
   return (
@@ -51,7 +55,7 @@ const FeedbackPage = async ({
       <div className='flex flex-col items-center mt-2'>
         <section className='tracking-tight pb-3 max-w-[700px] overflow-x-hidden w-full'>
           <Attempts
-            attempts={attempts}
+            attempts={attempts as { _id: string }[]}
             crrAttempt={searchParams.attemptId ?? attempts[0].id}
           />
 
@@ -82,12 +86,12 @@ const FeedbackPage = async ({
               Your questions
             </h2>
             <ul className='flex flex-col gap-3'>
-              {feedback.map(feedback => (
-                <li key={feedback.id}>
+              {interviewAttempt.answers.map(feedback => (
+                <li key={String(feedback._id)}>
                   <Collapsible>
                     <CollapsibleTrigger className='flex w-full items-center justify-between gap-3 shadow bg-background-2 rounded-lg p-2'>
                       <p className='font-medium line-clamp-1 text-start'>
-                        {feedback.question.question}
+                        {feedback.question}
                       </p>
                     </CollapsibleTrigger>
                     <CollapsibleContent asChild>
@@ -114,7 +118,7 @@ const FeedbackPage = async ({
               Analysis
             </h2>
             <p className='shadow bg-background-2 p-2 rounded-lg'>
-              {analysis?.speechAnalysis}
+              {interviewAttempt.speechAnalysis}
             </p>
           </div>
         </section>
