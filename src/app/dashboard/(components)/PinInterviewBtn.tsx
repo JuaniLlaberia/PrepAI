@@ -6,7 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { updateInterview } from '@/actions/interview';
 
-const PinBtn = ({
+const PinInterviewBtn = ({
   interviewId,
   isPinned,
 }: {
@@ -30,4 +30,4 @@ const PinBtn = ({
   );
 };
 
-export default PinBtn;
+export default PinInterviewBtn;

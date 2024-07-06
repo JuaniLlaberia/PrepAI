@@ -11,8 +11,8 @@ import { PiArrowClockwiseLight } from 'react-icons/pi';
 
 import DeleteInterviewModal from './(components)/DeleteInterviewModal';
 import Badge from '@/components/ui/badge';
-import PinBtn from './(components)/PinBtn';
 import InterviewsFilters from './(components)/InterviewsFilter';
+import PinInterviewBtn from './(components)/PinInterviewBtn';
 import { getUserInterviews } from '@/actions/interview';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
@@ -99,7 +99,7 @@ const DashboardPage = async ({
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
-                        <PinBtn interviewId={id} isPinned={pinned} />
+                        <PinInterviewBtn interviewId={id} isPinned={pinned} />
                         {!taken ? (
                           <DropdownMenuItem asChild>
                             <Link href={`/interview/${id}`}>
