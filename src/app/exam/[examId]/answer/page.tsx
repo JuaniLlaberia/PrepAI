@@ -13,8 +13,14 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import AnswerExamComponent from './(components)/AnswerExamComponent';
+import { getExamQuestions } from '@/actions/exams';
 
-const ExamAnswerPage = ({ params }: { params: { examId: string } }) => {
+const ExamAnswerPage = async ({ params }: { params: { examId: string } }) => {
+  const questions = (await getExamQuestions({ examId: params.examId }))
+    ?.questions;
+
+  if (!questions) return notFound();
+
   return (
     <>
       <header className='flex items-center justify-between py-3'>
@@ -45,7 +51,7 @@ const ExamAnswerPage = ({ params }: { params: { examId: string } }) => {
         </Dialog>
         <h2>MockAI</h2>
       </header>
-      <AnswerExamComponent examId={params.examId} questions={[]} />
+      <AnswerExamComponent examId={params.examId} questions={questions} />
     </>
   );
 };
