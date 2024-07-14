@@ -154,7 +154,7 @@ const AnswerExamComponent = ({
   }, []);
 
   return (
-    <div className='w-full flex flex-col items-center tracking-tight'>
+    <div className='w-full flex flex-col items-center tracking-tight lg:mt-4'>
       <section className='my-3 w-full max-w-[600px] overflow-hidden'>
         <div className='flex items-end justify-between mb-3 lg:mb-4'>
           <p className='font-medium'>

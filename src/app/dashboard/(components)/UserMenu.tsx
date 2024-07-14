@@ -21,7 +21,7 @@ const UserMenu = async () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <div className='flex items-center gap-2 cursor-pointer'>
+        <div className='flex items-center gap-2 cursor-pointer lg:hover:bg-accent lg:p-1 lg:rounded-lg lg:transition-colors'>
           <Avatar className='size-9 border border-border'>
             <AvatarFallback>{user?.given_name?.at(0)}</AvatarFallback>
             <AvatarImage src={user?.picture ?? undefined} />
@@ -34,7 +34,7 @@ const UserMenu = async () => {
           </p>
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
+      <DropdownMenuContent className='lg:w-[200px]'>
         <DropdownMenuLabel>My account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
