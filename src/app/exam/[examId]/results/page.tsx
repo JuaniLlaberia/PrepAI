@@ -10,8 +10,9 @@ import AnimatedProgress from '@/components/AnimatedProgress';
 import ConfettiComponent from '@/components/Confetti';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { getExamResults } from '@/actions/examAttempt';
+import { getExamAttempts, getExamResults } from '@/actions/examAttempt';
 import { formatTimer } from '@/lib/helpers';
+import Attempts from '@/components/Attempts';
 
 const ExamResultsPage = async ({
   params,
@@ -20,9 +21,11 @@ const ExamResultsPage = async ({
   params: { examId: string };
   searchParams: { attemptId: string };
 }) => {
+  const attempts = await getExamAttempts({ examId: params.examId });
+
   const results = await getExamResults({
     examId: params.examId,
-    attemptId: searchParams.attemptId,
+    attemptId: searchParams.attemptId ?? attempts[0]._id,
   });
 
   if (!results) return notFound();
@@ -48,17 +51,23 @@ const ExamResultsPage = async ({
       </header>
       <div className='flex flex-col items-center mt-2'>
         <section className='w-full max-w-[700px] tracking-tight'>
-          <div>
-            <h1 className='text-2xl font-medium'>Mock exam results</h1>
-            {passed ? (
-              <h2 className='text-xl font-medium text-green-500'>
-                Congratulations, you passed.
-              </h2>
-            ) : (
-              <h2 className='text-xl font-medium text-red-500'>
-                We are sorry, you failed.
-              </h2>
-            )}
+          <div className='flex items-start justify-between'>
+            <div>
+              <h1 className='text-2xl font-medium'>Mock exam results</h1>
+              {passed ? (
+                <h2 className='text-xl font-medium text-green-500'>
+                  Congratulations, you passed.
+                </h2>
+              ) : (
+                <h2 className='text-xl font-medium text-red-500'>
+                  We are sorry, you failed.
+                </h2>
+              )}
+            </div>
+            <Attempts
+              attempts={attempts as { _id: string }[]}
+              crrAttempt={searchParams.attemptId ?? attempts[0].id}
+            />
           </div>
 
           <div className='mt-6'>
@@ -66,7 +75,7 @@ const ExamResultsPage = async ({
               <h2 className='text-sm lg:text-base xl:text-lg font-semibold'>
                 Your time
               </h2>
-              <p className='text-sm text-muted-foreground'>
+              <p className='text-sm text-muted-foreground md:text-base'>
                 {formatTimer(time)}
               </p>
             </div>

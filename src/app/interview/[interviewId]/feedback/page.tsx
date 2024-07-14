@@ -2,8 +2,8 @@ import Link from 'next/link';
 import { HiMiniArrowLongLeft } from 'react-icons/hi2';
 import { notFound } from 'next/navigation';
 
-import Attempts from './(components)/Attempts';
 import AnimatedProgress from '@/components/AnimatedProgress';
+import ConfettiComponent from '@/components/Confetti';
 import { buttonVariants } from '@/components/ui/button';
 import {
   Collapsible,
@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/collapsible';
 import { cn } from '@/lib/utils';
 import { getAttemptFeedback, getAttempts } from '@/actions/feedback';
-import ConfettiComponent from '@/components/Confetti';
+import Attempts from '@/components/Attempts';
 
 const FeedbackPage = async ({
   params,
@@ -54,22 +54,23 @@ const FeedbackPage = async ({
       </header>
       <div className='flex flex-col items-center mt-2'>
         <section className='tracking-tight pb-3 max-w-[700px] overflow-x-hidden w-full'>
-          <Attempts
-            attempts={attempts as { _id: string }[]}
-            crrAttempt={searchParams.attemptId ?? attempts[0].id}
-          />
-
-          <div>
-            <h1 className='text-2xl font-medium'>Interview feedback</h1>
-            {hasPassed ? (
-              <h2 className='text-xl font-medium text-green-500'>
-                Congratulations, you passed.
-              </h2>
-            ) : (
-              <h2 className='text-xl font-medium text-red-500'>
-                We are sorry, you failed.
-              </h2>
-            )}
+          <div className='flex items-start justify-between'>
+            <div>
+              <h1 className='text-2xl font-medium'>Interview feedback</h1>
+              {hasPassed ? (
+                <h2 className='text-xl font-medium text-green-500'>
+                  Congratulations, you passed.
+                </h2>
+              ) : (
+                <h2 className='text-xl font-medium text-red-500'>
+                  We are sorry, you failed.
+                </h2>
+              )}
+            </div>
+            <Attempts
+              attempts={attempts as { _id: string }[]}
+              crrAttempt={searchParams.attemptId ?? attempts[0].id}
+            />
           </div>
 
           <div className='mt-6'>
