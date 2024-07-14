@@ -123,9 +123,11 @@ const NewExamForm = () => {
     <form
       onSubmit={
         isLastStep
-          ? handleSubmit(data =>
-              createExam({ subject: data.subject, difficulty: data.difficulty })
-            )
+          ? handleSubmit(data => {
+              createExam({
+                data,
+              });
+            })
           : async e => {
               e.preventDefault();
 
