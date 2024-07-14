@@ -46,7 +46,9 @@ export const useSpeechRecognition = () => {
     if (!recognition) return;
 
     setIsListening(false);
+    recognition.continuous = false;
     recognition.stop();
+    recognition.abort();
   };
 
   const resetTranscript = () => setTranscript('');
