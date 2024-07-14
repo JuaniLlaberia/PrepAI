@@ -34,7 +34,7 @@ const Attempts = ({
         value={crrAttempt}
         onValueChange={val => setSeachParam('attemptId', val)}
       >
-        <SelectTrigger className='max-w-[200px] m-1'>
+        <SelectTrigger className='w-full mt-1 mb-3 lg:max-w-[200px] lg:m-1'>
           <SelectValue placeholder='Select attempt' />
         </SelectTrigger>
         <SelectContent>

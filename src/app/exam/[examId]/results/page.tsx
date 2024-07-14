@@ -51,7 +51,7 @@ const ExamResultsPage = async ({
       </header>
       <div className='flex flex-col items-center mt-2'>
         <section className='w-full max-w-[700px] tracking-tight'>
-          <div className='flex items-start justify-between'>
+          <div className='flex items-start justify-between flex-col-reverse lg:flex-row'>
             <div>
               <h1 className='text-2xl font-medium'>Mock exam results</h1>
               {passed ? (

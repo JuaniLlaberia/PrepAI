@@ -54,7 +54,7 @@ const FeedbackPage = async ({
       </header>
       <div className='flex flex-col items-center mt-2'>
         <section className='tracking-tight pb-3 max-w-[700px] overflow-x-hidden w-full'>
-          <div className='flex items-start justify-between'>
+          <div className='flex items-start justify-between flex-col-reverse lg:flex-row'>
             <div>
               <h1 className='text-2xl font-medium'>Interview feedback</h1>
               {hasPassed ? (
@@ -90,13 +90,13 @@ const FeedbackPage = async ({
               {interviewAttempt.answers.map(feedback => (
                 <li key={String(feedback._id)}>
                   <Collapsible>
-                    <CollapsibleTrigger className='flex w-full items-center justify-between gap-3 shadow bg-background-2 rounded-lg p-2'>
+                    <CollapsibleTrigger className='flex w-full items-center justify-between gap-3 shadow bg-background-2 rounded-lg p-2 dark:border dark:border-border'>
                       <p className='font-medium line-clamp-1 text-start'>
                         {feedback.question}
                       </p>
                     </CollapsibleTrigger>
                     <CollapsibleContent asChild>
-                      <div className='bg-background-2 shadow p-4 mt-1 lg:mt-2 rounded-lg'>
+                      <div className='bg-background-2 shadow p-4 mt-1 lg:mt-2 rounded-lg dark:border dark:border-border'>
                         <h3 className='mb-1 text-sm lg:text-base xl:text-lg font-semibold'>
                           Feedback
                         </h3>
@@ -118,7 +118,7 @@ const FeedbackPage = async ({
             <h2 className='mb-1 text-sm lg:text-base xl:text-lg font-semibold'>
               Analysis
             </h2>
-            <p className='shadow bg-background-2 p-2 rounded-lg'>
+            <p className='shadow bg-background-2 p-2 rounded-lg dark:border dark:border-border'>
               {interviewAttempt.speechAnalysis}
             </p>
           </div>
