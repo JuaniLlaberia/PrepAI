@@ -21,10 +21,18 @@ const UserMenu = async () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <Avatar className='size-9 border border-border'>
-          <AvatarFallback>{user?.given_name?.at(0)}</AvatarFallback>
-          <AvatarImage src={user?.picture ?? undefined} />
-        </Avatar>
+        <div className='flex items-center gap-2 cursor-pointer'>
+          <Avatar className='size-9 border border-border'>
+            <AvatarFallback>{user?.given_name?.at(0)}</AvatarFallback>
+            <AvatarImage src={user?.picture ?? undefined} />
+          </Avatar>
+          <p className='hidden lg:flex lg:flex-col lg:items-start'>
+            <span className='font-medium text-sm'>
+              {user?.given_name} {user?.family_name}
+            </span>
+            <span className='text-sm text-muted-foreground'>{user?.email}</span>
+          </p>
+        </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel>My account</DropdownMenuLabel>
