@@ -9,11 +9,11 @@ export const authenticateUser = async () => {
 
   if (!user?.email || !user.id) throw new Error('Failed to authenticate');
 
-  const userDB = await User.findById(user.id);
+  const userDB = await User.findOne({ kindeId: user.id });
 
   if (!userDB) {
     await User.create({
-      _id: user.id,
+      kindeId: user.id,
       email: user.email,
       name: `${user.given_name} ${user.family_name}` ?? '',
     });

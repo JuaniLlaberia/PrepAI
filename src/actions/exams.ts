@@ -1,7 +1,6 @@
 'use server';
 
 import mongoose from 'mongoose';
-import { Difficulty } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 
 import ExamAttempt from '@/db/models/ExamAttempt';
@@ -32,13 +31,12 @@ export const getUserExams = async ({
 };
 
 export const createExam = async ({
-  subject,
-  difficulty,
+  data,
 }: {
-  subject: 'string';
-  difficulty: Difficulty;
+  data: Partial<IExamDocument>;
 }) => {
   const userId = await authAction();
+  const { subject, difficulty } = data;
 
   if (!subject || !difficulty) throw new Error('Missing required data');
 
@@ -59,7 +57,7 @@ export const createExam = async ({
     correctAnswer: number;
   }[] = JSON.parse(jsonData).questions;
 
-  const { _id } = await Exam.create({
+  const { id } = await Exam.create({
     subject,
     difficulty,
     userId,
@@ -68,7 +66,7 @@ export const createExam = async ({
 
   revalidatePath('/dashboard/exams');
 
-  return String(_id);
+  return id;
 };
 
 export const deleteExam = async ({ examId }: { examId: string }) => {
@@ -109,5 +107,6 @@ export const updateExam = async ({
 export const getExamQuestions = async ({ examId }: { examId: string }) => {
   await authAction();
 
-  return await Exam.findById(examId).select('questions').lean();
+  const questions = await Exam.findById(examId).select('questions').lean();
+  return questions;
 };

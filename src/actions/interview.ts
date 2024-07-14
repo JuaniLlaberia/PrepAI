@@ -3,10 +3,10 @@
 import mongoose from 'mongoose';
 import { revalidatePath } from 'next/cache';
 
+import InterviewAttempt from '@/db/models/InterviewAttempt';
 import Interview, { IInterviewDocument } from '@/db/models/Interview';
 import { model } from '@/gemini/index';
 import { authAction, interviewBelongsToUser } from './auth';
-import InterviewAttempt from '@/db/models/InterviewAttempt';
 
 export const getUserInterviews = async ({
   sort,
@@ -67,7 +67,7 @@ export const createInterview = async ({
   const questions: { question: string; hint: string }[] =
     JSON.parse(jsonData).questions;
 
-  const { _id } = await Interview.create({
+  const { id } = await Interview.create({
     jobRole,
     jobExperience,
     jobDescription,
@@ -77,7 +77,7 @@ export const createInterview = async ({
 
   revalidatePath('/dashboard');
 
-  return String(_id);
+  return id;
 };
 
 export const deleteInterview = async ({
