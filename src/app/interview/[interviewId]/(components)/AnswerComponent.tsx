@@ -136,6 +136,9 @@ const AnswerComponent = ({
             onClick={() => {
               setHasAnswered(true);
               stopListening();
+              if (!isLastQuestion) {
+                nextQuestion();
+              }
             }}
           >
             <HiOutlineMicrophone className='size-4 mr-1.5' /> Stop recording
@@ -145,12 +148,6 @@ const AnswerComponent = ({
         {!isListening && !hasAnswered && (
           <Button className='w-full' onClick={startListening}>
             <HiOutlineMicrophone className='size-4 mr-1.5' /> Start recording
-          </Button>
-        )}
-
-        {hasAnswered && !isListening && !isLastQuestion && (
-          <Button className='w-full' onClick={nextQuestion}>
-            Next question <HiMiniArrowLongRight className='size-4 ml-1.5' />
           </Button>
         )}
 
