@@ -2,7 +2,8 @@ import Link from 'next/link';
 import { HiMiniArrowLongLeft } from 'react-icons/hi2';
 import { notFound } from 'next/navigation';
 
-import ConfettiComponent from './(components)/Confetti';
+import Attempts from './(components)/Attempts';
+import AnimatedProgress from '@/components/AnimatedProgress';
 import { buttonVariants } from '@/components/ui/button';
 import {
   Collapsible,
@@ -11,8 +12,7 @@ import {
 } from '@/components/ui/collapsible';
 import { cn } from '@/lib/utils';
 import { getAttemptFeedback, getAttempts } from '@/actions/feedback';
-import { Progress } from '@/components/ui/progress';
-import Attempts from './(components)/Attempts';
+import ConfettiComponent from '@/components/Confetti';
 
 const FeedbackPage = async ({
   params,
@@ -79,7 +79,7 @@ const FeedbackPage = async ({
               </h2>
               <p className='text-sm text-muted-foreground'>{totalScore}/10</p>
             </div>
-            <Progress value={totalScore * 10} className='h-3' />
+            <AnimatedProgress value={totalScore * 10} />
           </div>
           <div className='mt-6'>
             <h2 className='mb-1 text-sm lg:text-base xl:text-lg font-semibold'>
