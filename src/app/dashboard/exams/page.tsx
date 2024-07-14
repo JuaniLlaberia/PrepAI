@@ -24,6 +24,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
+import PinExamBtn from './(components)/PinExamBtn';
 
 const ExamsPage = async ({
   searchParams,
@@ -115,6 +116,7 @@ const ExamsPage = async ({
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
+                        <PinExamBtn isPinned={pinned} examId={id} />
                         {!taken ? (
                           <DropdownMenuItem asChild>
                             <Link href={`/exam/${id}`}>

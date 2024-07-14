@@ -9,7 +9,7 @@ const Attempts = ({
   attempts,
   crrAttempt,
 }: {
-  attempts: { id: string }[];
+  attempts: { _id: string }[];
   crrAttempt: string;
 }) => {
   const pathname = usePathname();
@@ -28,12 +28,12 @@ const Attempts = ({
       <ul className='flex items-center flex-row gap-3 overflow-x-auto w-full pb-4 whitespace-nowrap'>
         {attempts.map((attempt, index) => (
           <li
-            key={attempt.id}
+            key={attempt._id}
             className={cn(
               'px-4 py-1.5 border border-border rounded-lg shadow text-sm font-medium',
-              crrAttempt === attempt.id ? 'bg-blue-500 text-white' : null
+              crrAttempt === attempt._id ? 'bg-blue-500 text-white' : null
             )}
-            onClick={() => setSeachParam('attemptId', attempt.id)}
+            onClick={() => setSeachParam('attemptId', attempt._id)}
           >
             Attempt {index + 1}
           </li>

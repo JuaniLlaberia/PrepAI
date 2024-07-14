@@ -22,23 +22,13 @@ const navigationLinks: NavigationLinksType[] = [
     id: 'interviews',
     label: 'Interviews',
     link: '/dashboard',
-    icon: (
-      <HiOutlineSquares2X2
-        strokeWidth={2}
-        className='size-[1.1rem]'
-      />
-    ),
+    icon: <HiOutlineSquares2X2 strokeWidth={2} className='size-[1.1rem]' />,
   },
   {
     id: 'mock-exams',
     label: 'Mock exams',
     link: '/dashboard/exams',
-    icon: (
-      <HiOutlineDocumentText
-        strokeWidth={2}
-        className='size-[1.1rem]'
-      />
-    ),
+    icon: <HiOutlineDocumentText strokeWidth={2} className='size-[1.1rem]' />,
   },
 ];
 

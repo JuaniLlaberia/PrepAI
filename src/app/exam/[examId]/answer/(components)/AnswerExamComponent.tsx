@@ -6,68 +6,83 @@ import { motion } from 'framer-motion';
 
 import { Button } from '@/components/ui/button';
 import { useMultiStepForm } from '@/hooks/useMultistepForm';
+import { useEffect, useState } from 'react';
+import { cn } from '@/lib/utils';
 
 const AnswerExamComponent = ({
   examId,
-  questions = [],
+  questions,
 }: {
   examId: string;
-  questions: {}[];
+  questions: { question: string; options: string[]; correctAnswer: number }[];
 }) => {
+  const [selectedOption, setSelectedOption] = useState<number | null>(null);
+  const [userAnswers, setUserAnswers] = useState();
+
   const { mutate, isPending } = useMutation({});
-  // const {} = useMultiStepForm(questions.map(question => <div key=''></div>));
-  const { crrStep, crrIndex, nextStep, prevStep, isFirstStep, isLastStep } =
-    useMultiStepForm([
+
+  const { crrStep, crrIndex, nextStep } = useMultiStepForm(
+    questions.map(question => (
       <motion.div
-        key='1'
+        key={question.question}
         initial={{ x: '50%', opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         exit={{ x: '-50%', opacity: 0 }}
         transition={{ duration: 0.3, ease: 'easeInOut' }}
       >
         <h1 className='text-lg font-medium text-center mb-6'>
-          Which of the following methods can be used to display data in some
-          form using Javascript?
+          {question.question}
         </h1>
         <ul className='flex flex-col gap-2'>
-          <li className='border border-blue-500 bg-blue-200 rounded-lg p-2'>
-            constant
-          </li>
-          <li className='border border-border rounded-lg p-2'>let</li>
-          <li className='border border-border rounded-lg p-2'>var</li>
-          <li className='border border-border rounded-lg p-2'>function</li>
+          {question.options.map((option, i) => (
+            <li
+              key={i}
+              className={cn(
+                'border border-border rounded-lg p-2 cursor-pointer',
+                selectedOption === i ? 'border-blue-500 bg-blue-100' : null
+              )}
+              onClick={() => setSelectedOption(i)}
+            >
+              {option}
+            </li>
+          ))}
         </ul>
-      </motion.div>,
-      <motion.div
-        key='2'
-        initial={{ x: '50%', opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        exit={{ x: '-50%', opacity: 0 }}
-        transition={{ duration: 0.3, ease: 'easeInOut' }}
-      >
-        <h1 className='text-lg font-medium text-center mb-6'>bla bla bla</h1>
-        <ul className='flex flex-col gap-2'>
-          <li className='border border-blue-500 bg-blue-200 rounded-lg p-2'>
-            constant
-          </li>
-          <li className='border border-border rounded-lg p-2'>let</li>
-          <li className='border border-border rounded-lg p-2'>var</li>
-          <li className='border border-border rounded-lg p-2'>function</li>
-        </ul>
-      </motion.div>,
-    ]);
+      </motion.div>
+    ))
+  );
+
+  const nextQuestion = () => {
+    //Store answers
+
+    setSelectedOption(null);
+    nextStep();
+  };
+  const submitExam = () => {};
+
+  //Show confirmation when refreshing/closing browser
+  useEffect(() => {
+    const unloadCallback = (event: Event) => {
+      event.preventDefault();
+      return '';
+    };
+
+    window.addEventListener('beforeunload', unloadCallback);
+    return () => window.removeEventListener('beforeunload', unloadCallback);
+  }, []);
 
   return (
     <div className='w-full flex flex-col items-center tracking-tight'>
       <section className='my-3 w-full max-w-[600px]'>
         <p className='font-medium mb-1'>
           <span className='text-3xl text-primary'>0{crrIndex + 1}</span>/
-          <span className='text-lg text-muted-foreground'>15</span>
+          <span className='text-lg text-muted-foreground'>
+            {questions.length}
+          </span>
         </p>
         {crrStep}
       </section>
       <div className='flex flex-col gap-1 w-full'>
-        <Button onClick={nextStep}>
+        <Button onClick={nextQuestion}>
           Next question
           <HiMiniArrowLongRight className='size-4 ml-1.5' />
         </Button>

@@ -1,11 +1,12 @@
 'use server';
 
-import { Interview } from '@prisma/client';
+import mongoose from 'mongoose';
 import { revalidatePath } from 'next/cache';
 
-import { db } from '@/db';
+import InterviewAttempt from '@/db/models/InterviewAttempt';
+import Interview, { IInterviewDocument } from '@/db/models/Interview';
 import { model } from '@/gemini/index';
-import { authAction, belongsToUser } from './auth';
+import { authAction, interviewBelongsToUser } from './auth';
 
 export const getUserInterviews = async ({
   sort,
@@ -14,26 +15,20 @@ export const getUserInterviews = async ({
   sort: 'createdAt' | 'name';
   filter: 'all' | 'taken' | 'new';
 }) => {
-  const user = await authAction();
+  const userId = await authAction();
 
-  return await db.interview.findMany({
-    where: {
-      userId: user.id,
-      taken: filter === 'new' ? false : filter === 'taken' ? true : undefined,
-    },
-    select: {
-      jobRole: true,
-      taken: true,
-      createdAt: true,
-      id: true,
-      jobExperience: true,
-      pinned: true,
-    },
-    orderBy:
+  const interviewsQuery = Interview.find({ userId });
+
+  if (filter === 'new') interviewsQuery.where({ taken: false });
+  else if (filter === 'taken') interviewsQuery.where({ taken: true });
+
+  return await interviewsQuery
+    .select('_id jobRole jobExperience taken createdAt pinned')
+    .sort(
       sort === 'createdAt'
-        ? [{ pinned: 'desc' }, { createdAt: 'desc' }]
-        : [{ pinned: 'desc' }, { jobRole: 'desc' }],
-  });
+        ? { pinned: 'desc', createdAt: 'desc' }
+        : { pinned: 'desc', jobRole: 'desc' }
+    );
 };
 
 export const getInterviewById = async ({
@@ -41,34 +36,22 @@ export const getInterviewById = async ({
 }: {
   interviewId: string;
 }) => {
-  const user = await authAction();
-
-  return await db.interview.findUnique({
-    where: { id: interviewId, userId: user.id },
-  });
+  await authAction();
+  return await Interview.findById(interviewId)
+    .select('questions.question questions.hint')
+    .lean();
 };
 
 export const createInterview = async ({
   data,
 }: {
-  data: Partial<Interview>;
+  data: Partial<IInterviewDocument>;
 }) => {
-  const user = await authAction();
+  const userId = await authAction();
 
   const { jobRole, jobExperience, jobDescription } = data;
   if (!jobRole || !jobExperience || !jobDescription)
     throw new Error('Missing required data');
-
-  //Create interview
-  const { id } = await db.interview.create({
-    data: {
-      jobRole,
-      jobExperience,
-      jobDescription,
-      taken: false,
-      userId: user.id,
-    },
-  });
 
   //Create questions using gemini model
   const prompt = `Generate job interview questions for the role of ${jobRole} with a
@@ -84,16 +67,42 @@ export const createInterview = async ({
   const questions: { question: string; hint: string }[] =
     JSON.parse(jsonData).questions;
 
-  const questionsWithId = questions.map(question => {
-    return { ...question, interviewId: id };
+  const { id } = await Interview.create({
+    jobRole,
+    jobExperience,
+    jobDescription,
+    userId,
+    questions,
   });
-
-  //Store questions in db
-  await db.question.createMany({ data: questionsWithId });
 
   revalidatePath('/dashboard');
 
   return id;
+};
+
+export const deleteInterview = async ({
+  interviewId,
+}: {
+  interviewId: string;
+}) => {
+  const userId = await authAction();
+  await interviewBelongsToUser(userId, interviewId);
+
+  const mongoSession = await mongoose.startSession();
+  mongoSession.startTransaction();
+
+  try {
+    await Promise.all([
+      Interview.findByIdAndDelete(interviewId),
+      InterviewAttempt.deleteMany({ interviewId }),
+    ]);
+  } catch (err) {
+    await mongoSession.abortTransaction();
+  } finally {
+    mongoSession.endSession();
+  }
+
+  revalidatePath('/dashboard');
 };
 
 export const updateInterview = async ({
@@ -101,46 +110,12 @@ export const updateInterview = async ({
   data,
 }: {
   interviewId: string;
-  data: Partial<Interview>;
+  data: Partial<IInterviewDocument>;
 }) => {
-  const user = await authAction();
-  await belongsToUser(user.id, interviewId);
+  const userId = await authAction();
+  await interviewBelongsToUser(userId, interviewId);
 
-  await db.interview.update({ where: { id: interviewId }, data });
+  await Interview.findByIdAndUpdate(interviewId, data);
 
   revalidatePath('/dashboard');
-};
-
-//Remove the interview and all data related
-export const deleteInterview = async ({
-  interviewId,
-}: {
-  interviewId: string;
-}) => {
-  const user = await authAction();
-  await belongsToUser(user.id, interviewId);
-
-  await db.$transaction([
-    db.answer.deleteMany({ where: { interviewId } }),
-    db.interviewAttempt.deleteMany({ where: { interviewId } }),
-    db.question.deleteMany({ where: { interviewId } }),
-    db.interview.delete({ where: { id: interviewId } }),
-  ]);
-
-  revalidatePath('/dashboard');
-};
-
-export const getInterviewQuestions = async ({
-  interviewId,
-}: {
-  interviewId: string;
-}) => {
-  const user = await authAction();
-  await belongsToUser(user.id, interviewId);
-
-  const questions = await db.question.findMany({
-    where: { interviewId },
-  });
-
-  return questions;
 };

@@ -13,7 +13,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { getInterviewQuestions } from '@/actions/interview';
+import { getInterviewById } from '@/actions/interview';
 
 const AnswerPage = async ({
   params,
@@ -22,11 +22,9 @@ const AnswerPage = async ({
   params: { interviewId: string };
   searchParams: { attemptId: string };
 }) => {
-  const questions = await getInterviewQuestions({
-    interviewId: params.interviewId,
-  });
+  const interview = await getInterviewById({ interviewId: params.interviewId });
 
-  if (!questions) return notFound();
+  if (!interview) return notFound();
 
   return (
     <>
@@ -62,7 +60,7 @@ const AnswerPage = async ({
       <AnswerComponent
         interviewId={params.interviewId}
         interviewAttemptId={searchParams.attemptId}
-        questions={questions}
+        questions={interview.questions}
       />
     </>
   );

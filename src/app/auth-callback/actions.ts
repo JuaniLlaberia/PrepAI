@@ -1,7 +1,7 @@
 'use server';
 
+import User from '@/db/models/User';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
-import { db } from '@/db';
 
 export const authenticateUser = async () => {
   const { getUser } = getKindeServerSession();
@@ -9,15 +9,13 @@ export const authenticateUser = async () => {
 
   if (!user?.email || !user.id) throw new Error('Failed to authenticate');
 
-  const userDB = await db.user.findUnique({ where: { id: user.id } });
+  const userDB = await User.findOne({ kindeId: user.id });
 
   if (!userDB) {
-    await db.user.create({
-      data: {
-        id: user.id,
-        email: user.email,
-        name: `${user.given_name} ${user.family_name}` ?? '',
-      },
+    await User.create({
+      kindeId: user.id,
+      email: user.email,
+      name: `${user.given_name} ${user.family_name}` ?? '',
     });
   }
 

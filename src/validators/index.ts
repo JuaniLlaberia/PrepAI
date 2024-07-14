@@ -1,12 +1,25 @@
-import { Difficulty, Experience } from '@prisma/client';
 import { z } from 'zod';
+
+export enum ExperienceEnum {
+  INTERSHIP = 'intership',
+  JUNIOR = 'junior',
+  SRR = 'ssr',
+  SENIOR = 'senior',
+  LEAD = 'lead',
+}
+
+export enum DifficultyEnum {
+  EASY = 'easy',
+  MEDIUM = 'medium',
+  HARD = 'hard',
+}
 
 export const InterviewSchema = z.object({
   jobRole: z
     .string()
     .min(4, { message: 'Must be at least 4 characters.' })
     .max(40, { message: 'Must have less than 40 characters.' }),
-  jobExperience: z.nativeEnum(Experience, {
+  jobExperience: z.nativeEnum(ExperienceEnum, {
     message: 'Please select an experience level.',
   }),
   jobDescription: z
@@ -20,7 +33,7 @@ export const ExamSchema = z.object({
     .string()
     .min(4, 'Must be at least 4 characters.')
     .max(40, 'Must have less than 40 characters.'),
-  difficulty: z.nativeEnum(Difficulty, {
+  difficulty: z.nativeEnum(DifficultyEnum, {
     message: 'Please select a difficulty.',
   }),
 });

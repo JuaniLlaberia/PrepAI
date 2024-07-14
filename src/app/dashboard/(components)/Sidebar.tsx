@@ -12,7 +12,7 @@ const SidebarLinks = ({ links }: { links: NavigationLinksType[] }) => {
   return (
     <ul className='flex flex-col gap-1'>
       {links.map(link => (
-        <li>
+        <li key={link.id}>
           <Link
             href={link.link}
             key={link.id}
