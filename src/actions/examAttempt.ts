@@ -60,3 +60,9 @@ export const getExamResults = async ({
 
   return await ExamAttempt.findOne({ _id: attemptId, examId, userId });
 };
+
+export const getExamAttempts = async ({ examId }: { examId: string }) => {
+  const userId = await authAction();
+
+  return await ExamAttempt.find({ examId, userId }).select('_id');
+};
