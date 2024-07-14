@@ -27,10 +27,6 @@ export const useSpeechRecognition = () => {
           setTranscript(prev => prev + transcriptText);
         };
 
-        // recognitionInstance.onend = () => {
-        //   if (isListening) recognitionInstance.start();
-        // };
-
         setRecognition(recognitionInstance);
       } else {
         throw new Error('Not supported in your browser');
