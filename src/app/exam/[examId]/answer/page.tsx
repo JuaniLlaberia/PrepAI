@@ -15,7 +15,7 @@ import {
 import AnswerExamComponent from './(components)/AnswerExamComponent';
 import { getExamQuestions } from '@/actions/exams';
 
-const ExamAnswerPage = async ({ params }: { params: { examId: string } }) => {
+const ExamAnswerPage = async ({ params, searchParams }: { params: { examId: string }, searchParams: {attemptId: string} }) => {
   const questions = (await getExamQuestions({ examId: params.examId }))
     ?.questions;
 
@@ -51,7 +51,7 @@ const ExamAnswerPage = async ({ params }: { params: { examId: string } }) => {
         </Dialog>
         <h2>MockAI</h2>
       </header>
-      <AnswerExamComponent examId={params.examId} questions={questions} />
+      <AnswerExamComponent examId={params.examId} questions={questions} attemptId={searchParams.attemptId}/>
     </>
   );
 };

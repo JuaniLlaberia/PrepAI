@@ -3,6 +3,7 @@ import mongoose, { Document, Model, ObjectId } from 'mongoose';
 export interface IExamAttempt {
   score: number;
   passed: boolean;
+  time: number;
   userId: ObjectId;
   examId: ObjectId;
 
@@ -18,6 +19,7 @@ const examAttemptSchema = new mongoose.Schema<IExamAttemptDocument>(
   {
     score: { type: Number },
     passed: { type: Boolean, default: false },
+    time: { type: Number },
     userId: {
       type: mongoose.Schema.ObjectId,
       ref: 'User',

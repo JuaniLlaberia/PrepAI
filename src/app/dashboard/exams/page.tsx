@@ -46,10 +46,7 @@ const ExamsPage = async ({
           sortBy={searchParams.sortBy}
           filter={searchParams.filter}
         />
-        <Link
-          className={buttonVariants({ size: 'sm' })}
-          href='/exam/new'
-        >
+        <Link className={buttonVariants({ size: 'sm' })} href='/exam/new'>
           <HiOutlinePlus className='size-4 mr-2' /> New mock exam
         </Link>
       </div>
@@ -83,12 +80,7 @@ const ExamsPage = async ({
                         text={taken ? 'Taken' : 'New'}
                         color={taken ? 'gray' : 'orange'}
                       />
-                      {pinned ? (
-                        <Badge
-                          text='Pinned'
-                          color='blue'
-                        />
-                      ) : null}
+                      {pinned ? <Badge text='Pinned' color='blue' /> : null}
                     </div>
                     <p className='text-muted-foreground text-sm text-end mt-3'>
                       {createdAt.toDateString()}
@@ -107,11 +99,7 @@ const ExamsPage = async ({
                   <Dialog>
                     <DropdownMenu>
                       <DropdownMenuTrigger className='absolute top-4 right-4'>
-                        <Button
-                          size='icon'
-                          variant='ghost'
-                          className='size-8'
-                        >
+                        <Button size='icon' variant='ghost' className='size-8'>
                           <HiOutlineEllipsisHorizontal className='size-4' />
                         </Button>
                       </DropdownMenuTrigger>
@@ -127,13 +115,13 @@ const ExamsPage = async ({
                         ) : (
                           <>
                             <DropdownMenuItem asChild>
-                              <Link href={`/interview/${id}`}>
+                              <Link href={`/exam/${id}`}>
                                 <PiArrowClockwiseLight className='size-4 mr-2' />
                                 Re-take
                               </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem asChild>
-                              <Link href={`/interview/${id}/feedback`}>
+                              <Link href={`/exam/${id}/results`}>
                                 <HiOutlineClipboardDocumentList className='size-4 mr-2' />
                                 Results
                               </Link>
@@ -153,10 +141,7 @@ const ExamsPage = async ({
                       </DropdownMenuContent>
                     </DropdownMenu>
                     <DialogContent>
-                      <DeleteExamModal
-                        examId={id}
-                        subject={subject}
-                      />
+                      <DeleteExamModal examId={id} subject={subject} />
                     </DialogContent>
                   </Dialog>
                 </li>
