@@ -7,6 +7,7 @@ export interface IInterview {
   taken: boolean;
   pinned: boolean;
   userId: ObjectId;
+  moduleId: ObjectId;
   questions: { _id: string; question: string; hint: string }[];
 }
 
@@ -48,7 +49,8 @@ const interviewSchema = new mongoose.Schema<IInterviewDocument>(
       type: Boolean,
       default: false,
     },
-    userId: { type: mongoose.Schema.ObjectId, ref: 'User', required: true },
+    userId: { type: mongoose.Schema.ObjectId, ref: 'User' },
+    moduleId: { type: mongoose.Schema.ObjectId, ref: 'Module' },
     questions: [
       {
         question: { type: String, required: true },
@@ -60,6 +62,7 @@ const interviewSchema = new mongoose.Schema<IInterviewDocument>(
 );
 
 interviewSchema.index({ userId: 1 });
+interviewSchema.index({ moduleId: 1 });
 
 const Interview: Model<IInterviewDocument> =
   mongoose.models?.Interview || mongoose.model('Interview', interviewSchema);

@@ -7,6 +7,7 @@ export interface IExam {
   taken: boolean;
   pinned: boolean;
   userId: ObjectId;
+  moduleId: ObjectId;
   questions: { question: string; options: string[]; correctAnswer: number }[];
 }
 
@@ -34,7 +35,10 @@ const examSchema = new mongoose.Schema<IExamDocument>(
     userId: {
       type: mongoose.Schema.ObjectId,
       ref: 'User',
-      required: true,
+    },
+    moduleId: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Module',
     },
     questions: [
       {
@@ -48,6 +52,7 @@ const examSchema = new mongoose.Schema<IExamDocument>(
 );
 
 examSchema.index({ userId: 1 });
+examSchema.index({ moduleId: 1 });
 
 const Exam: Model<IExamDocument> =
   mongoose.models?.Exam || mongoose.model('Exam', examSchema);
