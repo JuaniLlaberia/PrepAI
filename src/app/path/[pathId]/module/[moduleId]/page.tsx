@@ -1,10 +1,8 @@
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { HiMiniArrowLongLeft } from 'react-icons/hi2';
 
+import PageHeader from '@/components/PageHeader';
 import { getModuleById } from '@/actions/path';
-import { Button, buttonVariants } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 const ModulePage = async ({
   params,
@@ -17,19 +15,8 @@ const ModulePage = async ({
   const { title, description, topics } = moduleData;
 
   return (
-    <div className='py-2 px-4 md:px-16 lg:px-32 xl:px-56'>
-      <header className='flex items-center justify-between py-3'>
-        <Link
-          href={`/path/${params.pathId}`}
-          className={cn(
-            buttonVariants({ size: 'sm', variant: 'ghost' }),
-            'group'
-          )}
-        >
-          <HiMiniArrowLongLeft className='size-4 mr-1.5 group-hover:-translate-x-1 transition-transform' />
-          Go to path
-        </Link>
-      </header>
+    <>
+      <PageHeader text='Go to path' link={`/path/${params.pathId}`} />
       <div>
         <h1 className='text-2xl font-medium mb-1'>{title}</h1>
         <p className='text-muted-foreground'>{description}</p>
@@ -73,7 +60,7 @@ const ModulePage = async ({
           <Button size='sm'>Start interview</Button>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

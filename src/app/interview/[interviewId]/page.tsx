@@ -1,14 +1,9 @@
-import Link from 'next/link';
-import {
-  HiMiniArrowLongLeft,
-  HiOutlineInformationCircle,
-} from 'react-icons/hi2';
+import { HiOutlineInformationCircle } from 'react-icons/hi2';
 
+import PageHeader from '@/components/PageHeader';
 import StartIntBtn from './(components)/StartIntBtn';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { buttonVariants } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { cn } from '@/lib/utils';
 
 const InterviewPage = async ({
   params,
@@ -17,19 +12,7 @@ const InterviewPage = async ({
 }) => {
   return (
     <>
-      <header className='flex items-center justify-between py-3'>
-        <Link
-          href='/dashboard'
-          className={cn(
-            buttonVariants({ size: 'sm', variant: 'ghost' }),
-            'group'
-          )}
-        >
-          <HiMiniArrowLongLeft className='size-4 mr-1.5 group-hover:-translate-x-1 transition-transform' />
-          Go to dashboard
-        </Link>
-        <h2>MockAI</h2>
-      </header>
+      <PageHeader text='Go to interviews' link='/dashboard' />
       <section className='py-8 flex flex-col items-center w-full'>
         <h1 className='text-2xl lg:text-2xl mb-6 font-semibold text-center max-w-[600px]'>
           Let&apos;s start the interview

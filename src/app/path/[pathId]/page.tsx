@@ -1,13 +1,11 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { HiMiniArrowLongLeft } from 'react-icons/hi2';
 import { HiOutlineBookOpen } from 'react-icons/hi2';
 
 import AnimatedProgress from '@/components/AnimatedProgress';
 import Badge from '@/components/ui/badge';
+import PageHeader from '@/components/PageHeader';
 import { getModules, getPathById } from '@/actions/path';
-import { buttonVariants } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
 
 const PathPage = async ({ params }: { params: { pathId: string } }) => {
   const [path, modules] = await Promise.all([
@@ -20,20 +18,8 @@ const PathPage = async ({ params }: { params: { pathId: string } }) => {
   const { jobPosition, jobExperience, completed } = path;
 
   return (
-    <div className='py-2 px-4 md:px-16 lg:px-32 xl:px-56'>
-      <header className='flex items-center justify-between py-3'>
-        <Link
-          href='/dashboard/paths'
-          className={cn(
-            buttonVariants({ size: 'sm', variant: 'ghost' }),
-            'group'
-          )}
-        >
-          <HiMiniArrowLongLeft className='size-4 mr-1.5 group-hover:-translate-x-1 transition-transform' />
-          Go to dashboard
-        </Link>
-        <h2>MockAI</h2>
-      </header>
+    <>
+      <PageHeader text='Go to paths' link='/dashboard/paths' />
       <div>
         <h1 className='text-lg font-medium mb-2'>{jobPosition} path</h1>
         <div className='flex gap-2'>
@@ -77,7 +63,7 @@ const PathPage = async ({ params }: { params: { pathId: string } }) => {
           ))}
         </ul>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -1,18 +1,15 @@
-import Link from 'next/link';
-import { HiMiniArrowLongLeft } from 'react-icons/hi2';
 import { notFound } from 'next/navigation';
 
 import AnimatedProgress from '@/components/AnimatedProgress';
 import ConfettiComponent from '@/components/Confetti';
-import { buttonVariants } from '@/components/ui/button';
+import Attempts from '@/components/Attempts';
+import PageHeader from '@/components/PageHeader';
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
-import { cn } from '@/lib/utils';
 import { getAttemptFeedback, getAttempts } from '@/actions/feedback';
-import Attempts from '@/components/Attempts';
 
 const FeedbackPage = async ({
   params,
@@ -38,20 +35,7 @@ const FeedbackPage = async ({
   return (
     <>
       {hasPassed ? <ConfettiComponent /> : null}
-      <header className='flex items-center justify-between py-3'>
-        <Link
-          href='/dashboard'
-          className={cn(
-            buttonVariants({ size: 'sm', variant: 'ghost' }),
-            'group'
-          )}
-        >
-          <HiMiniArrowLongLeft className='size-4 mr-1.5 group-hover:-translate-x-1 transition-transform' />
-          Go to dashboard
-        </Link>
-
-        <h2>MockAI </h2>
-      </header>
+      <PageHeader text='Go to interviews' link='/dashboard' />
       <div className='flex flex-col items-center mt-2'>
         <section className='tracking-tight pb-3 max-w-[700px] overflow-x-hidden w-full'>
           <div className='flex items-start justify-between flex-col-reverse lg:flex-row'>

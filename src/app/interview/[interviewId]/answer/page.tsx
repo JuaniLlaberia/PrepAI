@@ -1,17 +1,14 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { HiMiniArrowLongLeft } from 'react-icons/hi2';
 
 import AnswerComponent from '../(components)/AnswerComponent';
+import PageHeader from '@/components/PageHeader';
 import { Button, buttonVariants } from '@/components/ui/button';
 import {
-  Dialog,
   DialogClose,
-  DialogContent,
   DialogDescription,
   DialogFooter,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 import { getInterviewById } from '@/actions/interview';
 
@@ -28,15 +25,12 @@ const AnswerPage = async ({
 
   return (
     <>
-      <header className='flex items-center justify-between py-3'>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button className='group' size='sm' variant='ghost'>
-              <HiMiniArrowLongLeft className='size-4 mr-1.5 group-hover:-translate-x-1 transition-transform' />
-              Quit interview
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
+      <PageHeader
+        text='Quit interview'
+        link='/dashboard'
+        withConfirmation
+        confirmationModal={
+          <>
             <DialogTitle>Quit interview</DialogTitle>
             <DialogDescription>
               You are about to leave this interview. You can&apos;t resume it
@@ -53,10 +47,9 @@ const AnswerPage = async ({
                 Quit interview
               </Link>
             </DialogFooter>
-          </DialogContent>
-        </Dialog>
-        <h2>MockAI</h2>
-      </header>
+          </>
+        }
+      />
       <AnswerComponent
         interviewId={params.interviewId}
         interviewAttemptId={searchParams.attemptId}

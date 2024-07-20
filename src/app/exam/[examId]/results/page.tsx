@@ -1,18 +1,12 @@
-import Link from 'next/link';
-import {
-  HiMiniArrowLongLeft,
-  HiOutlineCheck,
-  HiOutlineXMark,
-} from 'react-icons/hi2';
+import { HiOutlineCheck, HiOutlineXMark } from 'react-icons/hi2';
 import { notFound } from 'next/navigation';
 
 import AnimatedProgress from '@/components/AnimatedProgress';
 import ConfettiComponent from '@/components/Confetti';
-import { buttonVariants } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import Attempts from '@/components/Attempts';
+import PageHeader from '@/components/PageHeader';
 import { getExamAttempts, getExamResults } from '@/actions/examAttempt';
 import { formatTimer } from '@/lib/helpers';
-import Attempts from '@/components/Attempts';
 
 const ExamResultsPage = async ({
   params,
@@ -35,20 +29,7 @@ const ExamResultsPage = async ({
   return (
     <>
       {passed ? <ConfettiComponent /> : null}
-      <header className='flex items-center justify-between py-3'>
-        <Link
-          href='/dashboard/exams'
-          className={cn(
-            buttonVariants({ size: 'sm', variant: 'ghost' }),
-            'group'
-          )}
-        >
-          <HiMiniArrowLongLeft className='size-4 mr-1.5 group-hover:-translate-x-1 transition-transform' />
-          Go to dashboard
-        </Link>
-
-        <h2>MockAI </h2>
-      </header>
+      <PageHeader text='Go to exams' link='/dashboard/exams' />
       <div className='flex flex-col items-center mt-2'>
         <section className='w-full max-w-[700px] tracking-tight'>
           <div className='flex items-start justify-between flex-col-reverse lg:flex-row'>
