@@ -7,15 +7,19 @@ import Badge from '@/components/ui/badge';
 import PageHeader from '@/components/PageHeader';
 import { getModules, getPathById } from '@/actions/path';
 
-const PathPage = async ({ params }: { params: { pathId: string } }) => {
-  const [path, modules] = await Promise.all([
-    getPathById({ pathId: params.pathId }),
-    getModules({ pathId: params.pathId }),
+const PathPage = async ({
+  params: { pathId },
+}: {
+  params: { pathId: string };
+}) => {
+  const [[path, passedModules], modules] = await Promise.all([
+    getPathById({ pathId: pathId }),
+    getModules({ pathId: pathId }),
   ]);
 
   if (!path || !modules) return notFound();
 
-  const { jobPosition, jobExperience, completed } = path;
+  const { jobPosition, jobExperience, completed, modules: modulesCount } = path;
 
   return (
     <>
@@ -31,13 +35,16 @@ const PathPage = async ({ params }: { params: { pathId: string } }) => {
           )}
         </div>
         <div className='mt-4 flex flex-col'>
-          <div className='flex justify-between items-center'>
-            <h2 className='text-sm lg:text-base xl:text-lg font-semibold mb-1'>
-              Your progress
-            </h2>
-            <p className='text-sm px-1'>2/10</p>
+          <h2 className='text-sm lg:text-base xl:text-lg font-semibold mb-1'>
+            Your progress
+          </h2>
+          <div className='flex justify-between items-center text-sm px-1 mb-1'>
+            <p>{(passedModules / modulesCount) * 100} % completed</p>
+            <p>
+              {passedModules}/{modulesCount}
+            </p>
           </div>
-          <AnimatedProgress value={20} />
+          <AnimatedProgress value={(passedModules / modulesCount) * 100} />
         </div>
       </div>
       <div className='mt-5'>
@@ -46,9 +53,9 @@ const PathPage = async ({ params }: { params: { pathId: string } }) => {
         </h2>
         <ul className='flex flex-col gap-1.5'>
           {modules.map(module => (
-            <li key={module.id}>
+            <li key={String(module._id)}>
               <Link
-                href={`/path/${params.pathId}/module/${module.id}`}
+                href={`/path/${pathId}/module/${String(module._id)}`}
                 className='flex items-center justify-between border border-border p-3 rounded-lg'
               >
                 <div className='flex items-center gap-2'>
@@ -57,7 +64,7 @@ const PathPage = async ({ params }: { params: { pathId: string } }) => {
                   </div>
                   <h3>{module.title}</h3>
                 </div>
-                <p className='text-sm font-medium'>0/2</p>
+                <p className='text-sm font-medium'>{module.passedValue}/2</p>
               </Link>
             </li>
           ))}
