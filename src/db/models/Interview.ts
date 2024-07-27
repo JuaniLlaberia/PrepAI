@@ -7,6 +7,8 @@ export interface IInterview {
   taken: boolean;
   pinned: boolean;
   userId: ObjectId;
+  moduleId: ObjectId;
+  pathId: ObjectId;
   questions: { _id: string; question: string; hint: string }[];
 }
 
@@ -20,20 +22,10 @@ const interviewSchema = new mongoose.Schema<IInterviewDocument>(
     jobRole: {
       type: String,
       required: true,
-      minlength: [4, 'Interviews role must be at least 4 characters long.'],
-      maxlength: [40, 'Interviews role must be less than 40 characters long.'],
     },
     jobDescription: {
       type: String,
       required: true,
-      minlength: [
-        20,
-        'Interviews description must be at least 20 characters long.',
-      ],
-      maxlength: [
-        300,
-        'Interviews description must be less than 300 characters long.',
-      ],
     },
     jobExperience: {
       type: String,
@@ -46,9 +38,15 @@ const interviewSchema = new mongoose.Schema<IInterviewDocument>(
     },
     pinned: {
       type: Boolean,
-      default: false,
     },
-    userId: { type: mongoose.Schema.ObjectId, ref: 'User', required: true },
+    //userId for interviews created by an user
+    userId: { type: mongoose.Schema.ObjectId, ref: 'User' },
+    //moduleId & pathId for interviews created inside a module
+    moduleId: { type: mongoose.Schema.ObjectId, ref: 'Module' },
+    pathId: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Path',
+    },
     questions: [
       {
         question: { type: String, required: true },
@@ -60,6 +58,7 @@ const interviewSchema = new mongoose.Schema<IInterviewDocument>(
 );
 
 interviewSchema.index({ userId: 1 });
+interviewSchema.index({ moduleId: 1 });
 
 const Interview: Model<IInterviewDocument> =
   mongoose.models?.Interview || mongoose.model('Interview', interviewSchema);

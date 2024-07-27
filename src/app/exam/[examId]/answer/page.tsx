@@ -1,37 +1,36 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { HiMiniArrowLongLeft } from 'react-icons/hi2';
 
+import PageHeader from '@/components/PageHeader';
+import AnswerExamComponent from './(components)/AnswerExamComponent';
 import { Button, buttonVariants } from '@/components/ui/button';
 import {
-  Dialog,
   DialogClose,
-  DialogContent,
   DialogDescription,
   DialogFooter,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog';
-import AnswerExamComponent from './(components)/AnswerExamComponent';
 import { getExamQuestions } from '@/actions/exams';
 
-const ExamAnswerPage = async ({ params, searchParams }: { params: { examId: string }, searchParams: {attemptId: string} }) => {
-  const questions = (await getExamQuestions({ examId: params.examId }))
-    ?.questions;
+const ExamAnswerPage = async ({
+  params: { examId },
+  searchParams: { attemptId },
+}: {
+  params: { examId: string };
+  searchParams: { attemptId: string };
+}) => {
+  const questions = (await getExamQuestions({ examId: examId }))?.questions;
 
   if (!questions) return notFound();
 
   return (
     <>
-      <header className='flex items-center justify-between py-3'>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button className='group' size='sm' variant='ghost'>
-              <HiMiniArrowLongLeft className='size-4 mr-1.5 group-hover:-translate-x-1 transition-transform' />
-              Quit exam
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
+      <PageHeader
+        text='Quit exam'
+        link='/dashboard/exams'
+        withConfirmation
+        confirmationModal={
+          <>
             <DialogTitle>Quit mock exam</DialogTitle>
             <DialogDescription>
               You are about to leave this exam. You can&apos;t resume it after.{' '}
@@ -47,11 +46,14 @@ const ExamAnswerPage = async ({ params, searchParams }: { params: { examId: stri
                 Quit exam
               </Link>
             </DialogFooter>
-          </DialogContent>
-        </Dialog>
-        <h2>MockAI</h2>
-      </header>
-      <AnswerExamComponent examId={params.examId} questions={questions} attemptId={searchParams.attemptId}/>
+          </>
+        }
+      />
+      <AnswerExamComponent
+        examId={examId}
+        questions={questions}
+        attemptId={attemptId}
+      />
     </>
   );
 };

@@ -4,6 +4,7 @@ import {
   HiOutlineDocumentText,
   HiOutlineSquares2X2,
 } from 'react-icons/hi2';
+import { PiTreeStructureLight } from 'react-icons/pi';
 
 import UserMenu from './(components)/UserMenu';
 import DashboardTabs from './(components)/NavbarTabs';
@@ -19,16 +20,22 @@ export type NavigationLinksType = {
 
 const navigationLinks: NavigationLinksType[] = [
   {
+    id: 'paths',
+    label: 'Preparation paths',
+    link: '/dashboard/paths',
+    icon: <PiTreeStructureLight strokeWidth={2} className='size-[1.1rem]' />,
+  },
+  {
     id: 'interviews',
-    label: 'Interviews',
-    link: '/dashboard',
-    icon: <HiOutlineSquares2X2 strokeWidth={2} className='size-[1.1rem]' />,
+    label: 'Mock interviews',
+    link: '/dashboard/interviews',
+    icon: <HiOutlineSquares2X2 strokeWidth={1.5} className='size-[1.1rem]' />,
   },
   {
     id: 'mock-exams',
     label: 'Mock exams',
     link: '/dashboard/exams',
-    icon: <HiOutlineDocumentText strokeWidth={2} className='size-[1.1rem]' />,
+    icon: <HiOutlineDocumentText strokeWidth={1.5} className='size-[1.1rem]' />,
   },
 ];
 

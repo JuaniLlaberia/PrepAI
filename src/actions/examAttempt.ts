@@ -62,7 +62,7 @@ export const getExamResults = async ({
 };
 
 export const getExamAttempts = async ({ examId }: { examId: string }) => {
-  const userId = await authAction();
+  await authAction();
 
-  return await ExamAttempt.find({ examId, userId }).select('_id');
+  return await ExamAttempt.find({ examId }).select('_id');
 };

@@ -1,20 +1,17 @@
 import Link from 'next/link';
 import {
   HiMiniArrowLongRight,
-  HiOutlineClipboardDocumentList,
   HiOutlineEllipsisHorizontal,
   HiOutlinePlay,
   HiOutlinePlus,
   HiOutlineTrash,
 } from 'react-icons/hi2';
-import { PiArrowClockwiseLight } from 'react-icons/pi';
 
-import DifficultyBadge from './(components)/DifficultyBadge';
+import PinPathBtn from './(components)/PinPathBtn';
+import PathFilters from './(components)/PathFilters';
 import Badge from '@/components/ui/badge';
-import DeleteExamModal from './(components)/DeleteExamModal';
-import ExamFilters from './(components)/ExamsFilters';
+import DeletePathModal from './(components)/DeletePathModal';
 import { Button, buttonVariants } from '@/components/ui/button';
-import { getUserExams } from '@/actions/exams';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import {
   DropdownMenu,
@@ -24,62 +21,56 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
-import PinExamBtn from './(components)/PinExamBtn';
+import { getUserPaths } from '@/actions/path';
 
-const ExamsPage = async ({
-  searchParams,
+const PathsPage = async ({
+  searchParams: { sortBy, filter },
 }: {
   searchParams: {
     sortBy: 'createdAt' | 'name';
-    filter: 'all' | 'easy' | 'medium' | 'hard';
+    filter: 'progress' | 'completed';
   };
 }) => {
-  const exams = await getUserExams({
-    filter: searchParams.filter || 'all',
-    sort: searchParams.sortBy || 'createdAt',
-  });
+  const paths = await getUserPaths({ sort: sortBy, filter });
 
   return (
     <>
       <div className='mb-3 flex items-center gap-2 justify-end'>
-        <ExamFilters
-          sortBy={searchParams.sortBy}
-          filter={searchParams.filter}
-        />
-        <Link className={buttonVariants({ size: 'sm' })} href='/exam/new'>
-          <HiOutlinePlus className='size-4 mr-2' /> New mock exam
+        <PathFilters sortBy={sortBy} filter={filter} />
+        <Link className={buttonVariants({ size: 'sm' })} href='/path/new'>
+          <HiOutlinePlus className='size-4 mr-2' /> New path
         </Link>
       </div>
       <div>
         <h2 className='mb-2 text-sm lg:text-base xl:text-lg font-medium'>
-          Your exams
+          Your paths
         </h2>
         <ul className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2.5 pb-4'>
-          {exams.length > 0 ? (
-            exams.map(
+          {paths.length > 0 ? (
+            paths.map(
               ({
                 id,
-                subject,
-                difficulty,
+                jobPosition,
+                jobExperience,
                 createdAt,
-                taken,
-                passed,
+                completed,
                 pinned,
               }) => (
                 <li
                   key={id}
                   className='relative bg-background dark:bg-background-2 p-4 border border-border rounded-lg shadow'
                 >
-                  <Link href={taken ? `/exam/${id}/results` : `/exam/${id}`}>
+                  <Link href={`/path/${id}`}>
                     <h3 className='text-base lg:text-lg font-medium tracking-tight line-clamp-2 mb-2'>
-                      {subject}
+                      {jobPosition}
                     </h3>
                     <div className='flex items-center gap-2'>
-                      <DifficultyBadge difficulty={difficulty} />
-                      <Badge
-                        text={taken ? 'Taken' : 'New'}
-                        color={taken ? 'gray' : 'orange'}
-                      />
+                      <Badge text={`${jobExperience} level`} color='purple' />
+                      {completed ? (
+                        <Badge text='Completed' color='green' />
+                      ) : (
+                        <Badge text='In progress' color='orange' />
+                      )}
                       {pinned ? <Badge text='Pinned' color='blue' /> : null}
                     </div>
                     <p className='text-muted-foreground text-sm text-end mt-3'>
@@ -91,7 +82,7 @@ const ExamsPage = async ({
                         size='sm'
                         className='w-full group'
                       >
-                        {taken ? 'See results' : 'Start mock exam'}
+                        View modules
                         <HiMiniArrowLongRight className='size-4 ml-2 group-hover:translate-x-1 transition-transform' />
                       </Button>
                     </div>
@@ -104,30 +95,13 @@ const ExamsPage = async ({
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
-                        <PinExamBtn isPinned={pinned} examId={id} />
-                        {!taken ? (
-                          <DropdownMenuItem asChild>
-                            <Link href={`/exam/${id}`}>
-                              <HiOutlinePlay className='size-4 mr-2' />
-                              Start now
-                            </Link>
-                          </DropdownMenuItem>
-                        ) : (
-                          <>
-                            <DropdownMenuItem asChild>
-                              <Link href={`/exam/${id}`}>
-                                <PiArrowClockwiseLight className='size-4 mr-2' />
-                                Re-take
-                              </Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem asChild>
-                              <Link href={`/exam/${id}/results`}>
-                                <HiOutlineClipboardDocumentList className='size-4 mr-2' />
-                                Results
-                              </Link>
-                            </DropdownMenuItem>
-                          </>
-                        )}
+                        <PinPathBtn pathId={id} isPinned={pinned} />
+                        <DropdownMenuItem asChild>
+                          <Link href={`/exam/${id}`}>
+                            <HiOutlinePlay className='size-4 mr-2' />
+                            Go to path
+                          </Link>
+                        </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
                           asChild
@@ -141,7 +115,7 @@ const ExamsPage = async ({
                       </DropdownMenuContent>
                     </DropdownMenu>
                     <DialogContent>
-                      <DeleteExamModal examId={id} subject={subject} />
+                      <DeletePathModal pathId={id} jobPosition={jobPosition} />
                     </DialogContent>
                   </Dialog>
                 </li>
@@ -149,12 +123,12 @@ const ExamsPage = async ({
             )
           ) : (
             <div className='flex flex-col col-span-full gap-2 justify-center items-center py-6 text-muted-foreground'>
-              <p>No exams found</p>
+              <p>No paths found</p>
               <Link
                 className={cn(buttonVariants({ variant: 'default' }), 'group')}
-                href='/exam/new'
+                href='/path/new'
               >
-                New mock exam
+                New preparation path
                 <HiMiniArrowLongRight className='size-4 ml-2 group-hover:translate-x-1 transition-transform' />
               </Link>
             </div>
@@ -165,4 +139,4 @@ const ExamsPage = async ({
   );
 };
 
-export default ExamsPage;
+export default PathsPage;

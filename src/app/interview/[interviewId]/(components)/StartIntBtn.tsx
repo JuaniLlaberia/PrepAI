@@ -9,15 +9,28 @@ import { HiMiniArrowLongRight } from 'react-icons/hi2';
 import { Button } from '@/components/ui/button';
 import { createInterviewAttempt } from '@/actions/interviewAttempt';
 
-const StartIntBtn = ({ interviewId }: { interviewId: string }) => {
+const StartIntBtn = ({
+  interviewId,
+  moduleId,
+  pathId,
+}: {
+  interviewId: string;
+  moduleId?: string;
+  pathId?: string;
+}) => {
   const router = useRouter();
 
   const { mutate: createAttempt, isPending } = useMutation({
     mutationKey: ['create-attemp'],
     mutationFn: createInterviewAttempt,
-    onSuccess: attemptId => {
-      toast.success('Starting interview...');
-      router.push(`/interview/${interviewId}/answer?attemptId=${attemptId}`);
+    onSuccess: (attemptId: string) => {
+      toast.success(`Starting ${!moduleId ? 'mock' : ''} interview...`);
+      if (moduleId)
+        router.push(
+          `/path/${pathId}/module/${moduleId}/interview/${interviewId}/answer?attemptId=${attemptId}`
+        );
+      else
+        router.push(`/interview/${interviewId}/answer?attemptId=${attemptId}`);
     },
     onError: () => toast.error('Failed to start interview'),
   });
@@ -32,7 +45,7 @@ const StartIntBtn = ({ interviewId }: { interviewId: string }) => {
       {isPending ? (
         <LuLoader2 strokeWidth={2} className='animate-spin size-4 mr-1.5' />
       ) : null}
-      Start interview
+      Start {!moduleId ? 'mock' : ''} interview
       {!isPending ? (
         <HiMiniArrowLongRight className='size-4 ml-1.5 group-hover:translate-x-1 transition-transform' />
       ) : null}
