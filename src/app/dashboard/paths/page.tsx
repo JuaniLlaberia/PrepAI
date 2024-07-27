@@ -7,6 +7,8 @@ import {
   HiOutlineTrash,
 } from 'react-icons/hi2';
 
+import PinPathBtn from './(components)/PinPathBtn';
+import PathFilters from './(components)/PathFilters';
 import Badge from '@/components/ui/badge';
 import DeletePathModal from './(components)/DeletePathModal';
 import { Button, buttonVariants } from '@/components/ui/button';
@@ -20,22 +22,21 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 import { getUserPaths } from '@/actions/path';
-import { Progress } from '@/components/ui/progress';
-import PathSorts from './(components)/PathSorts';
 
 const PathsPage = async ({
-  searchParams,
+  searchParams: { sortBy, filter },
 }: {
   searchParams: {
     sortBy: 'createdAt' | 'name';
+    filter: 'progress' | 'completed';
   };
 }) => {
-  const paths = await getUserPaths({ sort: searchParams.sortBy });
+  const paths = await getUserPaths({ sort: sortBy, filter });
 
   return (
     <>
       <div className='mb-3 flex items-center gap-2 justify-end'>
-        <PathSorts sortBy={searchParams.sortBy} />
+        <PathFilters sortBy={sortBy} filter={filter} />
         <Link className={buttonVariants({ size: 'sm' })} href='/path/new'>
           <HiOutlinePlus className='size-4 mr-2' /> New path
         </Link>
@@ -67,19 +68,24 @@ const PathsPage = async ({
                       <Badge text={`${jobExperience} level`} color='purple' />
                       {completed ? (
                         <Badge text='Completed' color='green' />
-                      ) : null}
+                      ) : (
+                        <Badge text='In progress' color='orange' />
+                      )}
                       {pinned ? <Badge text='Pinned' color='blue' /> : null}
                     </div>
-                    <div className='flex flex-col gap-2 mt-5'>
-                      <div className='flex justify-between px-1'>
-                        <p className='text-sm'>20% completed</p>
-                        <p className='text-sm'>2/10</p>
-                      </div>
-                      <Progress value={20} className='h-2.5' />
-                    </div>
-                    <p className='text-muted-foreground text-sm text-start mt-3'>
+                    <p className='text-muted-foreground text-sm text-end mt-3'>
                       {createdAt.toDateString()}
                     </p>
+                    <div className='flex items-center mt-4'>
+                      <Button
+                        variant='outline'
+                        size='sm'
+                        className='w-full group'
+                      >
+                        View modules
+                        <HiMiniArrowLongRight className='size-4 ml-2 group-hover:translate-x-1 transition-transform' />
+                      </Button>
+                    </div>
                   </Link>
                   <Dialog>
                     <DropdownMenu>
@@ -89,13 +95,13 @@ const PathsPage = async ({
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
+                        <PinPathBtn pathId={id} isPinned={pinned} />
                         <DropdownMenuItem asChild>
                           <Link href={`/exam/${id}`}>
                             <HiOutlinePlay className='size-4 mr-2' />
                             Go to path
                           </Link>
                         </DropdownMenuItem>
-
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
                           asChild
@@ -120,7 +126,7 @@ const PathsPage = async ({
               <p>No paths found</p>
               <Link
                 className={cn(buttonVariants({ variant: 'default' }), 'group')}
-                href='/interview/new'
+                href='/path/new'
               >
                 New preparation path
                 <HiMiniArrowLongRight className='size-4 ml-2 group-hover:translate-x-1 transition-transform' />

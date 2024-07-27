@@ -27,8 +27,8 @@ const navigationLinks: NavigationLinksType[] = [
   },
   {
     id: 'interviews',
-    label: 'Interviews',
-    link: '/dashboard',
+    label: 'Mock interviews',
+    link: '/dashboard/interviews',
     icon: <HiOutlineSquares2X2 strokeWidth={1.5} className='size-[1.1rem]' />,
   },
   {

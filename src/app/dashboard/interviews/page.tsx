@@ -9,10 +9,10 @@ import {
 } from 'react-icons/hi2';
 import { PiArrowClockwiseLight } from 'react-icons/pi';
 
-import DeleteInterviewModal from './(components)/DeleteInterviewModal';
+import DeleteInterviewModal from '../(components)/DeleteInterviewModal';
 import Badge from '@/components/ui/badge';
-import InterviewsFilters from './(components)/InterviewsFilter';
-import PinInterviewBtn from './(components)/PinInterviewBtn';
+import InterviewsFilters from '../(components)/InterviewsFilter';
+import PinInterviewBtn from '../(components)/PinInterviewBtn';
 import { getUserInterviews } from '@/actions/interview';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
@@ -25,7 +25,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 
-const DashboardPage = async ({
+const InterviewsPage = async ({
   searchParams,
 }: {
   searchParams: {
@@ -163,4 +163,4 @@ const DashboardPage = async ({
   );
 };
 
-export default DashboardPage;
+export default InterviewsPage;

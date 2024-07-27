@@ -152,7 +152,7 @@ const ExamsPage = async ({
               <p>No exams found</p>
               <Link
                 className={cn(buttonVariants({ variant: 'default' }), 'group')}
-                href='/interview/new'
+                href='/exam/new'
               >
                 New mock exam
                 <HiMiniArrowLongRight className='size-4 ml-2 group-hover:translate-x-1 transition-transform' />
