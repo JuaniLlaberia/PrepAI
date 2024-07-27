@@ -10,6 +10,7 @@ import { motion } from 'framer-motion';
 import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { LuLoader2 } from 'react-icons/lu';
+import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
 import { useMultiStepForm } from '@/hooks/useMultistepForm';
@@ -18,17 +19,23 @@ import { formatNumber, formatTimer } from '@/lib/helpers';
 import { useTimer } from '@/hooks/useTimer';
 import { updateExamAttempt } from '@/actions/examAttempt';
 import { IExamAttemptDocument } from '@/db/models/ExamAttempt';
-import { useRouter } from 'next/navigation';
+import { finishExamAttemptForModule } from '@/actions/modules';
 
 const AnswerExamComponent = ({
   examId,
   attemptId,
   questions,
+  moduleId,
+  pathId,
 }: {
   examId: string;
   attemptId: string;
   questions: { question: string; options: string[]; correctAnswer: number }[];
+  moduleId?: string;
+  pathId?: string;
 }) => {
+  console.log(moduleId ? 'belong to moduke' : 'belong to user');
+
   const { timer } = useTimer();
   const router = useRouter();
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
@@ -41,12 +48,19 @@ const AnswerExamComponent = ({
 
   const { mutate: submitExamAttempt, isPending } = useMutation({
     mutationKey: ['submit-exam-attempt'],
-    mutationFn: updateExamAttempt,
-    onSuccess: () => {
+    mutationFn: moduleId ? finishExamAttemptForModule : updateExamAttempt,
+    onSuccess: (passed: boolean) => {
       toast.success('Submitting answers', {
         description: 'You will be redirected automatically.',
       });
-      router.push(`/exam/${examId}/results?attemptId=${attemptId}`);
+
+      if (moduleId) {
+        router.push(
+          `/path/${pathId}/module/${moduleId}/exam/${examId}/results?attemptId=${attemptId}`
+        );
+      } else {
+        router.push(`/exam/${examId}/results?attemptId=${attemptId}`);
+      }
     },
     onError: () =>
       toast.error('Failed to submit exam answers. Please try again.'),
@@ -110,7 +124,12 @@ const AnswerExamComponent = ({
       answers,
     };
 
-    submitExamAttempt({ examId, attemptId, data });
+    submitExamAttempt({
+      examId,
+      attemptId,
+      data,
+      moduleId: moduleId as string,
+    });
   };
 
   //Allow users to use keyboard to answer
@@ -166,6 +185,7 @@ const AnswerExamComponent = ({
               {questions.length}
             </span>
           </p>
+          {/* Implement as separate component to avoid rerenders */}
           <p className='flex items-center gap-1.5 font-medium text-muted-foreground lg:text-lg'>
             <HiOutlineClock strokeWidth={2} className='size-5' />
             {formatTimer(timer)}

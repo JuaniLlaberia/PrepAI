@@ -8,6 +8,7 @@ export interface IExam {
   pinned: boolean;
   userId: ObjectId;
   moduleId: ObjectId;
+  pathId: ObjectId;
   questions: { question: string; options: string[]; correctAnswer: number }[];
 }
 
@@ -21,8 +22,6 @@ const examSchema = new mongoose.Schema<IExamDocument>(
     subject: {
       type: String,
       required: true,
-      minlength: [4, 'Interviews role must be at least 4 characters long.'],
-      maxlength: [40, 'Interviews role must be less than 40 characters long.'],
     },
     difficulty: {
       type: String,
@@ -31,14 +30,14 @@ const examSchema = new mongoose.Schema<IExamDocument>(
     },
     taken: { type: Boolean, default: false },
     passed: { type: Boolean, default: false },
-    pinned: { type: Boolean, default: false },
-    userId: {
+    pinned: { type: Boolean },
+    //userId for interviews created by an user
+    userId: { type: mongoose.Schema.ObjectId, ref: 'User' },
+    //moduleId & pathId for interviews created inside a module
+    moduleId: { type: mongoose.Schema.ObjectId, ref: 'Module' },
+    pathId: {
       type: mongoose.Schema.ObjectId,
-      ref: 'User',
-    },
-    moduleId: {
-      type: mongoose.Schema.ObjectId,
-      ref: 'Module',
+      ref: 'Path',
     },
     questions: [
       {

@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import PageHeader from '@/components/PageHeader';
+import AnswerExamComponent from './(components)/AnswerExamComponent';
 import { Button, buttonVariants } from '@/components/ui/button';
 import {
   DialogClose,
@@ -9,18 +10,16 @@ import {
   DialogFooter,
   DialogTitle,
 } from '@/components/ui/dialog';
-import AnswerExamComponent from './(components)/AnswerExamComponent';
 import { getExamQuestions } from '@/actions/exams';
 
 const ExamAnswerPage = async ({
-  params,
-  searchParams,
+  params: { examId },
+  searchParams: { attemptId },
 }: {
   params: { examId: string };
   searchParams: { attemptId: string };
 }) => {
-  const questions = (await getExamQuestions({ examId: params.examId }))
-    ?.questions;
+  const questions = (await getExamQuestions({ examId: examId }))?.questions;
 
   if (!questions) return notFound();
 
@@ -51,9 +50,9 @@ const ExamAnswerPage = async ({
         }
       />
       <AnswerExamComponent
-        examId={params.examId}
+        examId={examId}
         questions={questions}
-        attemptId={searchParams.attemptId}
+        attemptId={attemptId}
       />
     </>
   );
