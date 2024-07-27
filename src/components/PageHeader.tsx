@@ -14,7 +14,7 @@ type PageHeaderType = {
 };
 
 const PageHeader = ({
-  link = '/dashboard',
+  link = '/',
   text = 'Go back',
   withConfirmation,
   confirmationModal,
