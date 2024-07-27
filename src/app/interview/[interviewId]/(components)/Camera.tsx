@@ -1,13 +1,15 @@
 'use client';
 
 import Webcam from 'react-webcam';
+import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs';
 import { useState } from 'react';
 import { LuWebcam } from 'react-icons/lu';
-import { PiWebcamSlashLight } from 'react-icons/pi';
 
 import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const CameraComponent = () => {
+  const { user, isLoading } = useKindeBrowserClient();
   const [webcamEnabled, setWebcamEnabled] = useState<boolean>(false);
 
   return (
@@ -24,8 +26,19 @@ const CameraComponent = () => {
       ) : (
         <div>
           <div className='w-full mb-1 flex flex-col gap-2 items-center justify-center h-[258px] lg:h-[350px] lg:rounded-xl bg-background-2 border border-border rounded-lg'>
-            <PiWebcamSlashLight className='size-12 text-muted-foreground' />
-            <p className='text-sm text-muted-foreground'>Camera not enabled</p>
+            {isLoading ? (
+              <div className='size-20 bg-background rounded-full border border-border animate-pulse'></div>
+            ) : (
+              <>
+                <Avatar className='size-16'>
+                  <AvatarFallback>{user?.family_name?.[0]}</AvatarFallback>
+                  <AvatarImage src={user?.picture!} />
+                </Avatar>
+                <p className='text-sm text-muted-foreground'>
+                  {user?.given_name} {user?.family_name}
+                </p>
+              </>
+            )}
           </div>
           <Button
             variant='outline'
