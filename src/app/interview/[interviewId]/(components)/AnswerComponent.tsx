@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/button';
 import { useSpeechRecognition } from '@/hooks/useSpeechRecognition';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { generateFeedback } from '@/actions/feedback';
+import { finishInterviewAttemptForModule } from '@/actions/modules';
 
 type AnswerComponentPropsType = {
   interviewId: string;
@@ -25,12 +26,17 @@ type AnswerComponentPropsType = {
     question: string;
     hint: string;
   }[];
+  //For module interviews
+  moduleId?: string;
+  pathId?: string;
 };
 
 const AnswerComponent = ({
   questions,
   interviewId,
   interviewAttemptId,
+  moduleId,
+  pathId,
 }: AnswerComponentPropsType) => {
   const {
     transcript,
@@ -52,14 +58,21 @@ const AnswerComponent = ({
 
   const { mutate: endInterview, isPending } = useMutation({
     mutationKey: ['finish-interview'],
-    mutationFn: generateFeedback,
+    mutationFn: moduleId ? finishInterviewAttemptForModule : generateFeedback,
     onSuccess: () => {
       toast.success('Generating feedback', {
         description: 'You will be redirected automatically.',
       });
-      router.push(
-        `/interview/${interviewId}/feedback?attemptId=${interviewAttemptId}`
-      );
+
+      if (moduleId) {
+        router.push(
+          `/path/${pathId}/module/${moduleId}/interview/${interviewAttemptId}/feedback?attemptId=${interviewAttemptId}`
+        );
+      } else {
+        router.push(
+          `/interview/${interviewId}/feedback?attemptId=${interviewAttemptId}`
+        );
+      }
     },
     onError: () => toast.error('Failed to submit interview'),
   });
