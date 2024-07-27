@@ -7,6 +7,7 @@ export interface IPath {
   completed: boolean;
   pinned: boolean;
   userId: ObjectId;
+  modules: number;
 }
 
 export interface IPathDocument extends IPath, Document {
@@ -48,6 +49,7 @@ const pathSchema = new mongoose.Schema<IPathDocument>(
       default: false,
     },
     userId: { type: mongoose.Schema.ObjectId, ref: 'User', required: true },
+    modules: Number,
   },
   { timestamps: true }
 );
