@@ -6,7 +6,7 @@ import { revalidatePath } from 'next/cache';
 import ExamAttempt from '@/db/models/ExamAttempt';
 import Exam, { IExamDocument } from '@/db/models/Exam';
 import { authAction, examBelongsToUser } from './auth';
-import { model } from '@/gemini';
+import { generateExamWithGemini } from '@/gemini/functions';
 
 export const getUserExams = async ({
   sort,
@@ -40,26 +40,12 @@ export const createExam = async ({
 
   if (!subject || !difficulty) throw new Error('Missing required data');
 
-  const prompt = `Generate an multiple choice exam about ${subject}
-   with a ${difficulty} difficulty level. Provide ${
-    difficulty === 'easy' || difficulty === 'medium' ? '10' : '15'
-  } related questions
-   (each with the question, 4 options and the correct option (being the option index)). Provide
-   it in JSON format with this schema: {questions: [{question, options, correctAnswer}]}.`;
-
-  const result = await model.generateContent(prompt);
-  const response = await result.response;
-  const jsonData = response.text();
-
-  const questions: {
-    question: string;
-    options: string[];
-    correctAnswer: number;
-  }[] = JSON.parse(jsonData).questions;
+  const questions = await generateExamWithGemini({ subject, difficulty });
 
   const { id } = await Exam.create({
     subject,
     difficulty,
+    pinned: false,
     userId,
     questions,
   });
