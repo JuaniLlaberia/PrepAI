@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
-import { HiOutlineSquares2X2 } from 'react-icons/hi2';
+import { HiOutlineHome } from 'react-icons/hi2';
 
 import LogoutBtn from './LogoutBtn';
 import ThemeMenu from './ThemeMenu';
@@ -38,9 +38,9 @@ const UserMenu = async () => {
         <DropdownMenuLabel>My account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link href='/dashboard'>
-            <HiOutlineSquares2X2 className='size-4 mr-1.5' />
-            My interviews
+          <Link href='/'>
+            <HiOutlineHome className='size-4 mr-1.5' />
+            Home
           </Link>
         </DropdownMenuItem>
         <ThemeMenu />

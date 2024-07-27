@@ -61,7 +61,7 @@ const PathsPage = async ({
                   className='relative bg-background dark:bg-background-2 p-4 border border-border rounded-lg shadow'
                 >
                   <Link href={`/path/${id}`}>
-                    <h3 className='text-base lg:text-lg font-medium tracking-tight line-clamp-2 mb-2'>
+                    <h3 className='text-base lg:text-lg font-medium line-clamp-2 mb-2'>
                       {jobPosition}
                     </h3>
                     <div className='flex items-center gap-2'>

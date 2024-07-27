@@ -13,12 +13,12 @@ const SignupPage = async () => {
   return (
     <section className='h-full flex flex-col items-center justify-center'>
       <div className='w-full max-w-[400px] px-8'>
-        <div className='mb-6 text-xl font-bold tracking-tight'>
+        <div className='mb-6 text-xl font-bold'>
           <h1>Create your MockAI account</h1>
           <h2 className='text-muted-foreground/60'>Smash that interview</h2>
         </div>
         <Authentication />
-        <p className='mt-3 text-sm text-muted-foreground tracking-tight'>
+        <p className='mt-3 text-sm text-muted-foreground'>
           Already have an account?{' '}
           <Link
             href='/login'
@@ -28,10 +28,7 @@ const SignupPage = async () => {
           </Link>
         </p>
       </div>
-      <Link
-        href='/'
-        className='absolute top-5 left-5'
-      >
+      <Link href='/' className='absolute top-5 left-5'>
         LOGO
       </Link>
     </section>

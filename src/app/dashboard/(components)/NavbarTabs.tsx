@@ -22,7 +22,7 @@ const DashboardTabs = ({ links }: { links: NavigationLinksType[] }) => {
               <Link
                 href={link.link}
                 className={cn(
-                  'inline-block text-nowrap px-4 py-2 rounded-t-lg hover:text-muted-foreground transition-colors',
+                  'inline-block text-nowrap px-4 py-2 rounded-t-lg lg:hover:text-muted-foreground transition-colors',
                   pathname === link.link ? 'border-b-2 border-primary' : null
                 )}
                 id='interview-tab'

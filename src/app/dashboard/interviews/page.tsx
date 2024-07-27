@@ -66,7 +66,7 @@ const InterviewsPage = async ({
                       taken ? `/interview/${id}/feedback` : `/interview/${id}`
                     }
                   >
-                    <h3 className='text-base lg:text-lg font-medium tracking-tight line-clamp-2 mb-2'>
+                    <h3 className='text-base lg:text-lg font-medium line-clamp-2 mb-2'>
                       {jobRole}
                     </h3>
                     <div className='flex items-center gap-2'>

@@ -71,7 +71,7 @@ const ExamsPage = async ({
                   className='relative bg-background dark:bg-background-2 p-4 border border-border rounded-lg shadow'
                 >
                   <Link href={taken ? `/exam/${id}/results` : `/exam/${id}`}>
-                    <h3 className='text-base lg:text-lg font-medium tracking-tight line-clamp-2 mb-2'>
+                    <h3 className='text-base lg:text-lg font-medium line-clamp-2 mb-2'>
                       {subject}
                     </h3>
                     <div className='flex items-center gap-2'>

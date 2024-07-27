@@ -49,7 +49,7 @@ const NewPathForm = () => {
         transition={{ duration: 0.3, ease: 'easeInOut' }}
         key='position-step'
       >
-        <p className='text-3xl font-medium tracking-tight mb-3 text-center'>
+        <p className='text-3xl font-medium mb-3 text-center'>
           What&apos;s the job position you want to prepare?
         </p>
         <InputWrapper
@@ -77,7 +77,7 @@ const NewPathForm = () => {
         transition={{ duration: 0.3, ease: 'easeInOut' }}
         key='experience-step'
       >
-        <p className='text-3xl font-medium tracking-tight mb-3 text-center'>
+        <p className='text-3xl font-medium mb-3 text-center'>
           What&apos;s the required experience level?
         </p>
         <div className='text-center lg:pt-4 lg:text-start'>
@@ -89,7 +89,7 @@ const NewPathForm = () => {
               options={[
                 { label: 'Intership', value: 'intership' },
                 { label: 'Junior', value: 'junior' },
-                { label: 'Srr', value: 'ssr' },
+                { label: 'Ssr', value: 'ssr' },
                 { label: 'Senior', value: 'senior' },
                 { label: 'Leader', value: 'lead' },
               ]}
@@ -119,7 +119,7 @@ const NewPathForm = () => {
         transition={{ duration: 0.3, ease: 'easeInOut' }}
         key='topics'
       >
-        <p className='text-3xl font-medium tracking-tight mb-3 text-center'>
+        <p className='text-3xl font-medium mb-3 text-center'>
           Describe what topics you need to practice
         </p>
         <InputWrapper inputId='topics' error={errors.topics?.message as string}>

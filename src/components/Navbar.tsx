@@ -44,9 +44,7 @@ const Navbar = () => {
       className='fixed top-0 pt-3 px-2.5 flex w-full justify-center z-50'
     >
       <nav className='flex items-center p-1 justify-between gap-3 rounded-full bg-secondary border border-border w-full max-w-[650px] shadow-sm'>
-        <span className='px-5 font-bold tracking-tight text-primary-foreground'>
-          MockAI
-        </span>
+        <span className='px-5 font-bold text-primary-foreground'>MockAI</span>
         <div className='flex items-center gap-4'>
           {isLoading ? (
             <Skeleton className='h-9 w-24 lg:w-32 rounded-full' />

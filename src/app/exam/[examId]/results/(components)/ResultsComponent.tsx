@@ -29,7 +29,7 @@ const ResultsComponent = async ({
     <>
       {passed ? <ConfettiComponent /> : null}
       <div className='flex flex-col items-center mt-2'>
-        <section className='w-full max-w-[700px] tracking-tight'>
+        <section className='w-full max-w-[700px]'>
           <div className='flex items-start justify-between flex-col-reverse lg:flex-row'>
             <div>
               <h1 className='text-2xl font-medium'>Mock exam results</h1>

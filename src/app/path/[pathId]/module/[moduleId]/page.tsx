@@ -27,7 +27,7 @@ const ModulePage = async ({
             <h2 className='text-sm lg:text-base xl:text-lg font-semibold mb-1'>
               Topics to learn
             </h2>
-            <ul className='flex flex-col gap-1'>
+            <ul className='flex flex-col gap-1 tracking-tight'>
               {topics.map((topic, i) => (
                 <li
                   key={i}
