@@ -72,8 +72,8 @@ const Assessments = ({
       <h2 className='text-sm lg:text-base xl:text-lg font-semibold mb-1'>
         Assessments
       </h2>
-      <ul className='flex flex-col gap-2'>
-        <li className='flex flex-col bg-background-2 border border-border rounded-lg p-3'>
+      <ul className='flex flex-col gap-2 lg:flex-row lg:w-full'>
+        <li className='flex flex-col bg-background-2 border border-border rounded-lg p-3 lg:w-full'>
           {!examData.passed ? (
             <>
               <h4 className='font-medium'>Ready for the exam?</h4>
@@ -135,7 +135,7 @@ const Assessments = ({
             </div>
           )}
         </li>
-        <li className='flex flex-col bg-background-2 border border-border rounded-lg p-3'>
+        <li className='flex flex-col bg-background-2 border border-border rounded-lg p-3 lg:w-full'>
           {!interviewData.passed ? (
             <>
               <h4 className='font-medium'>Ready for the interview?</h4>
