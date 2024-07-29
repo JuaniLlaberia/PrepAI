@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import AnswerComponent from '../(components)/AnswerComponent';
+import AnswerInterviewComponent from '../(components)/AnswerInterviewComponent';
 import PageHeader from '@/components/PageHeader';
 import { Button, buttonVariants } from '@/components/ui/button';
 import {
@@ -14,10 +14,10 @@ import { getInterviewById } from '@/actions/interview';
 
 const AnswerPage = async ({
   params: { interviewId },
-  searchParams: { attemptId },
+  searchParams: { attemptId, pathId, moduleId },
 }: {
   params: { interviewId: string };
-  searchParams: { attemptId: string };
+  searchParams: { attemptId: string; pathId: string; moduleId: string };
 }) => {
   const interview = await getInterviewById({ interviewId });
 
@@ -27,7 +27,11 @@ const AnswerPage = async ({
     <>
       <PageHeader
         text='Quit interview'
-        link='/dashboard/interviews'
+        link={
+          moduleId
+            ? `/path/${pathId}/module/${moduleId}`
+            : '/dashboard/interviews'
+        }
         withConfirmation
         confirmationModal={
           <>
@@ -44,7 +48,11 @@ const AnswerPage = async ({
                 <Button variant='ghost'>Cancel</Button>
               </DialogClose>
               <Link
-                href='/dashboard/interviews'
+                href={
+                  moduleId
+                    ? `/path/${pathId}/module/${moduleId}`
+                    : '/dashboard/interviews'
+                }
                 className={buttonVariants({})}
               >
                 Quit interview
@@ -53,10 +61,13 @@ const AnswerPage = async ({
           </>
         }
       />
-      <AnswerComponent
+      <AnswerInterviewComponent
         interviewId={interviewId}
         interviewAttemptId={attemptId}
         questions={interview.questions}
+        //Just for modules
+        moduleId={moduleId}
+        pathId={pathId}
       />
     </>
   );

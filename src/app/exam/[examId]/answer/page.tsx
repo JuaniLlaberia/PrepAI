@@ -14,10 +14,10 @@ import { getExamQuestions } from '@/actions/exams';
 
 const ExamAnswerPage = async ({
   params: { examId },
-  searchParams: { attemptId },
+  searchParams: { attemptId, pathId, moduleId },
 }: {
   params: { examId: string };
-  searchParams: { attemptId: string };
+  searchParams: { attemptId: string; moduleId: string; pathId: string };
 }) => {
   const questions = await getExamQuestions({ examId: examId });
   if (!questions) return notFound();
@@ -26,11 +26,13 @@ const ExamAnswerPage = async ({
     <>
       <PageHeader
         text='Quit exam'
-        link='/dashboard/exams'
+        link={
+          moduleId ? `/path/${pathId}/module/${moduleId}` : '/dashboard/exams'
+        }
         withConfirmation
         confirmationModal={
           <>
-            <DialogTitle>Quit mock exam</DialogTitle>
+            <DialogTitle>Quit exam</DialogTitle>
             <DialogDescription>
               You are about to leave this exam. You can&apos;t resume it after.{' '}
               <span className='font-medium text-primary'>
@@ -42,7 +44,11 @@ const ExamAnswerPage = async ({
                 <Button variant='ghost'>Cancel</Button>
               </DialogClose>
               <Link
-                href='/dashboard/exams'
+                href={
+                  moduleId
+                    ? `/path/${pathId}/module/${moduleId}`
+                    : '/dashboard/exams'
+                }
                 className={buttonVariants({})}
               >
                 Quit exam
@@ -55,6 +61,8 @@ const ExamAnswerPage = async ({
         examId={examId}
         questions={questions}
         attemptId={attemptId}
+        pathId={pathId}
+        moduleId={moduleId}
       />
     </>
   );

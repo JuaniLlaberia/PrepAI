@@ -49,6 +49,7 @@ const ModulePage = async ({
           </div>
           <Assessments
             moduleId={moduleId}
+            pathId={pathId}
             examData={JSON.parse(JSON.stringify(exam))}
             interviewData={JSON.parse(JSON.stringify(interview))}
           />
