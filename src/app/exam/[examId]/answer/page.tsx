@@ -19,8 +19,7 @@ const ExamAnswerPage = async ({
   params: { examId: string };
   searchParams: { attemptId: string };
 }) => {
-  const questions = (await getExamQuestions({ examId: examId }))?.questions;
-
+  const questions = await getExamQuestions({ examId: examId });
   if (!questions) return notFound();
 
   return (
@@ -42,7 +41,10 @@ const ExamAnswerPage = async ({
               <DialogClose asChild>
                 <Button variant='ghost'>Cancel</Button>
               </DialogClose>
-              <Link href='/dashboard/exams' className={buttonVariants({})}>
+              <Link
+                href='/dashboard/exams'
+                className={buttonVariants({})}
+              >
                 Quit exam
               </Link>
             </DialogFooter>

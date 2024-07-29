@@ -74,14 +74,14 @@ const Assessments = ({
       </h2>
       <ul className='flex flex-col gap-2 lg:flex-row lg:w-full'>
         <li className='flex flex-col bg-background-2 border border-border rounded-lg p-3 lg:w-full'>
-          {!examData.passed ? (
+          {!examData || !examData?.passed ? (
             <>
               <h4 className='font-medium'>Ready for the exam?</h4>
               <p className='text-sm text-muted-foreground'>
                 Take a mock exam to validate your knowledge.
               </p>
               <div className='flex items-center gap-3 mt-5'>
-                {examData.examId ? (
+                {examData?.examId ? (
                   <Link
                     href={`${pathname}/exam/${examData.examId}/results`}
                     className={cn(
@@ -95,7 +95,7 @@ const Assessments = ({
                     See attempts
                   </Link>
                 ) : null}
-                {!examData.examId ? (
+                {!examData || !examData.examId ? (
                   <Button
                     className='w-full'
                     size='sm'
@@ -136,14 +136,14 @@ const Assessments = ({
           )}
         </li>
         <li className='flex flex-col bg-background-2 border border-border rounded-lg p-3 lg:w-full'>
-          {!interviewData.passed ? (
+          {!interviewData || !interviewData.passed ? (
             <>
               <h4 className='font-medium'>Ready for the interview?</h4>
               <p className='text-sm text-muted-foreground'>
                 Take a mock interview to practice your skills.
               </p>
               <div className='flex items-center gap-3 mt-5'>
-                {interviewData.interviewId ? (
+                {interviewData?.interviewId ? (
                   <Link
                     href={`${pathname}/interview/${interviewData.interviewId}/feedback`}
                     className={cn(
@@ -157,7 +157,7 @@ const Assessments = ({
                     See attempts
                   </Link>
                 ) : null}
-                {!interviewData.interviewId ? (
+                {!interviewData || !interviewData.interviewId ? (
                   <Button
                     className='w-full'
                     size='sm'

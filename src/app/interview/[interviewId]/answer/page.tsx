@@ -19,7 +19,7 @@ const AnswerPage = async ({
   params: { interviewId: string };
   searchParams: { attemptId: string };
 }) => {
-  const interview = await getInterviewById({ interviewId: interviewId });
+  const interview = await getInterviewById({ interviewId });
 
   if (!interview) return notFound();
 
@@ -43,7 +43,10 @@ const AnswerPage = async ({
               <DialogClose asChild>
                 <Button variant='ghost'>Cancel</Button>
               </DialogClose>
-              <Link href='/dashboard/interviews' className={buttonVariants({})}>
+              <Link
+                href='/dashboard/interviews'
+                className={buttonVariants({})}
+              >
                 Quit interview
               </Link>
             </DialogFooter>

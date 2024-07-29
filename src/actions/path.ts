@@ -55,7 +55,7 @@ export const getPathById = async ({ pathId }: { pathId: string }) => {
   if (String(path?.userId) !== userId)
     throw new Error('This path does not belong to you');
 
-  return [path, passedModules[0].passedModules];
+  return [path, passedModules[0]?.passedModules ?? 0];
 };
 
 export const createPath = async ({

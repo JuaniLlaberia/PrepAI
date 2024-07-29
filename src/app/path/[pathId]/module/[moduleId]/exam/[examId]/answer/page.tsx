@@ -27,7 +27,7 @@ const ModuleExamAnswer = async ({
     attemptId: string;
   };
 }) => {
-  const questions = (await getExamQuestions({ examId }))?.questions;
+  const questions = await getExamQuestions({ examId });
   if (!questions) return notFound();
 
   return (
@@ -44,7 +44,10 @@ const ModuleExamAnswer = async ({
                 Are you sure you want to leave?
               </span>
             </DialogDescription>
-            <Alert variant='information' className='max-w-[600px]'>
+            <Alert
+              variant='information'
+              className='max-w-[600px]'
+            >
               <HiOutlineInformationCircle className='size-5' />
               <AlertTitle>Important</AlertTitle>
               <AlertDescription>

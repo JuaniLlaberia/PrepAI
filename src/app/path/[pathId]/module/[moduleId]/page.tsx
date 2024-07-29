@@ -16,7 +16,10 @@ const ModulePage = async ({
 
   return (
     <>
-      <PageHeader text='Go to path' link={`/path/${pathId}`} />
+      <PageHeader
+        text='Go to path'
+        link={`/path/${pathId}`}
+      />
       <div className='flex flex-col items-center mt-2'>
         <section className='w-full max-w-[700px] overflow-x-hidden pb-3'>
           <div>
@@ -34,7 +37,10 @@ const ModulePage = async ({
                   className='text-lg flex items-center gap-2 underline'
                 >
                   <div className='size-1.5 min-w-[6px] rounded-full bg-blue-600' />
-                  <a href={topic.link} target='_blank'>
+                  <a
+                    href={topic.link}
+                    target='_blank'
+                  >
                     {topic.label}
                   </a>
                 </li>
@@ -43,8 +49,8 @@ const ModulePage = async ({
           </div>
           <Assessments
             moduleId={moduleId}
-            examData={exam}
-            interviewData={interview}
+            examData={JSON.parse(JSON.stringify(exam))}
+            interviewData={JSON.parse(JSON.stringify(interview))}
           />
         </section>
       </div>

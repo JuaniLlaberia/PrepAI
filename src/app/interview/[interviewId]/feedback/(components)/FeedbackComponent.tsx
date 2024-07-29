@@ -50,8 +50,10 @@ const FeedbackComponent = async ({
               )}
             </div>
             <Attempts
-              attempts={attempts as { _id: string }[]}
-              crrAttempt={attemptId ?? attempts[0].id}
+              attempts={
+                JSON.parse(JSON.stringify(attempts)) as { _id: string }[]
+              }
+              crrAttempt={attemptId ?? String(attempts[0].id)}
             />
           </div>
 

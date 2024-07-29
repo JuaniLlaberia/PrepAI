@@ -49,7 +49,9 @@ export const generateFeedback = async ({
 export const getAttempts = async ({ interviewId }: { interviewId: string }) => {
   const userId = await authAction();
 
-  return await InterviewAttempt.find({ interviewId, userId }).select('_id');
+  return await InterviewAttempt.find({ interviewId, userId })
+    .select('_id')
+    .lean();
 };
 
 export const getAttemptFeedback = async ({

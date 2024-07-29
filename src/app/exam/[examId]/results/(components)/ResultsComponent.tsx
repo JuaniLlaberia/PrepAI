@@ -23,7 +23,7 @@ const ResultsComponent = async ({
 
   if (!results) return notFound();
 
-  const { score, passed, answers, time } = results;
+  const { score, passed, answers, time } = results.toObject();
 
   return (
     <>
@@ -44,8 +44,10 @@ const ResultsComponent = async ({
               )}
             </div>
             <Attempts
-              attempts={attempts as { _id: string }[]}
-              crrAttempt={attemptId ?? attempts[0].id}
+              attempts={
+                JSON.parse(JSON.stringify(attempts)) as { _id: string }[]
+              }
+              crrAttempt={attemptId ?? String(attempts[0].id)}
             />
           </div>
 

@@ -94,5 +94,10 @@ export const getExamQuestions = async ({ examId }: { examId: string }) => {
   await authAction();
 
   const questions = await Exam.findById(examId).select('questions').lean();
-  return questions;
+  const plainQuestions = JSON.parse(JSON.stringify(questions)) as Pick<
+    IExamDocument,
+    'questions'
+  >;
+
+  return plainQuestions.questions;
 };
