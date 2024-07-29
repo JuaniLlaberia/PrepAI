@@ -27,7 +27,7 @@ const StartIntBtn = ({
       toast.success(`Starting ${!moduleId ? 'mock' : ''} interview...`);
       if (moduleId)
         router.push(
-          `/path/${pathId}/module/${moduleId}/interview/${interviewId}/answer?attemptId=${attemptId}`
+          `/interview/${interviewId}/answer?attemptId=${attemptId}&pathId=${pathId}&moduleId=${moduleId}`
         );
       else
         router.push(`/interview/${interviewId}/answer?attemptId=${attemptId}`);
@@ -43,7 +43,10 @@ const StartIntBtn = ({
       onClick={() => createAttempt({ interviewId })}
     >
       {isPending ? (
-        <LuLoader2 strokeWidth={2} className='animate-spin size-4 mr-1.5' />
+        <LuLoader2
+          strokeWidth={2}
+          className='animate-spin size-4 mr-1.5'
+        />
       ) : null}
       Start {!moduleId ? 'mock' : ''} interview
       {!isPending ? (

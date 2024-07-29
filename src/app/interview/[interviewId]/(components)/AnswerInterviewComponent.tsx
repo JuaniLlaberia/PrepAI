@@ -64,15 +64,14 @@ const AnswerComponent = ({
         description: 'You will be redirected automatically.',
       });
 
-      if (moduleId) {
+      if (moduleId)
         router.push(
-          `/path/${pathId}/module/${moduleId}/interview/${interviewAttemptId}/feedback?attemptId=${interviewAttemptId}`
+          `/interview/${interviewId}/feedback?attemptId=${interviewAttemptId}&pathId=${pathId}&moduleId=${moduleId}`
         );
-      } else {
+      else
         router.push(
           `/interview/${interviewId}/feedback?attemptId=${interviewAttemptId}`
         );
-      }
     },
     onError: () => toast.error('Failed to submit interview'),
   });
@@ -136,7 +135,10 @@ const AnswerComponent = ({
       </section>
       <section className='flex flex-col justify-center items-center max-w-[500px] w-full'>
         <CameraComponent />
-        <Alert variant='information' className='mt-1'>
+        <Alert
+          variant='information'
+          className='mt-1'
+        >
           <HiOutlineLightBulb className='size-5' />
           <AlertTitle>Hint</AlertTitle>
           <AlertDescription>{questions[crrQuestion].hint}</AlertDescription>
@@ -159,7 +161,10 @@ const AnswerComponent = ({
         )}
 
         {!isListening && !hasAnswered && (
-          <Button className='w-full' onClick={startListening}>
+          <Button
+            className='w-full'
+            onClick={startListening}
+          >
             <HiOutlineMicrophone className='size-4 mr-1.5' /> Start recording
           </Button>
         )}

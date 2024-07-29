@@ -4,12 +4,21 @@ import AssigmentPrevCard from '@/components/AssigmentPrevCard';
 
 const InterviewPage = async ({
   params: { interviewId },
+  searchParams: { pathId, moduleId },
 }: {
   params: { interviewId: string };
+  searchParams: { pathId: string; moduleId: string };
 }) => {
   return (
     <>
-      <PageHeader text='Go to interviews' link='/dashboard/interviews' />
+      <PageHeader
+        text={moduleId ? 'Go to module' : 'Go to interviews'}
+        link={
+          moduleId
+            ? `/path/${pathId}/module/${moduleId}`
+            : '/dashboard/interviews'
+        }
+      />
       <AssigmentPrevCard
         title="Let's start the interview"
         options={[
@@ -19,7 +28,13 @@ const InterviewPage = async ({
           'Score 60% or more to pass',
         ]}
         infoMessage="Once the interview has started, it can't be stopped."
-        startBtn={<StartIntBtn interviewId={interviewId} />}
+        startBtn={
+          <StartIntBtn
+            interviewId={interviewId}
+            pathId={pathId}
+            moduleId={moduleId}
+          />
+        }
       />
     </>
   );

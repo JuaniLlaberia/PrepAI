@@ -27,7 +27,7 @@ const StartExamBtn = ({
       toast.success(`Starting ${!moduleId ? 'mock' : ''} exam...`);
       if (moduleId)
         router.push(
-          `/path/${pathId}/module/${moduleId}/exam/${examId}/answer?attemptId=${attemptId}`
+          `/exam/${examId}/answer?pathId=${pathId}&moduleId=${moduleId}&attemptId=${attemptId}`
         );
       else router.push(`/exam/${examId}/answer?attemptId=${attemptId}`);
     },
@@ -42,7 +42,10 @@ const StartExamBtn = ({
       onClick={() => createAttempt({ examId })}
     >
       {isPending ? (
-        <LuLoader2 strokeWidth={2} className='animate-spin size-4 mr-1.5' />
+        <LuLoader2
+          strokeWidth={2}
+          className='animate-spin size-4 mr-1.5'
+        />
       ) : null}
       Start {!moduleId ? 'mock' : ''} exam
       {!isPending ? (

@@ -17,6 +17,7 @@ import { cn } from '@/lib/utils';
 
 type AssessmentsType = {
   moduleId: string;
+  pathId: string;
   examData: {
     examId: string | ObjectId;
     passed: boolean;
@@ -29,6 +30,7 @@ type AssessmentsType = {
 
 const Assessments = ({
   moduleId,
+  pathId,
   examData,
   interviewData,
 }: AssessmentsType) => {
@@ -40,7 +42,7 @@ const Assessments = ({
     mutationKey: ['create-module-exam'],
     mutationFn: createExamForModule,
     onSuccess: (examId: string) => {
-      router.push(`${pathname}/exam/${examId}`);
+      router.push(`/exam/${examId}?pathId=${pathId}&moduleId=${moduleId}`);
       toast.success('Exam was created successfully', {
         description: 'Redirecting...',
       });
@@ -56,7 +58,9 @@ const Assessments = ({
       mutationKey: ['create-module-interview'],
       mutationFn: createInterviewForModule,
       onSuccess: (interviewId: string) => {
-        router.push(`${pathname}/interview/${interviewId}`);
+        router.push(
+          `/interview/${interviewId}?pathId=${pathId}&moduleId=${moduleId}`
+        );
         toast.success('Interview was created successfully', {
           description: 'Redirecting...',
         });
@@ -83,7 +87,7 @@ const Assessments = ({
               <div className='flex items-center gap-3 mt-5'>
                 {examData?.examId ? (
                   <Link
-                    href={`${pathname}/exam/${examData.examId}/results`}
+                    href={`/exam/${examData.examId}/results?pathId=${pathId}&moduleId=${moduleId}`}
                     className={cn(
                       buttonVariants({ size: 'sm', variant: 'outline' }),
                       'w-full',
@@ -109,7 +113,7 @@ const Assessments = ({
                   </Button>
                 ) : (
                   <Link
-                    href={`${pathname}/exam/${examData.examId}`}
+                    href={`/exam/${examData.examId}?pathId=${pathId}&moduleId=${moduleId}`}
                     className={cn(
                       buttonVariants({ size: 'sm' }),
                       'w-full',
@@ -145,7 +149,7 @@ const Assessments = ({
               <div className='flex items-center gap-3 mt-5'>
                 {interviewData?.interviewId ? (
                   <Link
-                    href={`${pathname}/interview/${interviewData.interviewId}/feedback`}
+                    href={`/interview/${interviewData.interviewId}/feedback?pathId=${pathId}&moduleId=${moduleId}`}
                     className={cn(
                       buttonVariants({ size: 'sm', variant: 'outline' }),
                       'w-full',
@@ -171,7 +175,7 @@ const Assessments = ({
                   </Button>
                 ) : (
                   <Link
-                    href={`${pathname}/interview/${interviewData.interviewId}`}
+                    href={`/interview/${interviewData.interviewId}?pathId=${pathId}&moduleId=${moduleId}`}
                     className={cn(
                       buttonVariants({ size: 'sm' }),
                       'w-full',

@@ -3,15 +3,23 @@ import ResultsComponent from './(components)/ResultsComponent';
 
 const ExamResultsPage = async ({
   params: { examId },
-  searchParams: { attemptId },
+  searchParams: { attemptId, moduleId, pathId },
 }: {
   params: { examId: string };
-  searchParams: { attemptId: string };
+  searchParams: { attemptId: string; pathId: string; moduleId: string };
 }) => {
   return (
     <>
-      <PageHeader text='Go to exams' link='/dashboard/exams' />
-      <ResultsComponent examId={examId} attemptId={attemptId} />
+      <PageHeader
+        text={moduleId ? 'Go to module' : 'Go to exams'}
+        link={
+          moduleId ? `/path/${pathId}/module/${moduleId}` : '/dashboard/exams'
+        }
+      />
+      <ResultsComponent
+        examId={examId}
+        attemptId={attemptId}
+      />
     </>
   );
 };

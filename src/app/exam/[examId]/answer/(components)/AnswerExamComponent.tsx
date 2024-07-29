@@ -52,14 +52,9 @@ const AnswerExamComponent = ({
         description: 'You will be redirected automatically.',
       });
 
-      if (moduleId) {
-        if (passed) router.push(`/path/${pathId}/module/${moduleId}`);
-        router.push(
-          `/path/${pathId}/module/${moduleId}/exam/${examId}/results?attemptId=${attemptId}`
-        );
-      } else {
-        router.push(`/exam/${examId}/results?attemptId=${attemptId}`);
-      }
+      if (passed) return router.push(`/path/${pathId}/module/${moduleId}`);
+
+      router.push(`/exam/${examId}/results?attemptId=${attemptId}`);
     },
     onError: () =>
       toast.error('Failed to submit exam answers. Please try again.'),
