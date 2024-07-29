@@ -34,8 +34,6 @@ const AnswerExamComponent = ({
   moduleId?: string;
   pathId?: string;
 }) => {
-  console.log(moduleId ? 'belong to moduke' : 'belong to user');
-
   const { timer } = useTimer();
   const router = useRouter();
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
@@ -55,6 +53,7 @@ const AnswerExamComponent = ({
       });
 
       if (moduleId) {
+        if (passed) router.push(`/path/${pathId}/module/${moduleId}`);
         router.push(
           `/path/${pathId}/module/${moduleId}/exam/${examId}/results?attemptId=${attemptId}`
         );
@@ -187,7 +186,10 @@ const AnswerExamComponent = ({
           </p>
           {/* Implement as separate component to avoid rerenders */}
           <p className='flex items-center gap-1.5 font-medium text-muted-foreground lg:text-lg'>
-            <HiOutlineClock strokeWidth={2} className='size-5' />
+            <HiOutlineClock
+              strokeWidth={2}
+              className='size-5'
+            />
             {formatTimer(timer)}
           </p>
         </div>
@@ -195,7 +197,10 @@ const AnswerExamComponent = ({
       </section>
       <div className='flex items-center w-full max-w-[600px] lg:justify-end'>
         {!isLastStep ? (
-          <Button onClick={nextQuestion} className='w-full lg:w-auto'>
+          <Button
+            onClick={nextQuestion}
+            className='w-full lg:w-auto'
+          >
             Next question
             <HiMiniArrowLongRight className='size-4 ml-1.5' />
           </Button>

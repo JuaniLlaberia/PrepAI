@@ -47,6 +47,8 @@ export const updateExamAttempt = async ({
   } finally {
     mongoSession.endSession();
   }
+
+  return passed;
 };
 
 export const getExamResults = async ({
