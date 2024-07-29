@@ -68,7 +68,7 @@ export const createInterview = async ({
     questions,
   });
 
-  revalidatePath('/dashboard');
+  revalidatePath('/dashboard/interviews');
 
   return id;
 };
@@ -95,7 +95,7 @@ export const deleteInterview = async ({
     mongoSession.endSession();
   }
 
-  revalidatePath('/dashboard');
+  revalidatePath('/dashboard/interviews');
 };
 
 export const updateInterview = async ({
@@ -110,5 +110,5 @@ export const updateInterview = async ({
 
   await Interview.findByIdAndUpdate(interviewId, data);
 
-  revalidatePath('/dashboard');
+  revalidatePath('/dashboard/interviews');
 };
