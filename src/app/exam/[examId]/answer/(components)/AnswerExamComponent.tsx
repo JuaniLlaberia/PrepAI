@@ -105,6 +105,8 @@ const AnswerExamComponent = ({
   }, [nextStep, selectedOption, crrIndex, questions]);
 
   const finishExam = () => {
+    if (selectedOption == null) return;
+
     const answers = [
       ...userAnswers,
       {
@@ -145,8 +147,7 @@ const AnswerExamComponent = ({
           setSelectedOption(3);
           break;
         case 'Enter':
-          if (isLastStep) break;
-          nextQuestion();
+          !isLastStep ? nextQuestion() : finishExam();
           break;
       }
     };
