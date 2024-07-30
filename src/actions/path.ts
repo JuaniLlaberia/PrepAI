@@ -203,7 +203,5 @@ export const updatePath = async ({
   await authAction();
   const test = await Path.findByIdAndUpdate(pathId, data);
 
-  console.log(test);
-
   revalidatePath('/dashboard/paths');
 };
