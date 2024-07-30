@@ -6,6 +6,11 @@ import Attempts from '@/components/Attempts';
 import ConfettiComponent from '@/components/Confetti';
 import { getExamAttempts, getExamResults } from '@/actions/examAttempt';
 import { formatTimer } from '@/lib/helpers';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible';
 
 const ResultsComponent = async ({
   examId,
@@ -23,7 +28,7 @@ const ResultsComponent = async ({
 
   if (!results) return notFound();
 
-  const { score, passed, answers, time } = results.toObject();
+  const { score, passed, questions, time } = results;
 
   return (
     <>
@@ -67,10 +72,10 @@ const ResultsComponent = async ({
                 Your score
               </h2>
               <p className='text-sm text-muted-foreground'>
-                {score}/{answers.length}
+                {score}/{questions.length}
               </p>
             </div>
-            <AnimatedProgress value={(score / answers.length) * 100} />
+            <AnimatedProgress value={(score / questions.length) * 100} />
           </div>
 
           <div className='mt-6'>
@@ -78,25 +83,53 @@ const ResultsComponent = async ({
               Your results
             </h2>
             <ul className='flex flex-col gap-1.5'>
-              {answers.map((answer, i) => (
-                <li
-                  key={i}
-                  className='flex justify-between w-full p-2 border border-border rounded-lg bg-background-2'
-                >
-                  <p className='font-medium'>Question {i + 1}</p>
-                  {answer.isCorrect ? (
-                    <p className='flex items-center gap-1 text-green-500'>
-                      <HiOutlineCheck strokeWidth={2} />
-                      Correct
-                    </p>
-                  ) : (
-                    <p className='flex items-center gap-1 text-red-500'>
-                      <HiOutlineXMark strokeWidth={2} />
-                      Wrong
-                    </p>
-                  )}
-                </li>
-              ))}
+              {questions.map(
+                (
+                  {
+                    isCorrect,
+                    question,
+                    answer,
+                    correctAnswer,
+                    explanation,
+                    options,
+                  },
+                  i
+                ) => (
+                  <Collapsible key={i}>
+                    <CollapsibleTrigger className='flex justify-between w-full p-2 border border-border rounded-lg bg-background-2'>
+                      <p className='font-medium'>Question {i + 1}</p>
+                      {isCorrect ? (
+                        <p className='flex items-center gap-1 text-green-500'>
+                          <HiOutlineCheck strokeWidth={2} />
+                          Correct
+                        </p>
+                      ) : (
+                        <p className='flex items-center gap-1 text-red-500'>
+                          <HiOutlineXMark strokeWidth={2} />
+                          Wrong
+                        </p>
+                      )}
+                    </CollapsibleTrigger>
+                    <CollapsibleContent asChild>
+                      <div className='bg-background-2 tracking-tight shadow p-4 mt-1 lg:mt-2 rounded-lg dark:border dark:border-border'>
+                        <p className='font-medium mb-2'>{question}</p>
+                        <p>
+                          <span className='font-medium'>Your answer:</span> "
+                          {options[answer]}"
+                        </p>
+                        <p>
+                          <span className='font-medium'>Correct answer:</span> "
+                          {options[correctAnswer]}"
+                        </p>
+                        <h2 className='text-sm lg:text-base xl:text-lg font-semibold mt-3'>
+                          Explanation
+                        </h2>
+                        <p>{explanation}</p>
+                      </div>
+                    </CollapsibleContent>
+                  </Collapsible>
+                )
+              )}
             </ul>
           </div>
         </section>

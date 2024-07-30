@@ -9,7 +9,12 @@ export interface IExam {
   userId: ObjectId;
   moduleId: ObjectId;
   pathId: ObjectId;
-  questions: { question: string; options: string[]; correctAnswer: number }[];
+  questions: {
+    question: string;
+    options: string[];
+    correctAnswer: number;
+    explanation: string;
+  }[];
 }
 
 export interface IExamDocument extends IExam, Document {
@@ -44,6 +49,7 @@ const examSchema = new mongoose.Schema<IExamDocument>(
         question: { type: String },
         options: { type: [String] },
         correctAnswer: { type: Number },
+        explanation: { type: String },
       },
     ],
   },

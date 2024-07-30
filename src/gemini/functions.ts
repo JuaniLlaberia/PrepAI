@@ -12,7 +12,7 @@ export const generateExamWithGemini = async ({
   const promptSchema = `
   {
     questions: [
-      {question: 'string', options: 'string'[], correctAnswer: 'number'}
+      {question: 'string', options: 'string'[], correctAnswer: 'number', explanation: 'string'}
     ]
   }
   `;
@@ -21,7 +21,7 @@ export const generateExamWithGemini = async ({
    with a ${difficulty} difficulty level. Provide ${
     difficulty === 'easy' || difficulty === 'medium' ? '10' : '15'
   } related questions
-   (each with the question, 4 options and the correct option (being the option index)). Provide
+   (each with the question, 4 options, the correct option (being the option index) and an explanation of the correct answer in 3-4 lines). Provide
    it in JSON format with this schema: ${promptSchema}.
    Remember to scape any special characters used in Javascript, such as "\n"
    `;
@@ -34,6 +34,7 @@ export const generateExamWithGemini = async ({
     question: string;
     options: string[];
     correctAnswer: number;
+    explanation: string;
   }[] = JSON.parse(jsonData).questions;
 
   return questions;

@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import Exam from '@/db/models/Exam';
 import ExamAttempt, { IExamAttemptDocument } from '@/db/models/ExamAttempt';
 import { authAction } from './auth';
+import { Amarante } from 'next/font/google';
 
 export const createExamAttempt = async ({ examId }: { examId: string }) => {
   const userId = await authAction();
@@ -58,9 +59,32 @@ export const getExamResults = async ({
   examId: string;
   attemptId: string;
 }) => {
-  const userId = await authAction();
+  await authAction();
 
-  return await ExamAttempt.findOne({ _id: attemptId, examId, userId });
+  const questions = await Exam.findById(examId).select('questions').lean();
+  const answers = await ExamAttempt.findById(attemptId)
+    .select('score passed time answers')
+    .lean();
+
+  if (!questions || !answers) throw Error('');
+
+  const quests = questions?.questions.map((question, i) => {
+    return {
+      correctAnswer: question.correctAnswer,
+      question: question.question,
+      options: question.options,
+      explanation: question.explanation,
+      isCorrect: answers?.answers[i].isCorrect,
+      answer: answers?.answers[i].answer,
+    };
+  });
+
+  return {
+    score: answers?.score,
+    passed: answers?.passed,
+    time: answers?.time,
+    questions: quests,
+  };
 };
 
 export const getExamAttempts = async ({ examId }: { examId: string }) => {
