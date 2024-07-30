@@ -3,17 +3,18 @@
 import Link from 'next/link';
 import { ObjectId } from 'mongoose';
 import { HiOutlineCheckCircle } from 'react-icons/hi2';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { LuLoader2 } from 'react-icons/lu';
 import { toast } from 'sonner';
 import { useMutation } from '@tanstack/react-query';
 
 import { Button, buttonVariants } from '@/components/ui/button';
 import {
-  createExamForModule,
+  createExamForModuleAction,
   createInterviewForModule,
 } from '@/actions/modules';
 import { cn } from '@/lib/utils';
+import { useServerActionMutation } from '@/hooks/server-action-hooks';
 
 type AssessmentsType = {
   moduleId: string;
@@ -35,23 +36,21 @@ const Assessments = ({
   interviewData,
 }: AssessmentsType) => {
   const router = useRouter();
-  const pathname = usePathname();
 
-  //Mutation with action to handle new exams for module
-  const { mutate: createExam, isPending: isPendingExam } = useMutation({
-    mutationKey: ['create-module-exam'],
-    mutationFn: createExamForModule,
-    onSuccess: (examId: string) => {
-      router.push(`/exam/${examId}?pathId=${pathId}&moduleId=${moduleId}`);
-      toast.success('Exam was created successfully', {
-        description: 'Redirecting...',
-      });
-    },
-    onError: () =>
-      toast.error('Something went wrong.', {
-        description: 'We failed to create the exam. Please try again.',
-      }),
-  });
+  const { mutate: createExam, isPending: isPendingExam } =
+    useServerActionMutation(createExamForModuleAction, {
+      mutationKey: ['create-module-exam'],
+      onSuccess: (examId: string) => {
+        router.push(`/exam/${examId}?pathId=${pathId}&moduleId=${moduleId}`);
+        toast.success('Exam was created successfully', {
+          description: 'Redirecting...',
+        });
+      },
+      onError: () =>
+        toast.error('Something went wrong.', {
+          description: 'We failed to create the exam. Please try again.',
+        }),
+    });
 
   const { mutate: createInterview, isPending: isPendingInterview } =
     useMutation({
