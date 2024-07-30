@@ -14,9 +14,9 @@ import Radio from '@/components/ui/radio';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { InterviewSchema } from '@/validators';
 import { createInterview as createInterviewAction } from '@/actions/interview';
 import { useMultiStepForm } from '@/hooks/useMultistepForm';
+import { InterviewSchema } from '@/lib/validators';
 
 const NewInterviewForm = () => {
   const router = useRouter();

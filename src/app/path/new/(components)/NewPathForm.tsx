@@ -14,9 +14,9 @@ import Radio from '@/components/ui/radio';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { PathSchema } from '@/validators';
 import { useMultiStepForm } from '@/hooks/useMultistepForm';
 import { createPath as createPathAction } from '@/actions/path';
+import { PathSchema } from '@/lib/validators';
 
 const NewPathForm = () => {
   const router = useRouter();
