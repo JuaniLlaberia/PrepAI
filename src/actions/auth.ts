@@ -1,4 +1,5 @@
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
+import { redirect } from 'next/navigation';
 
 import Interview from '@/db/models/Interview';
 import User from '@/db/models/User';
@@ -10,7 +11,10 @@ export const authAction = async (): Promise<string> => {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
-  if (!user) throw new Error('You need to log in');
+  if (!user) {
+    console.log('You need to log in.');
+    redirect('/login');
+  }
 
   await connectToDB();
   const userDB = await User.findOne({ kindeId: user.id }).select('_id');
