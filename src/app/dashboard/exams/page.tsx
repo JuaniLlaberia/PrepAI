@@ -14,7 +14,6 @@ import Badge from '@/components/ui/badge';
 import DeleteExamModal from './(components)/DeleteExamModal';
 import ExamFilters from './(components)/ExamsFilters';
 import { Button, buttonVariants } from '@/components/ui/button';
-import { getUserExams } from '@/actions/exams';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import {
   DropdownMenu,
@@ -25,6 +24,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 import PinExamBtn from './(components)/PinExamBtn';
+import { getUserExams } from '@/access-data/exams';
 
 const ExamsPage = async ({
   searchParams,
@@ -46,7 +46,10 @@ const ExamsPage = async ({
           sortBy={searchParams.sortBy}
           filter={searchParams.filter}
         />
-        <Link className={buttonVariants({ size: 'sm' })} href='/exam/new'>
+        <Link
+          className={buttonVariants({ size: 'sm' })}
+          href='/exam/new'
+        >
           <HiOutlinePlus className='size-4 mr-2' /> New mock exam
         </Link>
       </div>
@@ -80,7 +83,12 @@ const ExamsPage = async ({
                         text={taken ? 'Taken' : 'New'}
                         color={taken ? 'gray' : 'orange'}
                       />
-                      {pinned ? <Badge text='Pinned' color='blue' /> : null}
+                      {pinned ? (
+                        <Badge
+                          text='Pinned'
+                          color='blue'
+                        />
+                      ) : null}
                     </div>
                     <p className='text-muted-foreground text-sm text-end mt-3'>
                       {createdAt.toDateString()}
@@ -99,12 +107,19 @@ const ExamsPage = async ({
                   <Dialog>
                     <DropdownMenu>
                       <DropdownMenuTrigger className='absolute top-4 right-4'>
-                        <Button size='icon' variant='ghost' className='size-8'>
+                        <Button
+                          size='icon'
+                          variant='ghost'
+                          className='size-8'
+                        >
                           <HiOutlineEllipsisHorizontal className='size-4' />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
-                        <PinExamBtn isPinned={pinned} examId={id} />
+                        <PinExamBtn
+                          isPinned={pinned}
+                          examId={id}
+                        />
                         {!taken ? (
                           <DropdownMenuItem asChild>
                             <Link href={`/exam/${id}`}>
@@ -141,7 +156,10 @@ const ExamsPage = async ({
                       </DropdownMenuContent>
                     </DropdownMenu>
                     <DialogContent>
-                      <DeleteExamModal examId={id} subject={subject} />
+                      <DeleteExamModal
+                        examId={id}
+                        subject={subject}
+                      />
                     </DialogContent>
                   </Dialog>
                 </li>

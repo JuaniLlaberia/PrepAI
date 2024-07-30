@@ -1,103 +1,48 @@
 'use server';
 
-import mongoose from 'mongoose';
+import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 
-import ExamAttempt from '@/db/models/ExamAttempt';
-import Exam, { IExamDocument } from '@/db/models/Exam';
-import { authAction, examBelongsToUser } from './auth';
 import { generateExamWithGemini } from '@/gemini/functions';
+import { authenticatedAction } from '@/lib/safe-actions';
+import { DifficultyEnum } from '@/lib/validators';
+import { createExam, deleteExam, updateExam } from '@/access-data/exams';
 
-export const getUserExams = async ({
-  sort,
-  filter,
-}: {
-  sort: 'createdAt' | 'name';
-  filter: 'all' | 'easy' | 'medium' | 'hard';
-}) => {
-  const userId = await authAction();
+export const createExamAction = authenticatedAction
+  .createServerAction()
+  .input(
+    z.object({ subject: z.string(), difficulty: z.nativeEnum(DifficultyEnum) })
+  )
+  .handler(async ({ input: { subject, difficulty }, ctx: { userId } }) => {
+    const questions = await generateExamWithGemini({
+      subject,
+      difficulty,
+    });
 
-  const examQuery = Exam.find({ userId });
+    const { id } = await createExam({
+      exam: { userId, subject, difficulty, questions },
+    });
 
-  if (filter !== 'all') examQuery.where({ difficulty: filter });
-
-  return await examQuery
-    .select('_id subject difficulty taken pinned passed createdAt')
-    .sort(
-      sort === 'createdAt'
-        ? { pinned: 'desc', createdAt: 'desc' }
-        : { pinned: 'desc', subject: 'desc' }
-    );
-};
-
-export const createExam = async ({
-  data,
-}: {
-  data: Partial<IExamDocument>;
-}) => {
-  const userId = await authAction();
-  const { subject, difficulty } = data;
-
-  if (!subject || !difficulty) throw new Error('Missing required data');
-
-  const questions = await generateExamWithGemini({ subject, difficulty });
-
-  const { id } = await Exam.create({
-    subject,
-    difficulty,
-    pinned: false,
-    userId,
-    questions,
+    revalidatePath('/dashboard/exams');
+    return id;
   });
 
-  revalidatePath('/dashboard/exams');
+export const deleteExamAction = authenticatedAction
+  .createServerAction()
+  .input(z.object({ examId: z.string() }))
+  .handler(async ({ input: { examId } }) => {
+    await deleteExam({ examId });
 
-  return id;
-};
+    revalidatePath('/dashboard/exams');
+  });
 
-export const deleteExam = async ({ examId }: { examId: string }) => {
-  await authAction();
+export const updateExamAction = authenticatedAction
+  .createServerAction()
+  .input(
+    z.object({ examId: z.string(), exam: z.object({ pinned: z.boolean() }) })
+  )
+  .handler(async ({ input: { examId, exam } }) => {
+    await updateExam({ examId, exam });
 
-  const mongoSession = await mongoose.startSession();
-  mongoSession.startTransaction();
-
-  try {
-    await Promise.all([
-      ExamAttempt.deleteMany({ examId }),
-      Exam.findByIdAndDelete(examId),
-    ]);
-  } catch (err) {
-    mongoSession.abortTransaction();
-  } finally {
-    mongoSession.endSession();
-  }
-
-  revalidatePath('/dashboard/exams');
-};
-
-export const updateExam = async ({
-  examId,
-  data,
-}: {
-  examId: string;
-  data: Partial<IExamDocument>;
-}) => {
-  const userId = await authAction();
-  await examBelongsToUser(userId, examId);
-
-  await Exam.findByIdAndUpdate(examId, data);
-
-  revalidatePath('/dashboard/exams');
-};
-
-export const getExamQuestions = async ({ examId }: { examId: string }) => {
-  await authAction();
-
-  const questions = await Exam.findById(examId).select('questions').lean();
-  const plainQuestions = JSON.parse(JSON.stringify(questions)) as Pick<
-    IExamDocument,
-    'questions'
-  >;
-
-  return plainQuestions.questions;
-};
+    revalidatePath('/dashboard/exams');
+  });

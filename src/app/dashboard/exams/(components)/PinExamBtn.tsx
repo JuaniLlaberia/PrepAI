@@ -1,10 +1,10 @@
 'use client';
 
 import { HiOutlineStar } from 'react-icons/hi2';
-import { useMutation } from '@tanstack/react-query';
 
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
-import { updateExam } from '@/actions/exams';
+import { useServerActionMutation } from '@/hooks/server-action-hooks';
+import { updateExamAction } from '@/actions/exams';
 
 const PinExamBtn = ({
   examId,
@@ -13,17 +13,22 @@ const PinExamBtn = ({
   examId: string;
   isPinned: boolean;
 }) => {
-  const { mutate: togglePinExam, isPending } = useMutation({
-    mutationKey: ['pin-exam'],
-    mutationFn: updateExam,
-  });
+  const { mutate: updateExam, isPending } = useServerActionMutation(
+    updateExamAction,
+    {
+      mutationKey: ['pin-exam'],
+    }
+  );
 
   const togglePin = () => {
-    togglePinExam({ examId, data: { pinned: !isPinned } });
+    updateExam({ examId, exam: { pinned: !isPinned } });
   };
 
   return (
-    <DropdownMenuItem disabled={isPending} onClick={togglePin}>
+    <DropdownMenuItem
+      disabled={isPending}
+      onClick={togglePin}
+    >
       <HiOutlineStar className='size-4 mr-2' />
       {isPinned ? 'Unpin mock exam' : 'Pin mock exam'}
     </DropdownMenuItem>

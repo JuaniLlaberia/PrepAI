@@ -1,8 +1,6 @@
 'use client';
 
-import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { LuLoader2 } from 'react-icons/lu';
 import { HiOutlineExclamationCircle } from 'react-icons/hi2';
@@ -15,7 +13,8 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { deleteExam } from '@/actions/exams';
+import { useServerActionMutation } from '@/hooks/server-action-hooks';
+import { deleteExamAction } from '@/actions/exams';
 
 const DeleteExamModal = ({
   examId,
@@ -24,22 +23,21 @@ const DeleteExamModal = ({
   examId: string;
   subject: string;
 }) => {
-  const router = useRouter();
+  const { mutate: deleteExam, isPending } = useServerActionMutation(
+    deleteExamAction,
+    {
+      mutationKey: ['delete-exam'],
+      onSuccess: () =>
+        toast.success('Mock exam has been deleted', {
+          description: 'All data related to this mock exam has been deleted.',
+        }),
+      onError: () =>
+        toast.error('Failed to delete mock exam', {
+          description: 'We could not delate your mock exam. Please try again.',
+        }),
+    }
+  );
 
-  const { mutate: removeExam, isPending } = useMutation({
-    mutationKey: ['delete-exam'],
-    mutationFn: deleteExam,
-    onSuccess: () => {
-      router.push('/dashboard/exams');
-      toast.success('Mock exam has been deleted', {
-        description: 'All data related to this mock exam has been deleted.',
-      });
-    },
-    onError: () =>
-      toast.error('Failed to delete mock exam', {
-        description: 'We could not delate your mock exam. Please try again.',
-      }),
-  });
   const {
     register,
     handleSubmit,
@@ -47,7 +45,7 @@ const DeleteExamModal = ({
   } = useForm();
 
   const onSubmit = handleSubmit(() => {
-    removeExam({ examId });
+    deleteExam({ examId });
   });
 
   return (
@@ -57,7 +55,10 @@ const DeleteExamModal = ({
         You are about to delete <span className='text-primary'>{subject}</span>{' '}
         mock exam. All data related will be deleted.
       </DialogDescription>
-      <form onSubmit={onSubmit} className='flex flex-col gap-4'>
+      <form
+        onSubmit={onSubmit}
+        className='flex flex-col gap-4'
+      >
         <div>
           <label
             htmlFor='subject'
@@ -118,11 +119,18 @@ const DeleteExamModal = ({
         </Alert>
         <div className='flex justify-between mt-2'>
           <DialogClose asChild>
-            <Button disabled={isPending} variant='outline' size='sm'>
+            <Button
+              disabled={isPending}
+              variant='outline'
+              size='sm'
+            >
               Cancel
             </Button>
           </DialogClose>
-          <Button disabled={isPending} size='sm'>
+          <Button
+            disabled={isPending}
+            size='sm'
+          >
             {isPending ? (
               <LuLoader2 className='size-4 mr-1.5 animate-spin' />
             ) : null}

@@ -1,13 +1,13 @@
 'use client';
 
-import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { LuLoader2 } from 'react-icons/lu';
 import { toast } from 'sonner';
 import { HiMiniArrowLongRight } from 'react-icons/hi2';
 
 import { Button } from '@/components/ui/button';
-import { createExamAttempt } from '@/actions/examAttempt';
+import { useServerActionMutation } from '@/hooks/server-action-hooks';
+import { createExamAttemptAction } from '@/actions/examAttempt';
 
 const StartExamBtn = ({
   examId,
@@ -20,19 +20,21 @@ const StartExamBtn = ({
 }) => {
   const router = useRouter();
 
-  const { mutate: createAttempt, isPending } = useMutation({
-    mutationKey: ['create-attemp'],
-    mutationFn: createExamAttempt,
-    onSuccess: attemptId => {
-      toast.success(`Starting ${!moduleId ? 'mock' : ''} exam...`);
-      if (moduleId)
-        router.push(
-          `/exam/${examId}/answer?pathId=${pathId}&moduleId=${moduleId}&attemptId=${attemptId}`
-        );
-      else router.push(`/exam/${examId}/answer?attemptId=${attemptId}`);
-    },
-    onError: () => toast.error('Failed to start mock exam'),
-  });
+  const { mutate: createAttempt, isPending } = useServerActionMutation(
+    createExamAttemptAction,
+    {
+      mutationKey: ['create-attemp'],
+      onSuccess: attemptId => {
+        toast.success(`Starting ${!moduleId ? 'mock' : ''} exam...`);
+        if (moduleId)
+          router.push(
+            `/exam/${examId}/answer?pathId=${pathId}&moduleId=${moduleId}&attemptId=${attemptId}`
+          );
+        else router.push(`/exam/${examId}/answer?attemptId=${attemptId}`);
+      },
+      onError: () => toast.error('Failed to start mock exam'),
+    }
+  );
 
   return (
     <Button

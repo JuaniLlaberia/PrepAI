@@ -10,7 +10,7 @@ import {
   DialogFooter,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { getExamQuestions } from '@/actions/exams';
+import { getExamQuestions } from '@/access-data/exams';
 
 const ExamAnswerPage = async ({
   params: { examId },

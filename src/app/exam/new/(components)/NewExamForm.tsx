@@ -2,7 +2,6 @@
 
 import { HiMiniArrowLongLeft, HiSparkles } from 'react-icons/hi2';
 import { useForm } from 'react-hook-form';
-import { useMutation } from '@tanstack/react-query';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LuLoader2 } from 'react-icons/lu';
 import { toast } from 'sonner';
@@ -13,9 +12,10 @@ import InputWrapper from '@/components/InputWrapper';
 import Radio from '@/components/ui/radio';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { ExamSchema } from '@/validators';
 import { useMultiStepForm } from '@/hooks/useMultistepForm';
-import { createExam as createExamAction } from '@/actions/exams';
+import { createExamAction } from '@/actions/exams';
+import { ExamSchema } from '@/lib/validators';
+import { useServerActionMutation } from '@/hooks/server-action-hooks';
 
 const NewExamForm = () => {
   const router = useRouter();
@@ -27,15 +27,18 @@ const NewExamForm = () => {
   } = useForm({
     resolver: zodResolver(ExamSchema),
   });
-  const { mutate: createExam, isPending } = useMutation({
-    mutationKey: ['create-exam'],
-    mutationFn: createExamAction,
-    onSuccess: interviewId => {
-      toast.success('Mock exam created successfully');
-      router.push(`/exam/${interviewId}`);
-    },
-    onError: () => toast.error('Failed to create mock exam'),
-  });
+
+  const { mutate: createExam, isPending } = useServerActionMutation(
+    createExamAction,
+    {
+      mutationKey: ['create-exam'],
+      onSuccess: interviewId => {
+        toast.success('Mock exam created successfully');
+        router.push(`/exam/${interviewId}`);
+      },
+      onError: () => toast.error('Failed to create mock exam'),
+    }
+  );
 
   const steps = [['subject'], ['difficulty']];
 
@@ -131,7 +134,8 @@ const NewExamForm = () => {
         isLastStep
           ? handleSubmit(data => {
               createExam({
-                data,
+                subject: data.subject,
+                difficulty: data.difficulty,
               });
             })
           : async e => {
