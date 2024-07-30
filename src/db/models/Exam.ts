@@ -6,7 +6,7 @@ export interface IExam {
   passed: boolean;
   taken: boolean;
   pinned: boolean;
-  userId: ObjectId;
+  userId: ObjectId | string;
   moduleId: ObjectId;
   pathId: ObjectId;
   questions: {

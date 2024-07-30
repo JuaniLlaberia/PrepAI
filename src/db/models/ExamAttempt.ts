@@ -4,7 +4,7 @@ export interface IExamAttempt {
   score: number;
   passed: boolean;
   time: number;
-  userId: ObjectId;
+  userId: ObjectId | string;
   examId: ObjectId;
 
   answers: { answer: number; isCorrect: boolean }[];
