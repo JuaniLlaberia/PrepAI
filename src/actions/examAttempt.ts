@@ -5,7 +5,6 @@ import mongoose from 'mongoose';
 import Exam from '@/db/models/Exam';
 import ExamAttempt, { IExamAttemptDocument } from '@/db/models/ExamAttempt';
 import { authAction } from './auth';
-import { Amarante } from 'next/font/google';
 
 export const createExamAttempt = async ({ examId }: { examId: string }) => {
   const userId = await authAction();
