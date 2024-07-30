@@ -65,7 +65,10 @@ const NewPathForm = () => {
           />
         </InputWrapper>
         <div className='flex justify-end mt-3 md:mt-5'>
-          <Button disabled={isPending} className='w-full md:w-auto px-6'>
+          <Button
+            disabled={isPending}
+            className='w-full md:w-auto px-6'
+          >
             Next
           </Button>
         </div>
@@ -99,7 +102,10 @@ const NewPathForm = () => {
           </InputWrapper>
         </div>
         <div className='mt-5 md:mt-7 flex flex-col gap-2 md:flex-row-reverse items-end'>
-          <Button disabled={isPending} className='w-full md:w-auto px-6'>
+          <Button
+            disabled={isPending}
+            className='w-full md:w-auto px-6'
+          >
             Next
           </Button>
           <Button
@@ -122,7 +128,10 @@ const NewPathForm = () => {
         <p className='text-3xl font-medium mb-3 text-center'>
           Describe what topics you need to practice
         </p>
-        <InputWrapper inputId='topics' error={errors.topics?.message as string}>
+        <InputWrapper
+          inputId='topics'
+          error={errors.topics?.message as string}
+        >
           <Textarea
             id='topics'
             placeholder='Topics you need to know'
@@ -132,7 +141,10 @@ const NewPathForm = () => {
           />
         </InputWrapper>
         <div className='mt-3 md:mt-5 flex flex-col gap-2 md:flex-row-reverse items-end'>
-          <Button disabled={isPending} className='w-full md:w-auto px-6'>
+          <Button
+            disabled={isPending}
+            className='w-full md:w-auto px-6'
+          >
             {isPending ? (
               <LuLoader2
                 strokeWidth={2}
@@ -171,7 +183,7 @@ const NewPathForm = () => {
               nextStep();
             }
       }
-      className='flex flex-col gap-2'
+      className='flex flex-col gap-2 overflow-hidden px-1'
     >
       {crrStep}
     </form>

@@ -64,7 +64,10 @@ const NewExamForm = () => {
           />
         </InputWrapper>
         <div className='flex justify-end mt-3 md:mt-5'>
-          <Button disabled={isPending} className='w-full md:w-auto px-6'>
+          <Button
+            disabled={isPending}
+            className='w-full md:w-auto px-6'
+          >
             Next
           </Button>
         </div>
@@ -96,7 +99,10 @@ const NewExamForm = () => {
           </InputWrapper>
         </div>
         <div className='mt-5 md:mt-7 flex flex-col gap-2 md:flex-row-reverse items-end'>
-          <Button disabled={isPending} className='w-full md:w-auto px-6'>
+          <Button
+            disabled={isPending}
+            className='w-full md:w-auto px-6'
+          >
             {isPending ? (
               <LuLoader2
                 strokeWidth={2}
@@ -139,7 +145,7 @@ const NewExamForm = () => {
               nextStep();
             }
       }
-      className='flex flex-col gap-2'
+      className='flex flex-col gap-2 overflow-hidden px-1'
     >
       {crrStep}
     </form>
