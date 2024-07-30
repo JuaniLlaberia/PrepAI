@@ -5,7 +5,6 @@ import {
   HiOutlineClock,
   HiPaperAirplane,
 } from 'react-icons/hi2';
-import { useMutation } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
@@ -17,9 +16,8 @@ import { useMultiStepForm } from '@/hooks/useMultistepForm';
 import { cn } from '@/lib/utils';
 import { formatNumber, formatTimer } from '@/lib/helpers';
 import { useTimer } from '@/hooks/useTimer';
-import { updateExamAttempt } from '@/actions/examAttempt';
-import { IExamAttemptDocument } from '@/db/models/ExamAttempt';
-import { finishExamAttemptForModule } from '@/actions/modules';
+import { useServerActionMutation } from '@/hooks/server-action-hooks';
+import { updateExamAttemptAction } from '@/actions/examAttempt';
 
 const AnswerExamComponent = ({
   examId,
@@ -44,21 +42,23 @@ const AnswerExamComponent = ({
     }[]
   >([]);
 
-  const { mutate: submitExamAttempt, isPending } = useMutation({
-    mutationKey: ['submit-exam-attempt'],
-    mutationFn: moduleId ? finishExamAttemptForModule : updateExamAttempt,
-    onSuccess: (passed: boolean) => {
-      toast.success('Submitting answers', {
-        description: 'You will be redirected automatically.',
-      });
+  const { mutate: submitExamAttempt, isPending } = useServerActionMutation(
+    updateExamAttemptAction,
+    {
+      mutationKey: ['submit-exam-attempt'],
+      onSuccess: (passed: boolean) => {
+        toast.success('Submitting answers', {
+          description: 'You will be redirected automatically.',
+        });
 
-      if (passed) return router.push(`/path/${pathId}/module/${moduleId}`);
+        if (passed) return router.push(`/path/${pathId}/module/${moduleId}`);
 
-      router.push(`/exam/${examId}/results?attemptId=${attemptId}`);
-    },
-    onError: () =>
-      toast.error('Failed to submit exam answers. Please try again.'),
-  });
+        router.push(`/exam/${examId}/results?attemptId=${attemptId}`);
+      },
+      onError: () =>
+        toast.error('Failed to submit exam answers. Please try again.'),
+    }
+  );
 
   const { crrStep, crrIndex, isLastStep, nextStep } = useMultiStepForm(
     questions.map(question => (
@@ -115,7 +115,7 @@ const AnswerExamComponent = ({
       },
     ];
 
-    const data: Partial<IExamAttemptDocument> = {
+    const data = {
       time: timer,
       answers,
     };

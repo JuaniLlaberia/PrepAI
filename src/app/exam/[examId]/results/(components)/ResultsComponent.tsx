@@ -4,13 +4,13 @@ import { HiOutlineCheck, HiOutlineXMark } from 'react-icons/hi2';
 import AnimatedProgress from '@/components/AnimatedProgress';
 import Attempts from '@/components/Attempts';
 import ConfettiComponent from '@/components/Confetti';
-import { getExamAttempts, getExamResults } from '@/actions/examAttempt';
 import { formatTimer } from '@/lib/helpers';
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
+import { getExamAttempts, getExamResults } from '@/access-data/examAttempts';
 
 const ResultsComponent = async ({
   examId,
