@@ -21,7 +21,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
-import { getUserPaths } from '@/actions/path';
+import { getUserPaths } from '@/access-data/paths';
 
 const PathsPage = async ({
   searchParams: { sortBy, filter },

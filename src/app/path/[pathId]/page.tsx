@@ -5,7 +5,8 @@ import { HiOutlineBookOpen } from 'react-icons/hi2';
 import AnimatedProgress from '@/components/AnimatedProgress';
 import Badge from '@/components/ui/badge';
 import PageHeader from '@/components/PageHeader';
-import { getModules, getPathById } from '@/actions/path';
+import { getPathById } from '@/access-data/paths';
+import { getModules } from '@/access-data/modules';
 
 const PathPage = async ({
   params: { pathId },
@@ -23,29 +24,17 @@ const PathPage = async ({
 
   return (
     <>
-      <PageHeader
-        text='Go to paths'
-        link='/dashboard/paths'
-      />
+      <PageHeader text='Go to paths' link='/dashboard/paths' />
       <div className='flex flex-col items-center mt-2'>
         <section className='w-full max-w-[700px] overflow-x-hidden pb-3'>
           <div>
             <h1 className='text-lg font-medium mb-2'>{jobPosition} path</h1>
             <div className='flex gap-2'>
-              <Badge
-                text={`${jobExperience} level`}
-                color='purple'
-              />
+              <Badge text={`${jobExperience} level`} color='purple' />
               {completed ? (
-                <Badge
-                  text='Completed'
-                  color='green'
-                />
+                <Badge text='Completed' color='green' />
               ) : (
-                <Badge
-                  text='In progress'
-                  color='orange'
-                />
+                <Badge text='In progress' color='orange' />
               )}
             </div>
             <div className='mt-4 flex flex-col'>

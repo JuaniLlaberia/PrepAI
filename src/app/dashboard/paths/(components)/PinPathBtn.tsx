@@ -1,10 +1,10 @@
 'use client';
 
 import { HiOutlineStar } from 'react-icons/hi2';
-import { useMutation } from '@tanstack/react-query';
 
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
-import { updatePath } from '@/actions/path';
+import { useServerActionMutation } from '@/hooks/server-action-hooks';
+import { updatePathAction } from '@/actions/path';
 
 const PinPathBtn = ({
   pathId,
@@ -13,13 +13,15 @@ const PinPathBtn = ({
   pathId: string;
   isPinned: boolean;
 }) => {
-  const { mutate: togglePinPath, isPending } = useMutation({
-    mutationKey: ['pin-path'],
-    mutationFn: updatePath,
-  });
+  const { mutate: updatePath, isPending } = useServerActionMutation(
+    updatePathAction,
+    {
+      mutationKey: ['pin-path'],
+    }
+  );
 
   const togglePin = () => {
-    togglePinPath({ pathId, data: { pinned: !isPinned } });
+    updatePath({ pathId, path: { pinned: !isPinned } });
   };
 
   return (

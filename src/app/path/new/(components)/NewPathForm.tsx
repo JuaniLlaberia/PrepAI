@@ -2,7 +2,6 @@
 
 import { HiMiniArrowLongLeft, HiSparkles } from 'react-icons/hi2';
 import { useForm } from 'react-hook-form';
-import { useMutation } from '@tanstack/react-query';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LuLoader2 } from 'react-icons/lu';
 import { toast } from 'sonner';
@@ -15,8 +14,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useMultiStepForm } from '@/hooks/useMultistepForm';
-import { createPath as createPathAction } from '@/actions/path';
+import { createPathAction } from '@/actions/path';
 import { PathSchema } from '@/lib/validators';
+import { useServerActionMutation } from '@/hooks/server-action-hooks';
 
 const NewPathForm = () => {
   const router = useRouter();
@@ -28,15 +28,17 @@ const NewPathForm = () => {
   } = useForm({
     resolver: zodResolver(PathSchema),
   });
-  const { mutate: createPath, isPending } = useMutation({
-    mutationKey: ['create-path'],
-    mutationFn: createPathAction,
-    onSuccess: pathId => {
-      toast.success('Path created successfully');
-      router.push(`/path/${pathId}`);
-    },
-    onError: () => toast.error('Failed to create path'),
-  });
+  const { mutate: createPath, isPending } = useServerActionMutation(
+    createPathAction,
+    {
+      mutationKey: ['create-path'],
+      onSuccess: pathId => {
+        toast.success('Path created successfully');
+        router.push(`/path/${pathId}`);
+      },
+      onError: () => toast.error('Failed to create path'),
+    }
+  );
 
   const steps = [['jobPosition'], ['jobExperience'], ['topics']];
 
@@ -65,10 +67,7 @@ const NewPathForm = () => {
           />
         </InputWrapper>
         <div className='flex justify-end mt-3 md:mt-5'>
-          <Button
-            disabled={isPending}
-            className='w-full md:w-auto px-6'
-          >
+          <Button disabled={isPending} className='w-full md:w-auto px-6'>
             Next
           </Button>
         </div>
@@ -102,10 +101,7 @@ const NewPathForm = () => {
           </InputWrapper>
         </div>
         <div className='mt-5 md:mt-7 flex flex-col gap-2 md:flex-row-reverse items-end'>
-          <Button
-            disabled={isPending}
-            className='w-full md:w-auto px-6'
-          >
+          <Button disabled={isPending} className='w-full md:w-auto px-6'>
             Next
           </Button>
           <Button
@@ -128,10 +124,7 @@ const NewPathForm = () => {
         <p className='text-3xl font-medium mb-3 text-center'>
           Describe what topics you need to practice
         </p>
-        <InputWrapper
-          inputId='topics'
-          error={errors.topics?.message as string}
-        >
+        <InputWrapper inputId='topics' error={errors.topics?.message as string}>
           <Textarea
             id='topics'
             placeholder='Topics you need to know'
@@ -141,10 +134,7 @@ const NewPathForm = () => {
           />
         </InputWrapper>
         <div className='mt-3 md:mt-5 flex flex-col gap-2 md:flex-row-reverse items-end'>
-          <Button
-            disabled={isPending}
-            className='w-full md:w-auto px-6'
-          >
+          <Button disabled={isPending} className='w-full md:w-auto px-6'>
             {isPending ? (
               <LuLoader2
                 strokeWidth={2}
@@ -171,7 +161,9 @@ const NewPathForm = () => {
     <form
       onSubmit={
         isLastStep
-          ? handleSubmit(data => createPath({ data }))
+          ? handleSubmit(({ jobPosition, jobExperience, topics }) =>
+              createPath({ jobPosition, jobExperience, topics })
+            )
           : async e => {
               e.preventDefault();
 

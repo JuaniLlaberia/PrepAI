@@ -1,8 +1,6 @@
 'use client';
 
-import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { LuLoader2 } from 'react-icons/lu';
 import { HiOutlineExclamationCircle } from 'react-icons/hi2';
@@ -15,8 +13,8 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { deleteInterview } from '@/actions/interview';
-import { deletePath } from '@/actions/path';
+import { useServerActionMutation } from '@/hooks/server-action-hooks';
+import { deletePathAction } from '@/actions/path';
 
 const DeletePathModal = ({
   pathId,
@@ -25,22 +23,21 @@ const DeletePathModal = ({
   pathId: string;
   jobPosition: string;
 }) => {
-  const router = useRouter();
+  const { mutate: removePath, isPending } = useServerActionMutation(
+    deletePathAction,
+    {
+      mutationKey: ['delete-path'],
+      onSuccess: () =>
+        toast.success('Path has been deleted', {
+          description: 'All data related to this path has been deleted.',
+        }),
+      onError: () =>
+        toast.error('Failed to delete path', {
+          description: 'We could not delate your path. Please try again.',
+        }),
+    }
+  );
 
-  const { mutate: removePath, isPending } = useMutation({
-    mutationKey: ['delete-path'],
-    mutationFn: deletePath,
-    onSuccess: () => {
-      router.push('/dashboard/paths');
-      toast.success('Path has been deleted', {
-        description: 'All data related to this path has been deleted.',
-      });
-    },
-    onError: () =>
-      toast.error('Failed to delete path', {
-        description: 'We could not delate your path. Please try again.',
-      }),
-  });
   const {
     register,
     handleSubmit,
