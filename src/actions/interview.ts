@@ -1,114 +1,52 @@
 'use server';
 
-import mongoose from 'mongoose';
 import { revalidatePath } from 'next/cache';
+import { z } from 'zod';
 
-import InterviewAttempt from '@/db/models/InterviewAttempt';
-import Interview, { IInterviewDocument } from '@/db/models/Interview';
-import { authAction, interviewBelongsToUser } from './auth';
-import { generateInterviewWithGemini } from '@/gemini/functions';
+import { authenticatedAction } from '@/lib/safe-actions';
+import { ExperienceEnum } from '@/lib/validators';
+import {
+  createInterview,
+  deleteInterview,
+  updateInterview,
+} from '@/access-data/interview';
 
-export const getUserInterviews = async ({
-  sort,
-  filter,
-}: {
-  sort: 'createdAt' | 'name';
-  filter: 'all' | 'taken' | 'new';
-}) => {
-  const userId = await authAction();
+export const createInterviewAction = authenticatedAction
+  .createServerAction()
+  .input(
+    z.object({
+      jobRole: z.string(),
+      jobExperience: z.nativeEnum(ExperienceEnum),
+      jobDescription: z.string(),
+    })
+  )
+  .handler(async ({ input, ctx: { userId } }) => {
+    const { id } = await createInterview({ userId, interview: { ...input } });
 
-  const interviewsQuery = Interview.find({ userId });
+    revalidatePath('/dashboard/interviews');
 
-  if (filter === 'new') interviewsQuery.where({ taken: false });
-  else if (filter === 'taken') interviewsQuery.where({ taken: true });
-
-  return await interviewsQuery
-    .select('_id jobRole jobExperience taken createdAt pinned')
-    .sort(
-      sort === 'createdAt'
-        ? { pinned: 'desc', createdAt: 'desc' }
-        : { pinned: 'desc', jobRole: 'desc' }
-    );
-};
-
-export const getInterviewById = async ({
-  interviewId,
-}: {
-  interviewId: string;
-}) => {
-  await authAction();
-  return await Interview.findById(interviewId)
-    .select('questions.question questions.hint')
-    .lean();
-};
-
-export const createInterview = async ({
-  data,
-}: {
-  data: Partial<IInterviewDocument>;
-}) => {
-  const userId = await authAction();
-
-  const { jobRole, jobExperience, jobDescription } = data;
-  if (!jobRole || !jobExperience || !jobDescription)
-    throw new Error('Missing required data');
-
-  const questions = await generateInterviewWithGemini({
-    jobRole,
-    jobDescription,
-    jobExperience,
+    return id;
   });
 
-  const { id } = await Interview.create({
-    jobRole,
-    jobExperience,
-    jobDescription,
-    pinned: false,
-    userId,
-    questions,
+export const deleteInterviewAction = authenticatedAction
+  .createServerAction()
+  .input(z.object({ interviewId: z.string() }))
+  .handler(async ({ input: { interviewId } }) => {
+    await deleteInterview({ interviewId });
+
+    revalidatePath('/dashboard/interviews');
   });
 
-  revalidatePath('/dashboard/interviews');
+export const updateInterviewAction = authenticatedAction
+  .createServerAction()
+  .input(
+    z.object({
+      interviewId: z.string(),
+      interview: z.object({ pinned: z.boolean() }),
+    })
+  )
+  .handler(async ({ input: { interviewId, interview } }) => {
+    await updateInterview({ interviewId, interview });
 
-  return id;
-};
-
-export const deleteInterview = async ({
-  interviewId,
-}: {
-  interviewId: string;
-}) => {
-  const userId = await authAction();
-  await interviewBelongsToUser(userId, interviewId);
-
-  const mongoSession = await mongoose.startSession();
-  mongoSession.startTransaction();
-
-  try {
-    await Promise.all([
-      Interview.findByIdAndDelete(interviewId),
-      InterviewAttempt.deleteMany({ interviewId }),
-    ]);
-  } catch (err) {
-    await mongoSession.abortTransaction();
-  } finally {
-    mongoSession.endSession();
-  }
-
-  revalidatePath('/dashboard/interviews');
-};
-
-export const updateInterview = async ({
-  interviewId,
-  data,
-}: {
-  interviewId: string;
-  data: Partial<IInterviewDocument>;
-}) => {
-  const userId = await authAction();
-  await interviewBelongsToUser(userId, interviewId);
-
-  await Interview.findByIdAndUpdate(interviewId, data);
-
-  revalidatePath('/dashboard/interviews');
-};
+    revalidatePath('/dashboard/interviews');
+  });

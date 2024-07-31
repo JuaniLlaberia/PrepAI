@@ -13,7 +13,6 @@ import DeleteInterviewModal from '../(components)/DeleteInterviewModal';
 import Badge from '@/components/ui/badge';
 import InterviewsFilters from '../(components)/InterviewsFilter';
 import PinInterviewBtn from '../(components)/PinInterviewBtn';
-import { getUserInterviews } from '@/actions/interview';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import {
@@ -24,6 +23,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
+import { getUserInterviews } from '@/access-data/interview';
 
 const InterviewsPage = async ({
   searchParams,

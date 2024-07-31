@@ -1,8 +1,6 @@
 'use client';
 
-import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { LuLoader2 } from 'react-icons/lu';
 import { HiOutlineExclamationCircle } from 'react-icons/hi2';
@@ -15,7 +13,8 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { deleteInterview } from '@/actions/interview';
+import { useServerActionMutation } from '@/hooks/server-action-hooks';
+import { deleteInterviewAction } from '@/actions/interview';
 
 const DeleteInterviewModal = ({
   interviewId,
@@ -24,22 +23,21 @@ const DeleteInterviewModal = ({
   interviewId: string;
   jobRole: string;
 }) => {
-  const router = useRouter();
+  const { mutate: removeInterview, isPending } = useServerActionMutation(
+    deleteInterviewAction,
+    {
+      mutationKey: ['delete-interview'],
+      onSuccess: () =>
+        toast.success('Interview has been deleted', {
+          description: 'All data related to this interview has been deleted.',
+        }),
+      onError: () =>
+        toast.error('Failed to delete interview', {
+          description: 'We could not delate your interview. Please try again.',
+        }),
+    }
+  );
 
-  const { mutate: removeInterview, isPending } = useMutation({
-    mutationKey: ['delete-interview'],
-    mutationFn: deleteInterview,
-    onSuccess: () => {
-      router.push('/dashboard');
-      toast.success('Interview has been deleted', {
-        description: 'All data related to this interview has been deleted.',
-      });
-    },
-    onError: () =>
-      toast.error('Failed to delete interview', {
-        description: 'We could not delate your interview. Please try again.',
-      }),
-  });
   const {
     register,
     handleSubmit,

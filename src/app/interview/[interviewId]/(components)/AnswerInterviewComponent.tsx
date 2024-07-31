@@ -15,8 +15,8 @@ import CameraComponent from './Camera';
 import { Button } from '@/components/ui/button';
 import { useSpeechRecognition } from '@/hooks/useSpeechRecognition';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { generateFeedback } from '@/actions/feedback';
-import { finishInterviewAttemptForModule } from '@/actions/modules';
+import { useServerActionMutation } from '@/hooks/server-action-hooks';
+import { createInterviewAttemptFeedbackAction } from '@/actions/interviewAttempt';
 
 type AnswerComponentPropsType = {
   interviewId: string;
@@ -56,25 +56,27 @@ const AnswerComponent = ({
 
   const isLastQuestion = crrQuestion + 1 === questions.length;
 
-  const { mutate: endInterview, isPending } = useMutation({
-    mutationKey: ['finish-interview'],
-    mutationFn: moduleId ? finishInterviewAttemptForModule : generateFeedback,
-    onSuccess: () => {
-      toast.success('Generating feedback', {
-        description: 'You will be redirected automatically.',
-      });
+  const { mutate: endInterview, isPending } = useServerActionMutation(
+    createInterviewAttemptFeedbackAction,
+    {
+      mutationKey: ['finish-interview'],
+      onSuccess: () => {
+        toast.success('Generating feedback', {
+          description: 'You will be redirected automatically.',
+        });
 
-      if (moduleId)
-        router.push(
-          `/interview/${interviewId}/feedback?attemptId=${interviewAttemptId}&pathId=${pathId}&moduleId=${moduleId}`
-        );
-      else
-        router.push(
-          `/interview/${interviewId}/feedback?attemptId=${interviewAttemptId}`
-        );
-    },
-    onError: () => toast.error('Failed to submit interview'),
-  });
+        if (moduleId)
+          router.push(
+            `/interview/${interviewId}/feedback?attemptId=${interviewAttemptId}&pathId=${pathId}&moduleId=${moduleId}`
+          );
+        else
+          router.push(
+            `/interview/${interviewId}/feedback?attemptId=${interviewAttemptId}`
+          );
+      },
+      onError: () => toast.error('Failed to submit interview'),
+    }
+  );
 
   //Show confirmation when refreshing/closing browser
   useEffect(() => {
@@ -120,6 +122,7 @@ const AnswerComponent = ({
       interviewId,
       attemptId: interviewAttemptId,
       userResponses: responses,
+      moduleId,
     });
   };
 
@@ -135,10 +138,7 @@ const AnswerComponent = ({
       </section>
       <section className='flex flex-col justify-center items-center max-w-[500px] w-full'>
         <CameraComponent />
-        <Alert
-          variant='information'
-          className='mt-1'
-        >
+        <Alert variant='information' className='mt-1'>
           <HiOutlineLightBulb className='size-5' />
           <AlertTitle>Hint</AlertTitle>
           <AlertDescription>{questions[crrQuestion].hint}</AlertDescription>
@@ -161,10 +161,7 @@ const AnswerComponent = ({
         )}
 
         {!isListening && !hasAnswered && (
-          <Button
-            className='w-full'
-            onClick={startListening}
-          >
+          <Button className='w-full' onClick={startListening}>
             <HiOutlineMicrophone className='size-4 mr-1.5' /> Start recording
           </Button>
         )}

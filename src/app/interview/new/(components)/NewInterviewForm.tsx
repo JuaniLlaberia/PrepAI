@@ -2,7 +2,6 @@
 
 import { HiMiniArrowLongLeft, HiSparkles } from 'react-icons/hi2';
 import { useForm } from 'react-hook-form';
-import { useMutation } from '@tanstack/react-query';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LuLoader2 } from 'react-icons/lu';
 import { toast } from 'sonner';
@@ -14,9 +13,10 @@ import Radio from '@/components/ui/radio';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { createInterview as createInterviewAction } from '@/actions/interview';
+import { createInterviewAction } from '@/actions/interview';
 import { useMultiStepForm } from '@/hooks/useMultistepForm';
 import { InterviewSchema } from '@/lib/validators';
+import { useServerActionMutation } from '@/hooks/server-action-hooks';
 
 const NewInterviewForm = () => {
   const router = useRouter();
@@ -28,15 +28,18 @@ const NewInterviewForm = () => {
   } = useForm({
     resolver: zodResolver(InterviewSchema),
   });
-  const { mutate: createInterview, isPending } = useMutation({
-    mutationKey: ['create-interview'],
-    mutationFn: createInterviewAction,
-    onSuccess: interviewId => {
-      toast.success('Interview created successfully');
-      router.push(`/interview/${interviewId}`);
-    },
-    onError: () => toast.error('Failed to create interview'),
-  });
+
+  const { mutate: createInterview, isPending } = useServerActionMutation(
+    createInterviewAction,
+    {
+      mutationKey: ['create-interview'],
+      onSuccess: interviewId => {
+        toast.success('Interview created successfully');
+        router.push(`/interview/${interviewId}`);
+      },
+      onError: () => toast.error('Failed to create interview'),
+    }
+  );
 
   const steps = [['jobRole'], ['jobExperience'], ['jobDescription']];
 
@@ -52,10 +55,7 @@ const NewInterviewForm = () => {
         <p className='text-3xl font-medium tracking-tight mb-3 text-center'>
           What&apos;s the job role?
         </p>
-        <InputWrapper
-          inputId='role'
-          error={errors.jobRole?.message as string}
-        >
+        <InputWrapper inputId='role' error={errors.jobRole?.message as string}>
           <Input
             id='role'
             type='text'
@@ -65,10 +65,7 @@ const NewInterviewForm = () => {
           />
         </InputWrapper>
         <div className='flex justify-end mt-3 md:mt-5'>
-          <Button
-            disabled={isPending}
-            className='w-full md:w-auto px-6'
-          >
+          <Button disabled={isPending} className='w-full md:w-auto px-6'>
             Next
           </Button>
         </div>
@@ -102,10 +99,7 @@ const NewInterviewForm = () => {
           </InputWrapper>
         </div>
         <div className='mt-5 md:mt-7 flex flex-col gap-2 md:flex-row-reverse items-end'>
-          <Button
-            disabled={isPending}
-            className='w-full md:w-auto px-6'
-          >
+          <Button disabled={isPending} className='w-full md:w-auto px-6'>
             Next
           </Button>
           <Button
@@ -141,10 +135,7 @@ const NewInterviewForm = () => {
           />
         </InputWrapper>
         <div className='mt-3 md:mt-5 flex flex-col gap-2 md:flex-row-reverse items-end'>
-          <Button
-            disabled={isPending}
-            className='w-full md:w-auto px-6'
-          >
+          <Button disabled={isPending} className='w-full md:w-auto px-6'>
             {isPending ? (
               <LuLoader2
                 strokeWidth={2}
@@ -171,7 +162,9 @@ const NewInterviewForm = () => {
     <form
       onSubmit={
         isLastStep
-          ? handleSubmit(data => createInterview({ data }))
+          ? handleSubmit(({ jobRole, jobExperience, jobDescription }) =>
+              createInterview({ jobRole, jobDescription, jobExperience })
+            )
           : async e => {
               e.preventDefault();
 

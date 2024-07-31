@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation';
 
-import { getAttemptFeedback, getAttempts } from '@/actions/feedback';
 import ConfettiComponent from '@/components/Confetti';
 import Attempts from '@/components/Attempts';
 import AnimatedProgress from '@/components/AnimatedProgress';
@@ -9,6 +8,10 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
+import {
+  getAttemptFeedback,
+  getInterviewAttempts,
+} from '@/access-data/interviewAttempt';
 
 const FeedbackComponent = async ({
   interviewId,
@@ -17,7 +20,7 @@ const FeedbackComponent = async ({
   interviewId: string;
   attemptId: string;
 }) => {
-  const attempts = await getAttempts({ interviewId: interviewId });
+  const attempts = await getInterviewAttempts({ interviewId: interviewId });
 
   const interviewAttempt = await getAttemptFeedback({
     interviewAttemptId: attemptId ?? attempts[0]._id,

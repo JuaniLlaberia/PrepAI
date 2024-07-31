@@ -10,7 +10,7 @@ import {
   DialogFooter,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { getInterviewById } from '@/actions/interview';
+import { getInterviewById } from '@/access-data/interview';
 
 const AnswerPage = async ({
   params: { interviewId },

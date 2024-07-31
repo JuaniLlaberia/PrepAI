@@ -1,10 +1,10 @@
 'use client';
 
 import { HiOutlineStar } from 'react-icons/hi2';
-import { useMutation } from '@tanstack/react-query';
 
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
-import { updateInterview } from '@/actions/interview';
+import { useServerActionMutation } from '@/hooks/server-action-hooks';
+import { updateInterviewAction } from '@/actions/interview';
 
 const PinInterviewBtn = ({
   interviewId,
@@ -13,13 +13,15 @@ const PinInterviewBtn = ({
   interviewId: string;
   isPinned: boolean;
 }) => {
-  const { mutate: togglePinInterview, isPending } = useMutation({
-    mutationKey: ['pin-interview'],
-    mutationFn: updateInterview,
-  });
+  const { mutate: updateInterview, isPending } = useServerActionMutation(
+    updateInterviewAction,
+    {
+      mutationKey: ['pin-interview'],
+    }
+  );
 
   const togglePin = () => {
-    togglePinInterview({ interviewId, data: { pinned: !isPinned } });
+    updateInterview({ interviewId, interview: { pinned: !isPinned } });
   };
 
   return (
