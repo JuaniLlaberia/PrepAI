@@ -110,3 +110,47 @@ export const generateInterviewFeedbackWithGemini = async ({
 
   return { answers, speechAnalysis };
 };
+
+type GeminiModulesTypes = {
+  jobPosition: string;
+  topics: string;
+  jobExperience: 'intership' | 'junior' | 'ssr' | 'senior' | 'lead';
+};
+
+export const generateModulesWithGemini = async ({
+  jobPosition,
+  jobExperience,
+  topics,
+}: GeminiModulesTypes) => {
+  const promptSchema = `
+    {modules: [
+      {
+        title: 'string' (Module title),
+        description: 'string' (What this module includes),
+        subject: 'string' (Module topic),
+        topics: [
+          {
+            label: 'string' (topic name),
+            link: 'string' (reference/url to this topic in order for the user to learn/practice it, make sure that the urls actually exist. Provide at least 5 references for each)
+          }
+        ]
+      }
+    ]}
+  `;
+
+  const prompt = `Generate a list of modules (min 5, max 10) to get an user prepare for it's interviews for a ${jobExperience}
+   level job position as a ${jobPosition} with the next topics: ${topics}. Each module should have this schema and data: ${promptSchema} returned in JSON format.`;
+
+  const result = await model.generateContent(prompt);
+  const response = await result.response;
+  const jsonData = response.text();
+
+  const modules: {
+    title: string;
+    description: string;
+    subject: string;
+    topics: { label: string; link: string }[];
+  }[] = JSON.parse(jsonData).modules;
+
+  return modules;
+};
