@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { HiOutlineBookOpen } from 'react-icons/hi2';
+import { HiOutlineBookOpen, HiOutlineCheck } from 'react-icons/hi2';
 
 import AnimatedProgress from '@/components/AnimatedProgress';
 import Badge from '@/components/ui/badge';
@@ -24,17 +24,31 @@ const PathPage = async ({
 
   return (
     <>
-      <PageHeader text='Go to paths' link='/dashboard/paths' />
+      <PageHeader
+        text='Go to paths'
+        link='/dashboard/paths'
+      />
       <div className='flex flex-col items-center mt-2'>
         <section className='w-full max-w-[700px] overflow-x-hidden pb-3'>
           <div>
-            <h1 className='text-lg font-medium mb-2'>{jobPosition} path</h1>
+            <h1 className='text-lg font-medium mb-2 xl:text-xl'>
+              {jobPosition} path
+            </h1>
             <div className='flex gap-2'>
-              <Badge text={`${jobExperience} level`} color='purple' />
+              <Badge
+                text={`${jobExperience} level`}
+                color='purple'
+              />
               {completed ? (
-                <Badge text='Completed' color='green' />
+                <Badge
+                  text='Completed'
+                  color='green'
+                />
               ) : (
-                <Badge text='In progress' color='orange' />
+                <Badge
+                  text='In progress'
+                  color='orange'
+                />
               )}
             </div>
             <div className='mt-4 flex flex-col'>
@@ -61,7 +75,7 @@ const PathPage = async ({
                 <li key={String(module._id)}>
                   <Link
                     href={`/path/${pathId}/module/${String(module._id)}`}
-                    className='flex items-center justify-between border border-border p-3 rounded-lg'
+                    className='flex items-center justify-between border border-border p-3 rounded-lg md:hover:bg-background-2 transition-colors'
                   >
                     <div className='flex items-center gap-2'>
                       <div className='p-2 bg-accent border border-boreder rounded-md'>
@@ -70,7 +84,14 @@ const PathPage = async ({
                       <h3>{module.title}</h3>
                     </div>
                     <p className='text-sm font-medium'>
-                      {module.passedValue}/2
+                      {module.passedValue === 2 ? (
+                        <HiOutlineCheck
+                          className='text-green-500 size-4'
+                          strokeWidth={2}
+                        />
+                      ) : (
+                        `${module.passedValue}/2`
+                      )}
                     </p>
                   </Link>
                 </li>

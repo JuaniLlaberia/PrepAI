@@ -69,7 +69,7 @@ const AnswerExamComponent = ({
         exit={{ x: '-50%', opacity: 0 }}
         transition={{ duration: 0.3, ease: 'easeInOut' }}
       >
-        <h1 className='text-lg font-medium text-center mb-4'>
+        <h1 className='text-lg font-medium text-center mb-4 md:text-xl md:mb-6 lg:mb-8 lg:text-2xl xl:px-2'>
           {question.question}
         </h1>
         <ul className='flex flex-col gap-2'>
@@ -77,11 +77,23 @@ const AnswerExamComponent = ({
             <li
               key={i}
               className={cn(
-                'border border-border rounded-lg p-2 cursor-pointer transition-colors',
-                selectedOption === i ? 'border-blue-500 bg-blue-100' : null
+                'border-2 border-border rounded-lg p-3 cursor-pointer  transition-colors',
+                selectedOption === i
+                  ? 'border-[#88a4f0] bg-[#8bacff17]'
+                  : 'md:hover:bg-background-2'
               )}
               onClick={() => setSelectedOption(i)}
             >
+              <span
+                className={cn(
+                  'px-2 py-1 border-2 border-border rounded-md text-sm font-semibold mr-3 text-muted-foreground/80 transition-colors',
+                  selectedOption === i
+                    ? 'border-[#88a4f0] text-[#88a4f0]'
+                    : null
+                )}
+              >
+                {i + 1}
+              </span>
               {option}
             </li>
           ))}
@@ -191,20 +203,21 @@ const AnswerExamComponent = ({
         </div>
         {crrStep}
       </section>
-      <div className='flex items-center w-full max-w-[600px] lg:justify-end'>
+      <div className='flex items-center w-full max-w-[600px] md:justify-end'>
         {!isLastStep ? (
           <Button
             onClick={nextQuestion}
-            className='w-full lg:w-auto'
+            className='w-full md:w-auto'
+            disabled={selectedOption === null}
           >
             Next question
             <HiMiniArrowLongRight className='size-4 ml-1.5' />
           </Button>
         ) : (
           <Button
-            disabled={isPending}
+            disabled={isPending || selectedOption === null}
             onClick={finishExam}
-            className='w-full lg:w-auto'
+            className='w-full md:w-auto'
           >
             {isPending ? (
               <LuLoader2 className='size-4 mr-1.5 animate-spin' />

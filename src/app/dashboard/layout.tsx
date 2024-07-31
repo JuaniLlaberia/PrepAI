@@ -23,19 +23,34 @@ const navigationLinks: NavigationLinksType[] = [
     id: 'paths',
     label: 'Preparation paths',
     link: '/dashboard/paths',
-    icon: <PiTreeStructureLight strokeWidth={2} className='size-[1.1rem]' />,
+    icon: (
+      <PiTreeStructureLight
+        strokeWidth={2}
+        className='size-[1.1rem]'
+      />
+    ),
   },
   {
     id: 'interviews',
     label: 'Mock interviews',
     link: '/dashboard/interviews',
-    icon: <HiOutlineSquares2X2 strokeWidth={1.5} className='size-[1.1rem]' />,
+    icon: (
+      <HiOutlineSquares2X2
+        strokeWidth={1.5}
+        className='size-[1.1rem]'
+      />
+    ),
   },
   {
     id: 'mock-exams',
     label: 'Mock exams',
     link: '/dashboard/exams',
-    icon: <HiOutlineDocumentText strokeWidth={1.5} className='size-[1.1rem]' />,
+    icon: (
+      <HiOutlineDocumentText
+        strokeWidth={1.5}
+        className='size-[1.1rem]'
+      />
+    ),
   },
 ];
 
@@ -49,8 +64,8 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
         </div>
         <DashboardTabs links={navigationLinks} />
       </nav>
-      <div className='lg:flex lg:flex-row'>
-        <aside className='p-3 w-[300px] border-r border-border hidden lg:flex flex-col'>
+      <div className='lg:flex lg:flex-row h-screen'>
+        <aside className='p-3 w-[300px] border-r border-border hidden lg:flex flex-col h-screen'>
           <div className='flex-1'>
             <h1 className='text-center mb-6'>MockAI</h1>
             <h2 className='px-1 mb-1 text-xs font-medium text-muted-foreground'>
@@ -73,7 +88,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
             <UserMenu />
           </div>
         </aside>
-        <section className='w-full pt-4 lg:pt-8 px-4 md:px-16 lg:px-20 2xl:px-56 bg-background-2 dark:bg-background min-h-[calc(100vh-6.5rem-1px)] lg:min-h-screen'>
+        <section className='w-full pt-4 lg:pt-8 px-4 md:px-16 lg:px-20 2xl:px-56 bg-background-2 dark:bg-background h-full lg:overflow-y-auto'>
           {children}
         </section>
       </div>

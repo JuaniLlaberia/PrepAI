@@ -132,13 +132,16 @@ const AnswerComponent = ({
         <p className='uppercase text-muted-foreground text-sm text-center font-semibold mb-1'>
           Question #{crrQuestion + 1}
         </p>
-        <p className='text-center text-lg font-medium'>
+        <p className='text-center text-lg font-medium xl:text-xl'>
           {questions[crrQuestion].question}
         </p>
       </section>
       <section className='flex flex-col justify-center items-center max-w-[500px] w-full'>
         <CameraComponent />
-        <Alert variant='information' className='mt-1'>
+        <Alert
+          variant='information'
+          className='mt-1'
+        >
           <HiOutlineLightBulb className='size-5' />
           <AlertTitle>Hint</AlertTitle>
           <AlertDescription>{questions[crrQuestion].hint}</AlertDescription>
@@ -161,7 +164,10 @@ const AnswerComponent = ({
         )}
 
         {!isListening && !hasAnswered && (
-          <Button className='w-full' onClick={startListening}>
+          <Button
+            className='w-full'
+            onClick={startListening}
+          >
             <HiOutlineMicrophone className='size-4 mr-1.5' /> Start recording
           </Button>
         )}

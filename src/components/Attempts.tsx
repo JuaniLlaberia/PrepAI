@@ -34,12 +34,15 @@ const Attempts = ({
         value={crrAttempt}
         onValueChange={val => setSeachParam('attemptId', val)}
       >
-        <SelectTrigger className='w-full mt-1 mb-3 lg:max-w-[200px] lg:m-1'>
+        <SelectTrigger className='w-full mt-1 mb-3 md:max-w-[200px] md:m-1'>
           <SelectValue placeholder='Select attempt' />
         </SelectTrigger>
         <SelectContent>
           {attempts.map((attempt, i) => (
-            <SelectItem key={attempt._id} value={attempt._id}>
+            <SelectItem
+              key={attempt._id}
+              value={attempt._id}
+            >
               Attempt {i + 1}
             </SelectItem>
           ))}

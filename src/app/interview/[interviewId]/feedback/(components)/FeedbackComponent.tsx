@@ -39,7 +39,7 @@ const FeedbackComponent = async ({
       {hasPassed ? <ConfettiComponent /> : null}{' '}
       <div className='flex flex-col items-center mt-2'>
         <section className='king-tight pb-3 max-w-[700px] overflow-x-hidden w-full'>
-          <div className='flex items-start justify-between flex-col-reverse lg:flex-row'>
+          <div className='flex items-start justify-between flex-col-reverse md:flex-row'>
             <div>
               <h1 className='text-2xl font-medium'>Interview feedback</h1>
               {hasPassed ? (
@@ -105,7 +105,7 @@ const FeedbackComponent = async ({
             <h2 className='mb-1 text-sm lg:text-base xl:text-lg font-semibold'>
               Analysis
             </h2>
-            <p className='shadow tracking-tight bg-background-2 p-2 rounded-lg dark:border dark:border-border'>
+            <p className='shadow tracking-tight bg-background-2 p-4 rounded-lg dark:border dark:border-border'>
               {interviewAttempt.speechAnalysis}
             </p>
           </div>

@@ -1,5 +1,9 @@
 import { notFound } from 'next/navigation';
-import { HiOutlineCheck, HiOutlineXMark } from 'react-icons/hi2';
+import {
+  HiOutlineCheck,
+  HiOutlineQuestionMarkCircle,
+  HiOutlineXMark,
+} from 'react-icons/hi2';
 
 import AnimatedProgress from '@/components/AnimatedProgress';
 import Attempts from '@/components/Attempts';
@@ -35,7 +39,7 @@ const ResultsComponent = async ({
       {passed ? <ConfettiComponent /> : null}
       <div className='flex flex-col items-center mt-2'>
         <section className='w-full max-w-[700px]'>
-          <div className='flex items-start justify-between flex-col-reverse lg:flex-row'>
+          <div className='flex items-start justify-between flex-col-reverse md:flex-row'>
             <div>
               <h1 className='text-2xl font-medium'>Mock exam results</h1>
               {passed ? (
