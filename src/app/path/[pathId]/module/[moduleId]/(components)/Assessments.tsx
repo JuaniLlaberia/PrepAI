@@ -6,12 +6,11 @@ import { HiOutlineCheckCircle } from 'react-icons/hi2';
 import { useRouter } from 'next/navigation';
 import { LuLoader2 } from 'react-icons/lu';
 import { toast } from 'sonner';
-import { useMutation } from '@tanstack/react-query';
 
 import { Button, buttonVariants } from '@/components/ui/button';
 import {
   createExamForModuleAction,
-  createInterviewForModule,
+  createInterviewForModuleAction,
 } from '@/actions/modules';
 import { cn } from '@/lib/utils';
 import { useServerActionMutation } from '@/hooks/server-action-hooks';
@@ -53,9 +52,8 @@ const Assessments = ({
     });
 
   const { mutate: createInterview, isPending: isPendingInterview } =
-    useMutation({
+    useServerActionMutation(createInterviewForModuleAction, {
       mutationKey: ['create-module-interview'],
-      mutationFn: createInterviewForModule,
       onSuccess: (interviewId: string) => {
         router.push(
           `/interview/${interviewId}?pathId=${pathId}&moduleId=${moduleId}`
