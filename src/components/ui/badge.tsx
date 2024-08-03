@@ -34,7 +34,7 @@ const getColorClass = (color: ColorsType) => {
 const Badge = ({ text, color, decorated = false }: BadgeType) => {
   return (
     <span
-      className={`inline-flex capitalize items-center rounded-lg px-3 border py-1 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ${getColorClass(
+      className={`inline-flex capitalize items-center rounded-full px-3 border py-1 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ${getColorClass(
         color
       )}`}
     >
