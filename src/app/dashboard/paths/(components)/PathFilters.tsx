@@ -40,14 +40,24 @@ const PathSorts = ({
   return (
     <>
       <Drawer>
-        <DrawerTrigger asChild className='md:hidden'>
-          <Button variant='ghost' size='sm' className='px-3 md:hidden'>
+        <DrawerTrigger
+          asChild
+          className='md:hidden'
+        >
+          <Button
+            variant='outline'
+            size='sm'
+            className='px-3 md:hidden'
+          >
             <BsSortDown className='size-4 mr-1.5' /> Filter & Sort
           </Button>
         </DrawerTrigger>
         <DrawerContent className='p-4 text-primary transition-colors'>
           <ul>
-            <DrawerClose asChild aria-label='filter button'>
+            <DrawerClose
+              asChild
+              aria-label='filter button'
+            >
               <li
                 onClick={() => setSeachParam('sortBy', 'createdAt')}
                 className='py-3 px-2 flex justify-between items-center hover:bg-accent rounded-md'
@@ -61,7 +71,10 @@ const PathSorts = ({
                 />
               </li>
             </DrawerClose>
-            <DrawerClose asChild aria-label='filter button'>
+            <DrawerClose
+              asChild
+              aria-label='filter button'
+            >
               <li
                 onClick={() => setSeachParam('sortBy', 'name')}
                 className='py-3 px-2 flex justify-between items-center hover:bg-accent rounded-md'
@@ -78,7 +91,10 @@ const PathSorts = ({
           </ul>
           <Separator />
           <ul>
-            <DrawerClose asChild aria-label='filter button'>
+            <DrawerClose
+              asChild
+              aria-label='filter button'
+            >
               <li
                 onClick={() => setSeachParam('filter', 'progress')}
                 className='py-3 px-2 flex justify-between items-center hover:bg-accent rounded-md'
@@ -92,7 +108,10 @@ const PathSorts = ({
                 />
               </li>
             </DrawerClose>
-            <DrawerClose asChild aria-label='filter button'>
+            <DrawerClose
+              asChild
+              aria-label='filter button'
+            >
               <li
                 onClick={() => setSeachParam('filter', 'completed')}
                 className='py-3 px-2 flex justify-between items-center hover:bg-accent rounded-md'

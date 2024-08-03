@@ -11,6 +11,7 @@ import { PiArrowClockwiseLight } from 'react-icons/pi';
 
 import DifficultyBadge from './(components)/DifficultyBadge';
 import Badge from '@/components/ui/badge';
+import PinExamBtn from './(components)/PinExamBtn';
 import DeleteExamModal from './(components)/DeleteExamModal';
 import ExamFilters from './(components)/ExamsFilters';
 import { Button, buttonVariants } from '@/components/ui/button';
@@ -23,7 +24,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
-import PinExamBtn from './(components)/PinExamBtn';
 import { getUserExams } from '@/access-data/exams';
 
 const ExamsPage = async ({
@@ -50,7 +50,11 @@ const ExamsPage = async ({
           className={buttonVariants({ size: 'sm' })}
           href='/exam/new'
         >
-          <HiOutlinePlus className='size-4 mr-2' /> New mock exam
+          <HiOutlinePlus
+            className='size-4 mr-2'
+            strokeWidth={2.5}
+          />{' '}
+          New mock exam
         </Link>
       </div>
       <div>
@@ -60,23 +64,15 @@ const ExamsPage = async ({
         <ul className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2.5 pb-4'>
           {exams.length > 0 ? (
             exams.map(
-              ({
-                id,
-                subject,
-                difficulty,
-                createdAt,
-                taken,
-                passed,
-                pinned,
-              }) => (
+              ({ id, subject, difficulty, createdAt, taken, pinned }) => (
                 <li
                   key={id}
-                  className='relative bg-background dark:bg-background-2 p-4 border border-border rounded-lg shadow'
+                  className='relative p-4 bg-background rounded-xl shadow dark:bg-background-2'
                 >
-                  <Link href={taken ? `/exam/${id}/results` : `/exam/${id}`}>
-                    <h3 className='text-base lg:text-lg font-medium line-clamp-2 mb-2'>
-                      {subject}
-                    </h3>
+                  <Link
+                    href={taken ? `/exam/${id}/results` : `/exam/${id}`}
+                    className='flex flex-col gap-4'
+                  >
                     <div className='flex items-center gap-2'>
                       <DifficultyBadge difficulty={difficulty} />
                       <Badge
@@ -90,19 +86,10 @@ const ExamsPage = async ({
                         />
                       ) : null}
                     </div>
-                    <p className='text-muted-foreground text-sm text-end mt-3'>
+                    <h3 className='text-xl font-medium mb-2'>{subject}</h3>
+                    <p className='text-muted-foreground text-sm text-start mt-3'>
                       {createdAt.toDateString()}
                     </p>
-                    <div className='flex items-center mt-4'>
-                      <Button
-                        variant='outline'
-                        size='sm'
-                        className='w-full group'
-                      >
-                        {taken ? 'See results' : 'Start mock exam'}
-                        <HiMiniArrowLongRight className='size-4 ml-2 group-hover:translate-x-1 transition-transform' />
-                      </Button>
-                    </div>
                   </Link>
                   <Dialog>
                     <DropdownMenu>
