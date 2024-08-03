@@ -4,7 +4,7 @@ import Exam from '@/db/models/Exam';
 import Interview from '@/db/models/Interview';
 import InterviewAttempt from '@/db/models/InterviewAttempt';
 import ExamAttempt, { IExamAttemptDocument } from '@/db/models/ExamAttempt';
-import Module from '@/db/models/Modules';
+import Module, { IModuleDocument } from '@/db/models/Modules';
 import { IPathDocument } from '@/db/models/Path';
 import {
   generateExamWithGemini,
@@ -13,35 +13,25 @@ import {
 } from '@/gemini/functions';
 import { getAuthUser } from '@/actions/user';
 
-export const getModules = async ({ pathId }: { pathId: string }) => {
+export const getModules = async ({
+  pathId,
+}: {
+  pathId: string;
+}): Promise<IModuleDocument[]> => {
   await getAuthUser();
 
   return await Module.aggregate([
     { $match: { pathId: new mongoose.Types.ObjectId(pathId) } },
     {
       $addFields: {
-        passedValue: {
-          $cond: [
-            {
-              $and: [
-                { $eq: ['$exam.passed', true] },
-                { $eq: ['$interview.passed', true] },
-              ],
+        completedActivities: {
+          $size: {
+            $filter: {
+              input: '$activities',
+              as: 'activity',
+              cond: { $eq: ['$$activity.completed', true] },
             },
-            2,
-            {
-              $cond: [
-                {
-                  $or: [
-                    { $eq: ['$exam.passed', true] },
-                    { $eq: ['$interview.passed', true] },
-                  ],
-                },
-                1,
-                0,
-              ],
-            },
-          ],
+          },
         },
       },
     },
@@ -49,7 +39,9 @@ export const getModules = async ({ pathId }: { pathId: string }) => {
       $project: {
         _id: 1,
         title: 1,
-        passedValue: 1,
+        inProgress: 1,
+        completed: 1,
+        completedActivities: 1,
       },
     },
   ]);
@@ -58,7 +50,41 @@ export const getModules = async ({ pathId }: { pathId: string }) => {
 export const getModuleById = async ({ moduleId }: { moduleId: string }) => {
   await getAuthUser();
 
-  return await Module.findById(moduleId);
+  return await Module.findById(moduleId).lean();
+};
+
+export const updateModule = async ({
+  moduleId,
+  module,
+}: {
+  moduleId: string;
+  module: Partial<IModuleDocument>;
+}) => {
+  await Module.findByIdAndUpdate(moduleId, module);
+};
+
+export const updateActivity = async ({
+  moduleId,
+  activityId,
+}: {
+  moduleId: string;
+  activityId: string;
+}) => {
+  await Module.findOneAndUpdate(
+    {
+      _id: new mongoose.Types.ObjectId(moduleId),
+    },
+    {
+      $set: { 'activities.$[e1].completed': true },
+    },
+    {
+      arrayFilters: [
+        {
+          'e1._id': activityId,
+        },
+      ],
+    }
+  );
 };
 
 export const createExamForModule = async ({
@@ -153,17 +179,15 @@ export const createInterviewForModule = async ({
     | 'senior'
     | 'lead';
 
-  const topics = moduleDB.topics.map(topic => topic.label).join(' ');
-
   const questions = await generateInterviewWithGemini({
     jobRole: moduleDB.subject,
-    jobDescription: topics,
+    jobDescription: moduleDB.title,
     jobExperience: experience,
   });
 
   const { id } = await Interview.create({
     jobRole: moduleDB.subject,
-    jobDescription: topics,
+    jobDescription: moduleDB.title,
     jobExperience: experience,
     questions,
     moduleId,
