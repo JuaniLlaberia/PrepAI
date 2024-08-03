@@ -122,35 +122,94 @@ export const generateModulesWithGemini = async ({
   jobExperience,
   topics,
 }: GeminiModulesTypes) => {
-  const promptSchema = `
-    {modules: [
-      {
-        title: 'string' (Module title),
-        description: 'string' (What this module includes),
-        subject: 'string' (Module topic),
-        topics: [
-          {
-            label: 'string' (topic name),
-            link: 'string' (reference/url to this topic in order for the user to learn/practice it, make sure that the urls actually exist. Provide at least 5 references for each)
-          }
-        ]
-      }
-    ]}
-  `;
+  const prompt = `
+    Generate a JSON format of a list of modules (at least 7 and no more than 10 modules) for a ${jobExperience} level ${jobPosition} preparing for interviews. The interview topics include ${topics}. The modules should be ordered by difficulty (first the easier topics and then the harder ones), with each module having the following schema: 
+      {modules: [
+        {
+            title: 'string' (Module title),
+            description: 'string' (What this module includes),
+            subject: 'string' (Module topic),
+            activities: [
+                { 
+                    title: 'string' (reading title),
+                    type: 'reading',
+                    completed: false
+                },
+                {
+                    title: {subject} introduction exam,
+                    type: 'exam',
+                    difficulty: 'string' (easy difficulty),
+                    examId: undefined,
+                    taken: 'boolean' (false),
+                    passed: 'boolean' (false)
+                },
+                {
+                    title: 'string' (reading title),
+                    type: 'reading',
+                    completed: 'boolean' (false)
+                },
+                {
+                    title: 'string' (reading title),
+                    type: 'reading',
+                    completed: 'boolean' (false)
+                },
+                {
+                    title: Practice {subject} exam,
+                    type: 'exam',
+                    difficulty: 'string' (medium difficulty),
+                    examId: undefined,
+                    taken: 'boolean' (false),
+                    passed: 'boolean' (false)
+                },
+                {
+                    title: 'string' (reading title),
+                    type: 'reading',
+                    completed: 'boolean' (false)
+                },
+                {
+                    title: 'string' (reading title),
+                    type: 'reading',
+                    completed: 'boolean' (false)
+                },
+                {
+                    title: 'string' (activity title),
+                    type: 'project',
+                    completed: 'boolean' (false)
+                },
+                {
+                    title: 'string' (activity title),
+                    type: 'exam',
+                    difficulty: 'string' (hard difficulty),
+                    examId: undefined,
+                    taken: 'boolean' (false),
+                    passed: 'boolean' (false)
+                },
+                {
+                    title: {subject} final interview,
+                    type: 'interview',
+                    interviewId: undefined,
+                    taken: 'boolean' (false),
+                    passed: 'boolean' (false)
+                }
+            ] 
+        }
 
-  const prompt = `Generate a list of modules (min 5, max 10) to get an user prepare for it's interviews for a ${jobExperience}
-   level job position as a ${jobPosition} with the next topics: ${topics}. Each module should have this schema and data: ${promptSchema} returned in JSON format.`;
+      ]}. The difficulty levels should be ordered as follows: 'easy', 'medium', 'hard'. Sort the modules in ascending order of difficulty.
+  `;
 
   const result = await model.generateContent(prompt);
   const response = await result.response;
   const jsonData = response.text();
 
-  const modules: {
-    title: string;
-    description: string;
-    subject: string;
-    topics: { label: string; link: string }[];
-  }[] = JSON.parse(jsonData).modules;
+  //Check parsin type
+  const modules: {}[] = JSON.parse(jsonData).modules;
+
+  try {
+    //@ts-ignore
+    console.log(modules[0].activities);
+  } catch (err) {
+    console.log(err);
+  }
 
   return modules;
 };
