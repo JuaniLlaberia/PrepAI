@@ -44,7 +44,7 @@ export const createExam = async ({
   exam: Partial<IExamDocument>;
 }) => {
   const { id } = await Exam.create(exam);
-  return id;
+  return { id };
 };
 
 export const deleteExam = async ({ examId }: { examId: string }) => {
