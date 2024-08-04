@@ -10,6 +10,7 @@ import {
   updateModule,
 } from '@/access-data/modules';
 import { revalidatePath } from 'next/cache';
+import { DifficultyEnum } from '@/lib/validators';
 
 export const startModuleAction = authenticatedAction
   .createServerAction()
@@ -17,14 +18,20 @@ export const startModuleAction = authenticatedAction
   .handler(async ({ input: { moduleId, pathId } }) => {
     await updateModule({ moduleId, module: { inProgress: true } });
 
-    revalidatePath(`/path/${pathId}/module/${moduleId}`);
+    revalidatePath(`/path/${pathId}`);
   });
 
 export const createExamForModuleAction = authenticatedAction
   .createServerAction()
-  .input(z.object({ moduleId: z.string() }))
-  .handler(async ({ input: { moduleId } }) => {
-    const { id } = await createExamForModule({ moduleId });
+  .input(
+    z.object({
+      moduleId: z.string(),
+      activityId: z.string(),
+      difficulty: z.nativeEnum(DifficultyEnum),
+    })
+  )
+  .handler(async ({ input }) => {
+    const { id } = await createExamForModule({ ...input });
 
     return id;
   });
