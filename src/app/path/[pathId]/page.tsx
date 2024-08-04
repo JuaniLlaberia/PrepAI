@@ -18,8 +18,8 @@ const PathPage = async ({
   params: { pathId: string };
 }) => {
   const [path, modules] = await Promise.all([
-    getPathById({ pathId: pathId }),
-    getModules({ pathId: pathId }),
+    getPathById({ pathId }),
+    getModules({ pathId }),
   ]);
 
   if (!path || !modules) return notFound();
@@ -33,10 +33,7 @@ const PathPage = async ({
   return (
     <>
       {path.completed ? <ConfettiComponent /> : null}
-      <PageHeader
-        text='Go to paths'
-        link='/dashboard/paths'
-      />
+      <PageHeader text='Go to paths' link='/dashboard/paths' />
       <div className='flex flex-col items-center mt-2'>
         <section className='w-full max-w-[700px] overflow-x-hidden pb-3'>
           <div>
@@ -44,20 +41,11 @@ const PathPage = async ({
               {jobPosition} path
             </h1>
             <div className='flex gap-2'>
-              <Badge
-                text={`${jobExperience} level`}
-                color='purple'
-              />
+              <Badge text={`${jobExperience} level`} color='purple' />
               {completed ? (
-                <Badge
-                  text='Completed'
-                  color='green'
-                />
+                <Badge text='Completed' color='green' />
               ) : (
-                <Badge
-                  text='In progress'
-                  color='orange'
-                />
+                <Badge text='In progress' color='orange' />
               )}
             </div>
             <div className='mt-6 flex flex-col bg-background-2 rounded-xl p-4'>
@@ -85,7 +73,14 @@ const PathPage = async ({
             <ul className='flex flex-col gap-3'>
               {modules.map(
                 (
-                  { _id, completed, inProgress, completedActivities, title },
+                  {
+                    _id,
+                    completed,
+                    inProgress,
+                    completedActivities,
+                    title,
+                    slug,
+                  },
                   i
                 ) => (
                   <li
@@ -111,10 +106,7 @@ const PathPage = async ({
                           <span>{completed ? 'Completed' : 'In progress'}</span>
                         ) : (
                           <span className='flex items-center gap-1 text-sm font-semibold'>
-                            <HiLockClosed
-                              className='size-4'
-                              strokeWidth={1}
-                            />
+                            <HiLockClosed className='size-4' strokeWidth={1} />
                             10 sections
                           </span>
                         )}
@@ -145,13 +137,14 @@ const PathPage = async ({
                           moduleId={String(_id)}
                           stageNum={i + 1}
                           inProgress={inProgress}
+                          moduleSlug={slug}
                         />
                       )}
 
                       {completed ? (
                         <Link
                           className={cn(buttonVariants({}))}
-                          href={`/path/${pathId}/module/${String(_id)}`}
+                          href={`/path/${pathId}/${slug}`}
                         >
                           REVIEW
                         </Link>
