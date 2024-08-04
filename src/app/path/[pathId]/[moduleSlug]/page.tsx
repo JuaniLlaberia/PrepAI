@@ -1,26 +1,22 @@
 import { notFound } from 'next/navigation';
 
-import PageHeader from '@/components/PageHeader';
-import { getModuleById } from '@/access-data/modules';
-
 import ActivityCard from './(components)/ActivityCard';
+import PageHeader from '@/components/PageHeader';
+import { getModuleBySlug } from '@/access-data/modules';
 
 const ModulePage = async ({
-  params: { pathId, moduleId },
+  params: { pathId, moduleSlug: slug },
 }: {
-  params: { pathId: string; moduleId: string };
+  params: { pathId: string; moduleSlug: string };
 }) => {
-  const moduleData = await getModuleById({ moduleId: moduleId });
+  const moduleData = await getModuleBySlug({ slug, pathId });
   if (!moduleData) return notFound();
 
   const { title, description, activities } = moduleData;
 
   return (
     <>
-      <PageHeader
-        text='Go to path'
-        link={`/path/${pathId}`}
-      />
+      <PageHeader text='Go to path' link={`/path/${pathId}`} />
       <div>
         <h1 className='text-2xl font-medium mb-1'>{title}</h1>
         <p className='text-muted-foreground'>{description}</p>
@@ -35,7 +31,7 @@ const ModulePage = async ({
               key={i}
               activity={activity}
               pathId={pathId}
-              moduleId={moduleId}
+              moduleId={String(moduleData._id)}
             />
           ))}
         </ul>
