@@ -40,6 +40,7 @@ const examAttemptSchema = new mongoose.Schema<IExamAttemptDocument>(
   { timestamps: true }
 );
 
+examAttemptSchema.index({ examId: 1 });
 examAttemptSchema.index({ userId: 1, examId: 1 });
 
 const ExamAttempt: Model<IExamAttemptDocument> =

@@ -12,6 +12,7 @@ export interface IModule {
   title: string;
   description: string;
   subject: string;
+  slug: string;
   inProgress: boolean;
   completed: boolean;
   pathId: ObjectId;
@@ -38,6 +39,7 @@ const moduleSchema = new mongoose.Schema<IModuleDocument>(
       type: String,
       required: true,
     },
+    slug: { type: String, required: true },
     inProgress: {
       type: Boolean,
       default: false,
@@ -61,6 +63,7 @@ const moduleSchema = new mongoose.Schema<IModuleDocument>(
 );
 
 moduleSchema.index({ pathId: 1 });
+moduleSchema.index({ pathId: 1, slug: 1 });
 
 // Create model
 const Module: Model<IModuleDocument> =

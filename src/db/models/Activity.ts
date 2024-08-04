@@ -24,7 +24,6 @@ export interface IExamActivity extends IActivity {
   type: ActivityTypeEnum.EXAM;
   difficulty: DifficultyEnum;
   examId: string | ObjectId | undefined;
-  taken: boolean;
   passed: boolean;
 }
 
@@ -35,7 +34,6 @@ export interface IProjectActivity extends IActivity {
 export interface IInterviewActivity extends IActivity {
   type: ActivityTypeEnum.INTERVIEW;
   interviewId: string | ObjectId | undefined;
-  taken: boolean;
   passed: boolean;
 }
 
@@ -72,7 +70,6 @@ const examActivitySchema = new mongoose.Schema<IExamActivity>(
       enum: Object.values(DifficultyEnum),
     },
     examId: { type: mongoose.Schema.Types.ObjectId, ref: 'Exam' },
-    taken: { type: Boolean, default: false },
     passed: { type: Boolean, default: false },
   },
   baseOptions
@@ -86,7 +83,6 @@ const projectActivitySchema = new mongoose.Schema<IProjectActivity>(
 const interviewActivitySchema = new mongoose.Schema<IInterviewActivity>(
   {
     interviewId: { type: mongoose.Schema.Types.ObjectId, ref: 'Interview' },
-    taken: { type: Boolean, default: false },
     passed: { type: Boolean, default: false },
   },
   baseOptions
