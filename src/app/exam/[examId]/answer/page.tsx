@@ -14,12 +14,12 @@ import { getExamQuestions } from '@/access-data/exams';
 
 const ExamAnswerPage = async ({
   params: { examId },
-  searchParams: { attemptId, pathId, moduleId },
+  searchParams: { pathId, moduleId },
 }: {
   params: { examId: string };
-  searchParams: { attemptId: string; moduleId: string; pathId: string };
+  searchParams: { moduleId: string; pathId: string };
 }) => {
-  const questions = await getExamQuestions({ examId: examId });
+  const questions = await getExamQuestions({ examId });
   if (!questions) return notFound();
 
   return (
@@ -60,7 +60,6 @@ const ExamAnswerPage = async ({
       <AnswerExamComponent
         examId={examId}
         questions={questions}
-        attemptId={attemptId}
         pathId={pathId}
         moduleId={moduleId}
       />

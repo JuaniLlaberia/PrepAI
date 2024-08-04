@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { LuLoader2 } from 'react-icons/lu';
 import { toast } from 'sonner';
 import { HiMiniArrowLongRight } from 'react-icons/hi2';
@@ -18,19 +18,20 @@ const StartExamBtn = ({
   moduleId?: string;
   pathId?: string;
 }) => {
+  const pathname = usePathname();
   const router = useRouter();
 
   const { mutate: createAttempt, isPending } = useServerActionMutation(
     createExamAttemptAction,
     {
       mutationKey: ['create-attemp'],
-      onSuccess: attemptId => {
+      onSuccess: () => {
         toast.success(`Starting ${!moduleId ? 'mock' : ''} exam...`);
         if (moduleId)
           router.push(
-            `/exam/${examId}/answer?pathId=${pathId}&moduleId=${moduleId}&attemptId=${attemptId}`
+            `${pathname}/answer?pathId=${pathId}&moduleId=${moduleId}`
           );
-        else router.push(`/exam/${examId}/answer?attemptId=${attemptId}`);
+        else router.push(`${pathname}/answer`);
       },
       onError: () => toast.error('Failed to start mock exam'),
     }
@@ -44,10 +45,7 @@ const StartExamBtn = ({
       onClick={() => createAttempt({ examId })}
     >
       {isPending ? (
-        <LuLoader2
-          strokeWidth={2}
-          className='animate-spin size-4 mr-1.5'
-        />
+        <LuLoader2 strokeWidth={2} className='animate-spin size-4 mr-1.5' />
       ) : null}
       Start {!moduleId ? 'mock' : ''} exam
       {!isPending ? (

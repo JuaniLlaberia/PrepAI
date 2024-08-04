@@ -46,15 +46,9 @@ const ExamsPage = async ({
           sortBy={searchParams.sortBy}
           filter={searchParams.filter}
         />
-        <Link
-          className={buttonVariants({ size: 'sm' })}
-          href='/exam/new'
-        >
-          <HiOutlinePlus
-            className='size-4 mr-2'
-            strokeWidth={2.5}
-          />{' '}
-          New mock exam
+        <Link className={buttonVariants({ size: 'sm' })} href='/exam/new'>
+          <HiOutlinePlus className='size-4 mr-2' strokeWidth={2.5} /> New mock
+          exam
         </Link>
       </div>
       <div>
@@ -64,7 +58,15 @@ const ExamsPage = async ({
         <ul className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2.5 pb-4'>
           {exams.length > 0 ? (
             exams.map(
-              ({ id, subject, difficulty, createdAt, taken, pinned }) => (
+              ({
+                id,
+                subject,
+                difficulty,
+                createdAt,
+                taken,
+                pinned,
+                passed,
+              }) => (
                 <li
                   key={id}
                   className='relative p-4 bg-background rounded-xl shadow dark:bg-background-2'
@@ -79,12 +81,7 @@ const ExamsPage = async ({
                         text={taken ? 'Taken' : 'New'}
                         color={taken ? 'gray' : 'orange'}
                       />
-                      {pinned ? (
-                        <Badge
-                          text='Pinned'
-                          color='blue'
-                        />
-                      ) : null}
+                      {pinned ? <Badge text='Pinned' color='blue' /> : null}
                     </div>
                     <h3 className='text-xl font-medium mb-2'>{subject}</h3>
                     <p className='text-muted-foreground text-sm text-start mt-3'>
@@ -94,19 +91,12 @@ const ExamsPage = async ({
                   <Dialog>
                     <DropdownMenu>
                       <DropdownMenuTrigger className='absolute top-4 right-4'>
-                        <Button
-                          size='icon'
-                          variant='ghost'
-                          className='size-8'
-                        >
+                        <Button size='icon' variant='ghost' className='size-8'>
                           <HiOutlineEllipsisHorizontal className='size-4' />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
-                        <PinExamBtn
-                          isPinned={pinned}
-                          examId={id}
-                        />
+                        <PinExamBtn isPinned={pinned} examId={id} />
                         {!taken ? (
                           <DropdownMenuItem asChild>
                             <Link href={`/exam/${id}`}>
@@ -143,10 +133,7 @@ const ExamsPage = async ({
                       </DropdownMenuContent>
                     </DropdownMenu>
                     <DialogContent>
-                      <DeleteExamModal
-                        examId={id}
-                        subject={subject}
-                      />
+                      <DeleteExamModal examId={id} subject={subject} />
                     </DialogContent>
                   </Dialog>
                 </li>

@@ -23,11 +23,8 @@ const ResultsComponent = async ({
   examId: string;
   attemptId: string;
 }) => {
-  const attempts = await getExamAttempts({ examId: examId });
-
   const results = await getExamResults({
-    examId: examId,
-    attemptId: attemptId ?? attempts[0]._id,
+    examId,
   });
 
   if (!results) return notFound();
@@ -52,12 +49,6 @@ const ResultsComponent = async ({
                 </h2>
               )}
             </div>
-            <Attempts
-              attempts={
-                JSON.parse(JSON.stringify(attempts)) as { _id: string }[]
-              }
-              crrAttempt={attemptId ?? String(attempts[0].id)}
-            />
           </div>
 
           <div className='mt-6'>
@@ -66,7 +57,7 @@ const ResultsComponent = async ({
                 Your time
               </h2>
               <p className='text-sm text-muted-foreground md:text-base'>
-                {formatTimer(time)}
+                {formatTimer(time || 0)}
               </p>
             </div>
           </div>
@@ -76,7 +67,7 @@ const ResultsComponent = async ({
                 Your score
               </h2>
               <p className='text-sm text-muted-foreground'>
-                {score}/{questions.length}
+                {score || 0}/{questions.length}
               </p>
             </div>
             <AnimatedProgress value={(score / questions.length) * 100} />
@@ -118,12 +109,12 @@ const ResultsComponent = async ({
                       <div className='bg-background-2 tracking-tight shadow p-4 mt-1 lg:mt-2 rounded-lg dark:border dark:border-border'>
                         <p className='font-medium mb-2'>{question}</p>
                         <p>
-                          <span className='font-medium'>Your answer:</span> "
-                          {options[answer]}"
+                          <span className='font-medium'>Your answer:</span>
+                          {options[answer] || 'No answer'}
                         </p>
                         <p>
-                          <span className='font-medium'>Correct answer:</span> "
-                          {options[correctAnswer]}"
+                          <span className='font-medium'>Correct answer:</span>
+                          {options[correctAnswer]}
                         </p>
                         <h2 className='text-sm lg:text-base xl:text-lg font-semibold mt-3'>
                           Explanation

@@ -20,19 +20,16 @@ import { useServerActionMutation } from '@/hooks/server-action-hooks';
 import { updateExamAttemptAction } from '@/actions/examAttempt';
 
 const AnswerExamComponent = ({
-  examId,
-  attemptId,
   questions,
-  moduleId,
+  examId,
   pathId,
+  moduleId,
 }: {
-  examId: string;
-  attemptId: string;
   questions: { question: string; options: string[]; correctAnswer: number }[];
+  examId: string;
   moduleId?: string;
   pathId?: string;
 }) => {
-  const { timer } = useTimer();
   const router = useRouter();
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [userAnswers, setUserAnswers] = useState<
@@ -41,19 +38,24 @@ const AnswerExamComponent = ({
       isCorrect: boolean;
     }[]
   >([]);
+  const { timer } = useTimer();
 
   const { mutate: submitExamAttempt, isPending } = useServerActionMutation(
     updateExamAttemptAction,
     {
       mutationKey: ['submit-exam-attempt'],
-      onSuccess: (passed: boolean) => {
+      onSuccess: () => {
         toast.success('Submitting answers', {
           description: 'You will be redirected automatically.',
         });
 
-        if (passed) return router.push(`/path/${pathId}/module/${moduleId}`);
-
-        router.push(`/exam/${examId}/results?attemptId=${attemptId}`);
+        if (moduleId) {
+          router.push(
+            `/exam/${examId}/results?pathId=${pathId}&moduleId=${moduleId}`
+          );
+        } else {
+          router.push(`/exam/${examId}/results`);
+        }
       },
       onError: () =>
         toast.error('Failed to submit exam answers. Please try again.'),
@@ -116,7 +118,7 @@ const AnswerExamComponent = ({
     nextStep();
   }, [nextStep, selectedOption, crrIndex, questions]);
 
-  const finishExam = () => {
+  const finishExam = useCallback(() => {
     if (selectedOption == null) return;
 
     const answers = [
@@ -134,11 +136,19 @@ const AnswerExamComponent = ({
 
     submitExamAttempt({
       examId,
-      attemptId,
       data,
-      moduleId: moduleId as string,
+      moduleId,
     });
-  };
+  }, [
+    crrIndex,
+    examId,
+    moduleId,
+    questions,
+    selectedOption,
+    timer,
+    userAnswers,
+    submitExamAttempt,
+  ]);
 
   //Allow users to use keyboard to answer
   useEffect(() => {
@@ -166,7 +176,7 @@ const AnswerExamComponent = ({
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [nextQuestion, isLastStep]);
+  }, [nextQuestion, finishExam, isLastStep]);
 
   // Show confirmation when refreshing/closing browser
   useEffect(() => {
@@ -194,10 +204,7 @@ const AnswerExamComponent = ({
           </p>
           {/* Implement as separate component to avoid rerenders */}
           <p className='flex items-center gap-1.5 font-medium text-muted-foreground lg:text-lg'>
-            <HiOutlineClock
-              strokeWidth={2}
-              className='size-5'
-            />
+            <HiOutlineClock strokeWidth={2} className='size-5' />
             {formatTimer(timer)}
           </p>
         </div>

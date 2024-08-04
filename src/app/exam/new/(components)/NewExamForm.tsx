@@ -32,9 +32,9 @@ const NewExamForm = () => {
     createExamAction,
     {
       mutationKey: ['create-exam'],
-      onSuccess: interviewId => {
+      onSuccess: (examId: string) => {
         toast.success('Mock exam created successfully');
-        router.push(`/exam/${interviewId}`);
+        router.push(`/exam/${examId}`);
       },
       onError: () => toast.error('Failed to create mock exam'),
     }
@@ -67,10 +67,7 @@ const NewExamForm = () => {
           />
         </InputWrapper>
         <div className='flex justify-end mt-3 md:mt-5'>
-          <Button
-            disabled={isPending}
-            className='w-full md:w-auto px-6'
-          >
+          <Button disabled={isPending} className='w-full md:w-auto px-6'>
             Next
           </Button>
         </div>
@@ -102,10 +99,7 @@ const NewExamForm = () => {
           </InputWrapper>
         </div>
         <div className='mt-5 md:mt-7 flex flex-col gap-2 md:flex-row-reverse items-end'>
-          <Button
-            disabled={isPending}
-            className='w-full md:w-auto px-6'
-          >
+          <Button disabled={isPending} className='w-full md:w-auto px-6'>
             {isPending ? (
               <LuLoader2
                 strokeWidth={2}
