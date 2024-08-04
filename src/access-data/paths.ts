@@ -92,21 +92,30 @@ export const createPath = async ({
   userId: string;
   path: Pick<IPathDocument, 'jobPosition' | 'topics' | 'jobExperience'>;
 }) => {
-  const modules = await generateModulesWithGemini({ ...path });
+  const mongoSession = await mongoose.startSession();
+  mongoSession.startTransaction();
 
-  const { id } = await Path.create({
-    ...path,
-    userId,
-    totalModules: modules.length,
-  });
+  try {
+    const modules = await generateModulesWithGemini({ ...path });
 
-  const modulesWithId = modules.map(module => {
-    return { ...module, pathId: id };
-  });
+    const { id } = await Path.create({
+      ...path,
+      userId,
+      totalModules: modules.length,
+    });
 
-  await Module.create([...modulesWithId]);
+    const modulesWithId = modules.map(module => {
+      return { ...module, pathId: id };
+    });
+    await Module.create([...modulesWithId]);
 
-  return { id };
+    return { id };
+  } catch (err) {
+    await mongoSession.abortTransaction();
+    throw err;
+  } finally {
+    mongoSession.endSession();
+  }
 };
 
 export const updatePath = async ({
