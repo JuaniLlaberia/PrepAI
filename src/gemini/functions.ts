@@ -129,8 +129,9 @@ export const generateModulesWithGemini = async ({
             title: 'string' (Module title),
             description: 'string' (What this module includes),
             subject: 'string' (Module topic),
+            slug: 'string' (short unique slug for each module),
             activities: [
-                { 
+                {
                     title: 'string' (reading title),
                     type: 'reading',
                     completed: false
