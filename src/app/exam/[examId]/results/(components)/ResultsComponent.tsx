@@ -1,12 +1,7 @@
 import { notFound } from 'next/navigation';
-import {
-  HiOutlineCheck,
-  HiOutlineQuestionMarkCircle,
-  HiOutlineXMark,
-} from 'react-icons/hi2';
+import { HiOutlineCheck, HiOutlineXMark } from 'react-icons/hi2';
 
 import AnimatedProgress from '@/components/AnimatedProgress';
-import Attempts from '@/components/Attempts';
 import ConfettiComponent from '@/components/Confetti';
 import { formatTimer } from '@/lib/helpers';
 import {
@@ -14,15 +9,9 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
-import { getExamAttempts, getExamResults } from '@/access-data/examAttempts';
+import { getExamResults } from '@/access-data/examAttempts';
 
-const ResultsComponent = async ({
-  examId,
-  attemptId,
-}: {
-  examId: string;
-  attemptId: string;
-}) => {
+const ResultsComponent = async ({ examId }: { examId: string }) => {
   const results = await getExamResults({
     examId,
   });
@@ -64,7 +53,7 @@ const ResultsComponent = async ({
           <div className='mt-3'>
             <div className='flex items-center justify-between mb-1'>
               <h2 className='text-sm lg:text-base xl:text-lg font-semibold'>
-                Your score
+                Your max score
               </h2>
               <p className='text-sm text-muted-foreground'>
                 {score || 0}/{questions.length}

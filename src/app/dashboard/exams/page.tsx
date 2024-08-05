@@ -78,8 +78,8 @@ const ExamsPage = async ({
                     <div className='flex items-center gap-2'>
                       <DifficultyBadge difficulty={difficulty} />
                       <Badge
-                        text={taken ? 'Taken' : 'New'}
-                        color={taken ? 'gray' : 'orange'}
+                        text={passed ? 'Passed' : taken ? 'Taken' : 'New'}
+                        color={passed ? 'green' : taken ? 'gray' : 'orange'}
                       />
                       {pinned ? <Badge text='Pinned' color='blue' /> : null}
                     </div>
