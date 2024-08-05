@@ -1,10 +1,8 @@
-import { getModuleRevision } from '@/access-data/modules';
+import { HiCheckCircle, HiOutlineArrowTopRightOnSquare } from 'react-icons/hi2';
+
 import PageHeader from '@/components/PageHeader';
+import { getModuleRevision } from '@/access-data/modules';
 import { Button } from '@/components/ui/button';
-import {
-  HiCheckCircle,
-  HiOutlineArrowTopRightOnSquare,
-} from 'react-icons/hi2';
 
 const ModuleRevisionPage = async ({
   params: { pathId, moduleSlug },
