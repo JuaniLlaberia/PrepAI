@@ -123,7 +123,7 @@ export const generateModulesWithGemini = async ({
   topics,
 }: GeminiModulesTypes) => {
   const prompt = `
-    Generate a JSON format of a list of modules (at least 7 and no more than 10 modules) for a ${jobExperience} level ${jobPosition} preparing for interviews. The interview topics include ${topics}. The modules should be ordered by difficulty (first the easier topics and then the harder ones), with each module having the following schema: 
+    Generate a JSON format of a list of modules (at least 7 and no more than 10 modules) for a ${jobExperience} level ${jobPosition} preparing for interviews. The interview topics include ${topics}. The modules should be ordered by difficulty (first the easier topics and then the harder ones), with each module having the following schema:
       {modules: [
         {
             title: 'string' (Module title),
@@ -132,9 +132,14 @@ export const generateModulesWithGemini = async ({
             slug: 'string' (short unique slug for each module),
             activities: [
                 {
-                    title: 'string' (reading title),
-                    type: 'reading',
-                    completed: false
+                  title: {subject} references,
+                  type: 'revision',
+                  completed: false,
+                  description: 'string' (module description of 100 words),
+                  references: {
+                      label: 'string' (reference label),
+                      link: 'string' (link to reference related to this module)
+                    }[] (generate 5 references)
                 },
                 {
                     title: {subject} introduction exam,
@@ -142,17 +147,8 @@ export const generateModulesWithGemini = async ({
                     difficulty: 'string' (easy difficulty),
                     examId: undefined,
                     taken: 'boolean' (false),
-                    passed: 'boolean' (false)
-                },
-                {
-                    title: 'string' (reading title),
-                    type: 'reading',
-                    completed: 'boolean' (false)
-                },
-                {
-                    title: 'string' (reading title),
-                    type: 'reading',
-                    completed: 'boolean' (false)
+                    passed: 'boolean' (false),
+                    completed: false
                 },
                 {
                     title: Practice {subject} exam,
@@ -160,22 +156,19 @@ export const generateModulesWithGemini = async ({
                     difficulty: 'string' (medium difficulty),
                     examId: undefined,
                     taken: 'boolean' (false),
-                    passed: 'boolean' (false)
-                },
-                {
-                    title: 'string' (reading title),
-                    type: 'reading',
-                    completed: 'boolean' (false)
-                },
-                {
-                    title: 'string' (reading title),
-                    type: 'reading',
-                    completed: 'boolean' (false)
+                    passed: 'boolean' (false),
+                    completed: false
                 },
                 {
                     title: 'string' (activity title),
                     type: 'project',
-                    completed: 'boolean' (false)
+                    completed: 'boolean' (false),
+                    content: 'string' (Project presentation and what needs to be done),
+                    steps: 'string'[] (Steps that the user should follow to complete this project),
+                    references: {
+                      label: 'string' (reference label),
+                      link: 'string' (link to reference that will help the user with the task)
+                    }[] (Between 2 and 5 references)
                 },
                 {
                     title: 'string' (activity title),
@@ -183,16 +176,18 @@ export const generateModulesWithGemini = async ({
                     difficulty: 'string' (hard difficulty),
                     examId: undefined,
                     taken: 'boolean' (false),
-                    passed: 'boolean' (false)
+                    passed: 'boolean' (false),
+                    completed: false
                 },
                 {
                     title: {subject} final interview,
                     type: 'interview',
                     interviewId: undefined,
                     taken: 'boolean' (false),
-                    passed: 'boolean' (false)
+                    passed: 'boolean' (false),
+                    completed: false
                 }
-            ] 
+            ]
         }
 
       ]}. The difficulty levels should be ordered as follows: 'easy', 'medium', 'hard'. Sort the modules in ascending order of difficulty.
