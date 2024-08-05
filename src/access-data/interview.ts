@@ -20,7 +20,7 @@ export const getUserInterviews = async ({
   else if (filter === 'taken') interviewsQuery.where({ taken: true });
 
   return await interviewsQuery
-    .select('_id jobRole jobExperience taken createdAt pinned')
+    .select('_id jobRole jobExperience taken createdAt pinned passed')
     .sort(
       sort === 'createdAt'
         ? { pinned: 'desc', createdAt: 'desc' }

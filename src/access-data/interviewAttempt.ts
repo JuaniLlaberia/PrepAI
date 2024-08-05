@@ -1,29 +1,18 @@
+import mongoose from 'mongoose';
+
+import Interview from '@/db/models/Interview';
 import InterviewAttempt from '@/db/models/InterviewAttempt';
 import { getAuthUser } from '@/actions/user';
 import { generateInterviewFeedbackWithGemini } from '@/gemini/functions';
-import mongoose from 'mongoose';
-import Interview from '@/db/models/Interview';
 
-export const getInterviewAttempts = async ({
+export const getInterviewFeedback = async ({
   interviewId,
 }: {
   interviewId: string;
 }) => {
-  const userId = await getAuthUser();
-
-  return await InterviewAttempt.find({ interviewId, userId })
-    .select('_id')
-    .lean();
-};
-
-export const getAttemptFeedback = async ({
-  interviewAttemptId,
-}: {
-  interviewAttemptId: string;
-}) => {
   await getAuthUser();
 
-  return await InterviewAttempt.findById(interviewAttemptId);
+  return await InterviewAttempt.findOne({ interviewId });
 };
 
 export const createInterviewAttempt = async ({
@@ -33,24 +22,22 @@ export const createInterviewAttempt = async ({
   interviewId: string;
   userId: string;
 }) => {
-  const { id } = await InterviewAttempt.create({
+  const interviewAttempt = await InterviewAttempt.findOne({
     interviewId,
     userId,
-  });
+  }).select('_id');
 
-  return { id };
+  if (!interviewAttempt) await InterviewAttempt.create({ interviewId, userId });
 };
 
 export const createInterviewAttemptFeedback = async ({
   userResponses,
-  attemptId,
   interviewId,
 }: {
   userResponses: {
     question: string;
     answer: string;
   }[];
-  attemptId?: string;
   interviewId?: string;
 }) => {
   const { answers, speechAnalysis } = await generateInterviewFeedbackWithGemini(
@@ -61,12 +48,16 @@ export const createInterviewAttemptFeedback = async ({
   mongoSession.startTransaction();
 
   try {
+    const score =
+      answers.reduce((prev, crr) => prev + crr.score, 0) / answers.length;
+    const passed = score >= 6;
+
     await Promise.all([
-      InterviewAttempt.findByIdAndUpdate(attemptId, {
-        speechAnalysis,
-        answers,
-      }),
-      Interview.findByIdAndUpdate(interviewId, { taken: true }),
+      InterviewAttempt.findOne(
+        { interviewId },
+        { speechAnalysis, answers, passed, $max: { score } }
+      ),
+      Interview.findByIdAndUpdate(interviewId, { taken: true, passed }),
     ]);
   } catch (err) {
     await mongoSession.abortTransaction();

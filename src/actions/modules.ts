@@ -38,9 +38,9 @@ export const createExamForModuleAction = authenticatedAction
 
 export const createInterviewForModuleAction = authenticatedAction
   .createServerAction()
-  .input(z.object({ moduleId: z.string() }))
-  .handler(async ({ input: { moduleId } }) => {
-    const { id } = await createInterviewForModule({ moduleId });
+  .input(z.object({ moduleId: z.string(), activityId: z.string() }))
+  .handler(async ({ input }) => {
+    const { id } = await createInterviewForModule({ ...input });
 
     return id;
   });
