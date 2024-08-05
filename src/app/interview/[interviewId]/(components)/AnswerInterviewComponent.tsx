@@ -6,7 +6,6 @@ import {
   HiOutlineLightBulb,
   HiOutlineMicrophone,
 } from 'react-icons/hi2';
-import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { LuLoader2 } from 'react-icons/lu';
@@ -20,7 +19,6 @@ import { createInterviewAttemptFeedbackAction } from '@/actions/interviewAttempt
 
 type AnswerComponentPropsType = {
   interviewId: string;
-  interviewAttemptId: string;
   questions: {
     _id: string;
     question: string;
@@ -34,7 +32,6 @@ type AnswerComponentPropsType = {
 const AnswerComponent = ({
   questions,
   interviewId,
-  interviewAttemptId,
   moduleId,
   pathId,
 }: AnswerComponentPropsType) => {
@@ -67,12 +64,9 @@ const AnswerComponent = ({
 
         if (moduleId)
           router.push(
-            `/interview/${interviewId}/feedback?attemptId=${interviewAttemptId}&pathId=${pathId}&moduleId=${moduleId}`
+            `/interview/${interviewId}/feedback?&pathId=${pathId}&moduleId=${moduleId}`
           );
-        else
-          router.push(
-            `/interview/${interviewId}/feedback?attemptId=${interviewAttemptId}`
-          );
+        else router.push(`/interview/${interviewId}/feedback`);
       },
       onError: () => toast.error('Failed to submit interview'),
     }
@@ -120,7 +114,6 @@ const AnswerComponent = ({
 
     endInterview({
       interviewId,
-      attemptId: interviewAttemptId,
       userResponses: responses,
       moduleId,
     });
@@ -138,10 +131,7 @@ const AnswerComponent = ({
       </section>
       <section className='flex flex-col justify-center items-center max-w-[500px] w-full'>
         <CameraComponent />
-        <Alert
-          variant='information'
-          className='mt-1'
-        >
+        <Alert variant='information' className='mt-1'>
           <HiOutlineLightBulb className='size-5' />
           <AlertTitle>Hint</AlertTitle>
           <AlertDescription>{questions[crrQuestion].hint}</AlertDescription>
@@ -164,10 +154,7 @@ const AnswerComponent = ({
         )}
 
         {!isListening && !hasAnswered && (
-          <Button
-            className='w-full'
-            onClick={startListening}
-          >
+          <Button className='w-full' onClick={startListening}>
             <HiOutlineMicrophone className='size-4 mr-1.5' /> Start recording
           </Button>
         )}

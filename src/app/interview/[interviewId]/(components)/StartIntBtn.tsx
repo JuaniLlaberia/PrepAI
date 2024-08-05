@@ -24,16 +24,13 @@ const StartIntBtn = ({
     createInterviewAttemptAction,
     {
       mutationKey: ['create-attemp'],
-      onSuccess: (attemptId: string) => {
+      onSuccess: () => {
         toast.success(`Starting ${!moduleId ? 'mock' : ''} interview...`);
         if (moduleId)
           router.push(
-            `/interview/${interviewId}/answer?attemptId=${attemptId}&pathId=${pathId}&moduleId=${moduleId}`
+            `/interview/${interviewId}/answer?pathId=${pathId}&moduleId=${moduleId}`
           );
-        else
-          router.push(
-            `/interview/${interviewId}/answer?attemptId=${attemptId}`
-          );
+        else router.push(`/interview/${interviewId}/answer`);
       },
       onError: () => toast.error('Failed to start interview'),
     }

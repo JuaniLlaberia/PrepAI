@@ -14,10 +14,10 @@ import { getInterviewById } from '@/access-data/interview';
 
 const AnswerPage = async ({
   params: { interviewId },
-  searchParams: { attemptId, pathId, moduleId },
+  searchParams: { pathId, moduleId },
 }: {
   params: { interviewId: string };
-  searchParams: { attemptId: string; pathId: string; moduleId: string };
+  searchParams: { pathId: string; moduleId: string };
 }) => {
   const interview = await getInterviewById({ interviewId });
 
@@ -63,7 +63,6 @@ const AnswerPage = async ({
       />
       <AnswerInterviewComponent
         interviewId={interviewId}
-        interviewAttemptId={attemptId}
         questions={interview.questions}
         //Just for modules
         moduleId={moduleId}

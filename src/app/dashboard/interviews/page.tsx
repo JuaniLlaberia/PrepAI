@@ -45,15 +45,9 @@ const InterviewsPage = async ({
           sortBy={searchParams.sortBy}
           filter={searchParams.filter}
         />
-        <Link
-          className={buttonVariants({ size: 'sm' })}
-          href='/interview/new'
-        >
-          <HiOutlinePlus
-            className='size-4 mr-2'
-            strokeWidth={2.5}
-          />{' '}
-          New interview
+        <Link className={buttonVariants({ size: 'sm' })} href='/interview/new'>
+          <HiOutlinePlus className='size-4 mr-2' strokeWidth={2.5} /> New
+          interview
         </Link>
       </div>
       <div>
@@ -63,7 +57,15 @@ const InterviewsPage = async ({
         <ul className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2.5 pb-4'>
           {interviews.length > 0 ? (
             interviews.map(
-              ({ id, jobExperience, jobRole, createdAt, taken, pinned }) => (
+              ({
+                id,
+                jobExperience,
+                jobRole,
+                createdAt,
+                taken,
+                pinned,
+                passed,
+              }) => (
                 <li
                   key={id}
                   className='relative p-4 bg-background rounded-xl shadow dark:bg-background-2'
@@ -75,20 +77,12 @@ const InterviewsPage = async ({
                     className='flex flex-col gap-4'
                   >
                     <div className='flex items-center gap-2'>
+                      <Badge text={`${jobExperience} level`} color='purple' />
                       <Badge
-                        text={`${jobExperience} level`}
-                        color='purple'
+                        text={passed ? 'Passed' : taken ? 'Taken' : 'New'}
+                        color={passed ? 'green' : taken ? 'gray' : 'orange'}
                       />
-                      <Badge
-                        text={taken ? 'Taken' : 'New'}
-                        color={taken ? 'gray' : 'orange'}
-                      />
-                      {pinned ? (
-                        <Badge
-                          text='Pinned'
-                          color='blue'
-                        />
-                      ) : null}
+                      {pinned ? <Badge text='Pinned' color='blue' /> : null}
                     </div>
                     <h3 className='text-xl font-medium mb-2'>{jobRole}</h3>
                     <p className='text-muted-foreground text-sm text-start mt-3'>
@@ -98,19 +92,12 @@ const InterviewsPage = async ({
                   <Dialog>
                     <DropdownMenu>
                       <DropdownMenuTrigger className='absolute top-4 right-4'>
-                        <Button
-                          size='icon'
-                          variant='ghost'
-                          className='size-8'
-                        >
+                        <Button size='icon' variant='ghost' className='size-8'>
                           <HiOutlineEllipsisHorizontal className='size-4' />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
-                        <PinInterviewBtn
-                          interviewId={id}
-                          isPinned={pinned}
-                        />
+                        <PinInterviewBtn interviewId={id} isPinned={pinned} />
                         {!taken ? (
                           <DropdownMenuItem asChild>
                             <Link href={`/interview/${id}`}>
