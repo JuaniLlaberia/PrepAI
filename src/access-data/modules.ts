@@ -13,6 +13,7 @@ import {
 import { getAuthUser } from '@/actions/user';
 import { DifficultyEnum } from '@/lib/validators';
 import { IPathDocument } from '@/db/models/Path';
+import { IRevisionActivity } from '@/db/models/Activity';
 
 export const getModules = async ({
   pathId,
@@ -60,6 +61,25 @@ export const getModuleBySlug = async ({
 
   const moduleData = await Module.findOne({ pathId, slug }).lean();
   return JSON.parse(JSON.stringify(moduleData)) as IModuleDocument;
+};
+
+export const getModuleRevision = async ({
+  pathId,
+  moduleSlug,
+}: {
+  pathId: string;
+  moduleSlug: string;
+}) => {
+  console.log(pathId, moduleSlug);
+  const revisionData = await Module.findOne({
+    pathId,
+    slug: moduleSlug,
+    'activities.type': 'revision',
+  }).select('activities.$');
+
+  if (!revisionData) throw new Error('Not found');
+
+  return revisionData.activities[0] as IRevisionActivity;
 };
 
 export const updateModule = async ({
