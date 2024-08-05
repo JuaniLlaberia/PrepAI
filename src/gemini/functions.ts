@@ -3,11 +3,13 @@ import { model } from '@/gemini/index';
 type GeminiExamTypes = {
   subject: string;
   difficulty: 'easy' | 'medium' | 'hard';
+  type: 'multiple-choice' | 'true-false';
 };
 
 export const generateExamWithGemini = async ({
   subject,
   difficulty,
+  type,
 }: GeminiExamTypes) => {
   const promptSchema = `
   {
@@ -17,11 +19,18 @@ export const generateExamWithGemini = async ({
   }
   `;
 
-  const prompt = `Generate an multiple choice exam about ${subject}
+  const examType =
+    type === 'multiple-choice' ? 'multiple choice' : 'true or false';
+
+  const examDescription =
+    type === 'multiple-choice'
+      ? 'each with the question, 4 options, the correct option (being the option index) and an explanation of the correct answer in 3-4 lines'
+      : 'each with the question, 2 options (true or false), the correct option (being the option index) and an explanation of the correct answer in 3-4 lines';
+
+  const prompt = `Generate a ${examType} exam about ${subject}
    with a ${difficulty} difficulty level. Provide ${
     difficulty === 'easy' || difficulty === 'medium' ? '10' : '15'
-  } related questions
-   (each with the question, 4 options, the correct option (being the option index) and an explanation of the correct answer in 3-4 lines). Provide
+  } related questions (${examDescription}). Provide
    it in JSON format with this schema: ${promptSchema}.
    Remember to scape any special characters used in Javascript, such as "\n"
    `;
@@ -144,7 +153,18 @@ export const generateModulesWithGemini = async ({
                 {
                     title: {subject} introduction exam,
                     type: 'exam',
+                    examType: 'multiple-choice',
                     difficulty: 'string' (easy difficulty),
+                    examId: undefined,
+                    taken: 'boolean' (false),
+                    passed: 'boolean' (false),
+                    completed: false
+                },
+                {
+                    title: True or False Challenge,
+                    type: 'exam',
+                    examType: 'true-false',
+                    difficulty: 'string' (medium difficulty),
                     examId: undefined,
                     taken: 'boolean' (false),
                     passed: 'boolean' (false),
@@ -153,6 +173,7 @@ export const generateModulesWithGemini = async ({
                 {
                     title: Practice {subject} exam,
                     type: 'exam',
+                    examType: 'multiple-choice',
                     difficulty: 'string' (medium difficulty),
                     examId: undefined,
                     taken: 'boolean' (false),
@@ -163,7 +184,7 @@ export const generateModulesWithGemini = async ({
                     title: 'string' (activity title),
                     type: 'project',
                     completed: 'boolean' (false),
-                    content: 'string' (Project presentation and what needs to be done),
+                    content: 'string' (Project presentation and what needs to be done. Also provide some real world project ideas),
                     steps: 'string'[] (Steps that the user should follow to complete this project),
                     references: {
                       label: 'string' (reference label),
@@ -173,6 +194,7 @@ export const generateModulesWithGemini = async ({
                 {
                     title: 'string' (activity title),
                     type: 'exam',
+                    examType: 'multiple-choice',
                     difficulty: 'string' (hard difficulty),
                     examId: undefined,
                     taken: 'boolean' (false),

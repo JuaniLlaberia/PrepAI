@@ -14,6 +14,11 @@ export enum DifficultyEnum {
   HARD = 'hard',
 }
 
+export enum ExamTypeEnum {
+  MULTIPLE = 'multiple-choice',
+  TRUTH = 'true-false',
+}
+
 export const InterviewSchema = z.object({
   jobRole: z
     .string()
@@ -35,6 +40,9 @@ export const ExamSchema = z.object({
     .max(40, 'Must have less than 40 characters.'),
   difficulty: z.nativeEnum(DifficultyEnum, {
     message: 'Please select a difficulty.',
+  }),
+  type: z.nativeEnum(ExamTypeEnum, {
+    message: 'Please select an exam type.',
   }),
 });
 
