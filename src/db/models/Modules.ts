@@ -5,7 +5,7 @@ import {
   IActivity,
   interviewActivitySchema,
   projectActivitySchema,
-  readingActivitySchema,
+  revisionActivitySchema,
 } from './Activity';
 
 export interface IModule {
@@ -73,7 +73,7 @@ const Module: Model<IModuleDocument> =
 const activitiesPath = moduleSchema.path(
   'activities'
 ) as mongoose.Schema.Types.DocumentArray;
-activitiesPath.discriminator('reading', readingActivitySchema);
+activitiesPath.discriminator('revision', revisionActivitySchema);
 activitiesPath.discriminator('exam', examActivitySchema);
 activitiesPath.discriminator('project', projectActivitySchema);
 activitiesPath.discriminator('interview', interviewActivitySchema);

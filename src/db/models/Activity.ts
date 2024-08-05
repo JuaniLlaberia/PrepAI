@@ -2,7 +2,7 @@ import mongoose, { ObjectId } from 'mongoose';
 import { DifficultyEnum } from '@/lib/validators';
 
 export enum ActivityTypeEnum {
-  READING = 'reading',
+  REVISION = 'revision',
   EXAM = 'exam',
   PROJECT = 'project',
   INTERVIEW = 'interview',
@@ -15,9 +15,10 @@ export interface IActivity {
   completed: boolean;
 }
 
-export interface IReadingActivity extends IActivity {
-  type: ActivityTypeEnum.READING;
-  time: number;
+export interface IRevisionActivity extends IActivity {
+  type: ActivityTypeEnum.REVISION;
+  description: string;
+  references: { label: string; link: string }[];
 }
 
 export interface IExamActivity extends IActivity {
@@ -29,6 +30,9 @@ export interface IExamActivity extends IActivity {
 
 export interface IProjectActivity extends IActivity {
   type: ActivityTypeEnum.PROJECT;
+  content: string;
+  steps: string[];
+  references: { label: string; link: string }[];
 }
 
 export interface IInterviewActivity extends IActivity {
@@ -58,8 +62,11 @@ const activitySchema = new mongoose.Schema<IActivity>(
   baseOptions
 );
 
-const readingActivitySchema = new mongoose.Schema<IReadingActivity>(
-  { time: Number },
+const revisionActivitySchema = new mongoose.Schema<IRevisionActivity>(
+  {
+    description: String,
+    references: [{ label: String, link: String }],
+  },
   baseOptions
 );
 
@@ -76,7 +83,11 @@ const examActivitySchema = new mongoose.Schema<IExamActivity>(
 );
 
 const projectActivitySchema = new mongoose.Schema<IProjectActivity>(
-  {},
+  {
+    content: String,
+    steps: [String],
+    references: [{ label: String, link: String }],
+  },
   baseOptions
 );
 
@@ -90,8 +101,8 @@ const interviewActivitySchema = new mongoose.Schema<IInterviewActivity>(
 
 export {
   activitySchema,
-  readingActivitySchema,
   examActivitySchema,
+  revisionActivitySchema,
   projectActivitySchema,
   interviewActivitySchema,
 };
