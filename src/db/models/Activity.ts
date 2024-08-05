@@ -1,5 +1,5 @@
 import mongoose, { ObjectId } from 'mongoose';
-import { DifficultyEnum } from '@/lib/validators';
+import { DifficultyEnum, ExamTypeEnum } from '@/lib/validators';
 
 export enum ActivityTypeEnum {
   REVISION = 'revision',
@@ -23,6 +23,7 @@ export interface IRevisionActivity extends IActivity {
 
 export interface IExamActivity extends IActivity {
   type: ActivityTypeEnum.EXAM;
+  examType: ExamTypeEnum;
   difficulty: DifficultyEnum;
   examId: string | ObjectId | undefined;
   passed: boolean;
@@ -75,6 +76,10 @@ const examActivitySchema = new mongoose.Schema<IExamActivity>(
     difficulty: {
       type: String,
       enum: Object.values(DifficultyEnum),
+    },
+    examType: {
+      type: String,
+      enum: Object.values(ExamTypeEnum),
     },
     examId: { type: mongoose.Schema.Types.ObjectId, ref: 'Exam' },
     passed: { type: Boolean, default: false },

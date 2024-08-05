@@ -25,7 +25,7 @@ type ExamCardType = {
 const ExamCard = ({ examActivity, pathId, moduleId }: ExamCardType) => {
   const router = useRouter();
 
-  const { title, completed, type, difficulty, _id, examId, passed } =
+  const { title, completed, type, difficulty, _id, examId, passed, examType } =
     examActivity;
 
   const { mutate: createExam, isPending: isPendingExam } =
@@ -79,6 +79,7 @@ const ExamCard = ({ examActivity, pathId, moduleId }: ExamCardType) => {
                       moduleId,
                       difficulty,
                       activityId: String(_id),
+                      type: examType,
                     })
                   }
                 >

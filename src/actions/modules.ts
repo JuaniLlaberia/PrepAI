@@ -1,6 +1,7 @@
 'use server';
 
 import { z } from 'zod';
+import { revalidatePath } from 'next/cache';
 
 import { authenticatedAction } from '@/lib/safe-actions';
 import {
@@ -9,8 +10,7 @@ import {
   updateActivity,
   updateModule,
 } from '@/access-data/modules';
-import { revalidatePath } from 'next/cache';
-import { DifficultyEnum } from '@/lib/validators';
+import { DifficultyEnum, ExamTypeEnum } from '@/lib/validators';
 
 export const startModuleAction = authenticatedAction
   .createServerAction()
@@ -28,6 +28,7 @@ export const createExamForModuleAction = authenticatedAction
       moduleId: z.string(),
       activityId: z.string(),
       difficulty: z.nativeEnum(DifficultyEnum),
+      type: z.nativeEnum(ExamTypeEnum),
     })
   )
   .handler(async ({ input }) => {

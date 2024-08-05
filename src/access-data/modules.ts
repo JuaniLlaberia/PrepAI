@@ -11,7 +11,7 @@ import {
   generateInterviewWithGemini,
 } from '@/gemini/functions';
 import { getAuthUser } from '@/actions/user';
-import { DifficultyEnum } from '@/lib/validators';
+import { DifficultyEnum, ExamTypeEnum } from '@/lib/validators';
 import { IPathDocument } from '@/db/models/Path';
 import { IProjectActivity, IRevisionActivity } from '@/db/models/Activity';
 
@@ -45,6 +45,7 @@ export const getModules = async ({
         completed: 1,
         completedActivities: 1,
         slug: 1,
+        examType: 1,
       },
     },
   ]);
@@ -138,10 +139,12 @@ export const createExamForModule = async ({
   moduleId,
   activityId,
   difficulty,
+  type,
 }: {
   moduleId: string;
   activityId: string;
   difficulty: DifficultyEnum;
+  type: ExamTypeEnum;
 }) => {
   const moduleDB = await Module.findById(moduleId).select('_id subject pathId');
   if (!moduleDB) throw new Error('Invalid module ID');
@@ -151,6 +154,7 @@ export const createExamForModule = async ({
   const questions = await generateExamWithGemini({
     subject,
     difficulty,
+    type,
   });
 
   const { id } = await Exam.create({
