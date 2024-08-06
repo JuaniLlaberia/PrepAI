@@ -33,7 +33,7 @@ const PathPage = async ({
       {path.completed ? <ConfettiComponent /> : null}
       <PageHeader text='Go to paths' link='/dashboard/paths' />
       <div className='flex flex-col items-center mt-2'>
-        <section className='w-full max-w-[700px] overflow-x-hidden pb-3'>
+        <section className='w-full max-w-[800px] overflow-x-hidden pb-3'>
           <div>
             <h1 className='text-xl font-medium mb-2 xl:text-2xl'>
               {jobPosition} path
@@ -68,7 +68,7 @@ const PathPage = async ({
             <h2 className='mb-2 text-sm lg:text-base xl:text-lg font-semibold'>
               Stages
             </h2>
-            <ul className='flex flex-col gap-3'>
+            <ul className='grid grid-cols-1 lg:grid-cols-2 gap-3'>
               {modules.map(
                 (
                   {
