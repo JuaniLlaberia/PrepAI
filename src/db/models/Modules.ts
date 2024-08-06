@@ -13,11 +13,13 @@ export interface IModule {
   description: string;
   subject: string;
   slug: string;
+  order: number;
   inProgress: boolean;
   completed: boolean;
   pathId: ObjectId;
   activities: IActivity[];
   completedActivities: number;
+  activitiesLength: number;
 }
 
 export interface IModuleDocument extends IModule, Document {
@@ -40,6 +42,7 @@ const moduleSchema = new mongoose.Schema<IModuleDocument>(
       required: true,
     },
     slug: { type: String, required: true },
+    order: { type: Number, required: true },
     inProgress: {
       type: Boolean,
       default: false,
