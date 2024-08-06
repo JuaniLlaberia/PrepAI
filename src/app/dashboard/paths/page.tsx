@@ -106,7 +106,7 @@ const PathsPage = async ({
                       <DropdownMenuContent>
                         <PinPathBtn pathId={String(_id)} isPinned={pinned} />
                         <DropdownMenuItem asChild>
-                          <Link href={`/exam/${String(_id)}`}>
+                          <Link href={`/path/${String(_id)}`}>
                             <PiTreeStructureLight className='size-4 mr-2' />
                             Go to path
                           </Link>
