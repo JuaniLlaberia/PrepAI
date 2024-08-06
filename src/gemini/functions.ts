@@ -139,6 +139,7 @@ export const generateModulesWithGemini = async ({
             description: 'string' (What this module includes),
             subject: 'string' (Module topic),
             slug: 'string' (short unique slug for each module),
+            order: 'number',
             activities: [
                 {
                   title: {subject} references,
@@ -209,10 +210,10 @@ export const generateModulesWithGemini = async ({
                     passed: 'boolean' (false),
                     completed: false
                 }
-            ]
+            ] (Generate the 7 activities for each module, as specified in the schema)
         }
 
-      ]}. The difficulty levels should be ordered as follows: 'easy', 'medium', 'hard'. Sort the modules in ascending order of difficulty.
+      ]}. The difficulty levels should be ordered as follows: 'easy', 'medium', 'hard'. Sort the modules in ascending order of difficulty, add and order field to sort them properly.
   `;
 
   const result = await model.generateContent(prompt);
@@ -221,13 +222,6 @@ export const generateModulesWithGemini = async ({
 
   //Check parsin type
   const modules: {}[] = JSON.parse(jsonData).modules;
-
-  try {
-    //@ts-ignore
-    console.log(modules[0].activities);
-  } catch (err) {
-    console.log(err);
-  }
 
   return modules;
 };
