@@ -12,13 +12,16 @@ const ModulePage = async ({
   const moduleData = await getModuleBySlug({ slug, pathId });
   if (!moduleData) return notFound();
 
-  const { title, description, activities } = moduleData;
+  const { title, description, activities, order } = moduleData;
 
   return (
     <>
       <PageHeader text='Go to path' link={`/path/${pathId}`} />
-      <div>
-        <h1 className='text-2xl font-medium mb-1'>{title}</h1>
+      <div className='bg-background-2 p-4 rounded-xl border-[1px] border-b-[3.5px] border-[#ebebeb] dark:border-accent'>
+        <h1 className='font-semibold text-sm mb-1 text-muted-foreground'>
+          STAGE {order}
+        </h1>
+        <h2 className='text-xl font-medium mb-3'>{title}</h2>
         <p className='text-muted-foreground'>{description}</p>
       </div>
       <div className='mt-6'>
