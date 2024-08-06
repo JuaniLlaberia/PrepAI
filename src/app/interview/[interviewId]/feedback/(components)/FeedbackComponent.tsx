@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import { HiOutlineCheck, HiOutlineXMark } from 'react-icons/hi2';
 
 import ConfettiComponent from '@/components/Confetti';
 import AnimatedProgress from '@/components/AnimatedProgress';
@@ -49,19 +50,33 @@ const FeedbackComponent = async ({ interviewId }: { interviewId: string }) => {
           </div>
           <div className='mt-6'>
             <h2 className='mb-1 text-sm lg:text-base xl:text-lg font-semibold'>
-              Your questions
+              Attempt answers
             </h2>
-            <ul className='flex flex-col gap-3'>
-              {answers.map(feedback => (
+            <ul className='flex flex-col gap-2.5'>
+              {answers.map((feedback, i) => (
                 <li key={String(feedback._id)}>
                   <Collapsible>
-                    <CollapsibleTrigger className='flex w-full items-center justify-between gap-3 shadow bg-background-2 rounded-lg p-2 dark:border dark:border-border'>
-                      <p className='font-medium line-clamp-1 text-start'>
-                        {feedback.question}
+                    <CollapsibleTrigger className='flex w-full items-center justify-between gap-3 border-[1px] border-b-[2.5px] border-border bg-background-2 rounded-xl p-3'>
+                      <p className='flex items-center justify-between font-medium w-full'>
+                        <span>Question {i + 1}</span>
+                        {score > 6 ? (
+                          <span className='flex items-center gap-1 text-green-500'>
+                            <HiOutlineCheck strokeWidth={2} />
+                            Correct
+                          </span>
+                        ) : (
+                          <span className='flex items-center gap-1 text-red-500'>
+                            <HiOutlineXMark strokeWidth={2} />
+                            Wrong
+                          </span>
+                        )}
                       </p>
                     </CollapsibleTrigger>
                     <CollapsibleContent asChild>
-                      <div className='bg-background-2 tracking-tight shadow p-4 mt-1 lg:mt-2 rounded-lg dark:border dark:border-border'>
+                      <div className='bg-background-2 tracking-tight p-4 mt-1 lg:mt-2 rounded-xl border-[1px] border-b-[2.5px] border-border'>
+                        <p className='font-medium text-start mb-4'>
+                          {feedback.question}
+                        </p>
                         <h3 className='mb-1 text-sm lg:text-base xl:text-lg font-semibold'>
                           Feedback
                         </h3>
@@ -81,9 +96,9 @@ const FeedbackComponent = async ({ interviewId }: { interviewId: string }) => {
           </div>
           <div className='mt-6'>
             <h2 className='mb-1 text-sm lg:text-base xl:text-lg font-semibold'>
-              Analysis
+              Attempt speech analysis
             </h2>
-            <p className='shadow tracking-tight bg-background-2 p-4 rounded-lg dark:border dark:border-border'>
+            <p className='tracking-tight bg-background-2 p-4 rounded-xl border-[1px] border-b-[2.5px] border-border'>
               {speechAnalysis}
             </p>
           </div>

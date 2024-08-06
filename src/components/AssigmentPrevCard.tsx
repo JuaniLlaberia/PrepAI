@@ -22,7 +22,7 @@ const AssigmentPrevCard = ({
       <h1 className='text-2xl lg:text-2xl mb-6 font-semibold text-center max-w-[600px]'>
         {title}
       </h1>
-      <div className='flex flex-col justify-center bg-background-2 my-3 rounded-lg shadow w-full max-w-[600px]'>
+      <div className='flex flex-col justify-center bg-background-2 my-3 rounded-xl border-[1px] border-b-[3.5px] border-[#ebebeb] dark:border-accent w-full max-w-[600px]'>
         <h2 className='text-start text-xl font-semibold py-6 px-4 text-muted-foreground'>
           Before you start:
         </h2>
@@ -30,7 +30,7 @@ const AssigmentPrevCard = ({
         <ul className='py-6 px-4 flex flex-col gap-4'>
           {options.map((option, i) => (
             <li key={i} className='font-medium flex items-center gap-2'>
-              <div className='size-2 rounded-full bg-blue-600' />
+              <div className='size-2 rounded-full shrink-0 bg-violet-500' />
               {option}
             </li>
           ))}

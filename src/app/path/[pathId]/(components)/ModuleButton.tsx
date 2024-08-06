@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { HiOutlineArrowRight } from 'react-icons/hi2';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { LuLoader2 } from 'react-icons/lu';
@@ -42,26 +41,21 @@ const ModuleButton = ({
       {inProgress ? (
         <Link
           href={`/path/${pathId}/${moduleSlug}`}
-          className={cn(buttonVariants({ size: 'lg' }))}
+          className={cn(buttonVariants({ size: 'lg', variant: 'secondary' }))}
         >
           CONTINUE
-          <HiOutlineArrowRight className='size-4 ml-2' strokeWidth={2} />
         </Link>
       ) : (
         <Button
           disabled={isPending}
-          variant='outline'
           size='lg'
-          className='border-2 min-w-[200px]'
+          className='min-w-[200px]'
           onClick={() => startModule({ pathId, moduleId })}
         >
           {isPending ? (
             <LuLoader2 className='size-4  animate-spin' />
           ) : (
-            <>
-              START STAGE {stageNum}
-              <HiOutlineArrowRight className='size-4 ml-2' strokeWidth={2} />
-            </>
+            <>START STAGE {stageNum}</>
           )}
         </Button>
       )}

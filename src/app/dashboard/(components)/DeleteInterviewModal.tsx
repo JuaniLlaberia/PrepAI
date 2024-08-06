@@ -81,35 +81,6 @@ const DeleteInterviewModal = ({
             </p>
           ) : null}
         </div>
-        <div>
-          <label
-            htmlFor='confirm'
-            className='text-sm text-muted-foreground mb-1.5'
-          >
-            To confirm, type{' '}
-            <span className='text-primary font-semibold'>
-              delete my interview
-            </span>{' '}
-            below:
-          </label>
-          <Input
-            id='confirm'
-            type='text'
-            {...register('confirm', {
-              validate: {
-                validator: fieldVal =>
-                  fieldVal === 'delete my interview'
-                    ? true
-                    : 'Please confirm in order to continue',
-              },
-            })}
-          />
-          {errors.confirm?.message ? (
-            <p className='text-sm text-red-500 px-1'>
-              {errors.confirm?.message as string}
-            </p>
-          ) : null}
-        </div>
         <Alert variant='destructive'>
           <AlertTitle className='flex items-center gap-2 mb-0'>
             <HiOutlineExclamationCircle className='size-5' />

@@ -1,6 +1,5 @@
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { HiCheckCircle, HiLockClosed } from 'react-icons/hi2';
+import { HiCheckCircle } from 'react-icons/hi2';
 
 import AnimatedProgress from '@/components/AnimatedProgress';
 import Badge from '@/components/ui/badge';
@@ -10,7 +9,6 @@ import ModuleButton from './(components)/ModuleButton';
 import { getPathById } from '@/access-data/paths';
 import { getModules } from '@/access-data/modules';
 import { cn } from '@/lib/utils';
-import { buttonVariants } from '@/components/ui/button';
 
 const PathPage = async ({
   params: { pathId },
@@ -48,7 +46,7 @@ const PathPage = async ({
                 <Badge text='In progress' color='orange' />
               )}
             </div>
-            <div className='mt-6 flex flex-col bg-background-2 rounded-xl p-4'>
+            <div className='mt-6 flex flex-col bg-background-2 rounded-xl p-4 border-[1px] border-b-[3.5px] border-[#ebebeb] dark:border-accent'>
               <h2 className='text-base xl:text-lg font-semibold mb-1'>
                 Your progress
               </h2>
@@ -80,34 +78,37 @@ const PathPage = async ({
                     completedActivities,
                     title,
                     slug,
+                    order,
+                    activitiesLength,
                   },
                   i
                 ) => (
                   <li
                     key={String(_id)}
                     className={cn(
-                      'flex flex-col gap-4 p-5 rounded-xl shadow',
+                      'flex flex-col gap-4 p-5 rounded-xl border-[1px] border-b-[3.5px]',
                       inProgress && !completed
-                        ? 'bg-blue-100'
+                        ? 'bg-violet-200 border-violet-300'
                         : completed
-                        ? 'bg-green-100'
-                        : 'bg-background-2'
+                        ? 'bg-green-100 border-green-200'
+                        : 'bg-background-2 border-[#ebebeb]'
                     )}
                   >
                     <div
                       className={cn(
                         'mb-1',
-                        !inProgress ? 'text-muted-foreground' : null
+                        !inProgress || completed
+                          ? 'text-muted-foreground'
+                          : null
                       )}
                     >
                       <h3 className='flex items-center gap-1 text-lg font-semibold mb-1.5'>
-                        Stage {i + 1} •
+                        Stage {order} •
                         {inProgress ? (
                           <span>{completed ? 'Completed' : 'In progress'}</span>
                         ) : (
                           <span className='flex items-center gap-1 text-sm font-semibold'>
-                            <HiLockClosed className='size-4' strokeWidth={1} />
-                            10 sections
+                            {activitiesLength} sections
                           </span>
                         )}
                       </h3>
@@ -116,11 +117,11 @@ const PathPage = async ({
                     {inProgress && !completed ? (
                       <div className='relative'>
                         <AnimatedProgress
-                          value={(completedActivities / 10) * 100}
+                          value={(completedActivities / activitiesLength) * 100}
                           className='h-5 bg-background'
                         />
-                        <p className='absolute left-1/2 top-1/2 -translate-y-1/2 text-sm text-muted-foreground font-semibold'>
-                          {completedActivities} / 10
+                        <p className='absolute left-1/2 top-1/2 -translate-y-1/2 text-sm text-muted-foreground font-medium text-white mix-blend-difference'>
+                          {completedActivities} / {activitiesLength}
                         </p>
                       </div>
                     ) : null}
@@ -140,15 +141,6 @@ const PathPage = async ({
                           moduleSlug={slug}
                         />
                       )}
-
-                      {completed ? (
-                        <Link
-                          className={cn(buttonVariants({}))}
-                          href={`/path/${pathId}/${slug}`}
-                        >
-                          REVIEW
-                        </Link>
-                      ) : null}
                     </div>
                   </li>
                 )

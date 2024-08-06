@@ -5,6 +5,7 @@ import {
   HiOutlinePlus,
   HiOutlineTrash,
 } from 'react-icons/hi2';
+import { PiTreeStructureLight } from 'react-icons/pi';
 
 import PinPathBtn from './(components)/PinPathBtn';
 import PathFilters from './(components)/PathFilters';
@@ -22,7 +23,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 import { getUserPaths } from '@/access-data/paths';
-import { PiTreeStructureLight } from 'react-icons/pi';
 
 const PathsPage = async ({
   searchParams: { sortBy, filter },
@@ -37,19 +37,9 @@ const PathsPage = async ({
   return (
     <>
       <div className='mb-3 flex items-center gap-2 justify-end'>
-        <PathFilters
-          sortBy={sortBy}
-          filter={filter}
-        />
-        <Link
-          className={buttonVariants({ size: 'sm' })}
-          href='/path/new'
-        >
-          <HiOutlinePlus
-            className='size-4 mr-2'
-            strokeWidth={2.5}
-          />{' '}
-          New path
+        <PathFilters sortBy={sortBy} filter={filter} />
+        <Link className={buttonVariants({ size: 'sm' })} href='/path/new'>
+          <HiOutlinePlus className='size-4 mr-2' strokeWidth={2.5} /> New path
         </Link>
       </div>
       <div>
@@ -71,34 +61,20 @@ const PathsPage = async ({
               }) => (
                 <li
                   key={String(_id)}
-                  className='relative p-4 bg-background rounded-xl shadow'
+                  className='relative p-4 bg-background rounded-xl border-[1px] border-b-[3.5px] border-[#ebebeb] dark:border-accent dark:bg-background-2'
                 >
                   <Link
                     href={`/path/${String(_id)}`}
                     className='flex flex-col gap-4'
                   >
                     <div className='flex items-center gap-2'>
-                      <Badge
-                        text={`${jobExperience} level`}
-                        color='purple'
-                      />
+                      <Badge text={`${jobExperience} level`} color='purple' />
                       {completed ? (
-                        <Badge
-                          text='Completed'
-                          color='green'
-                        />
+                        <Badge text='Completed' color='green' />
                       ) : (
-                        <Badge
-                          text='In progress'
-                          color='orange'
-                        />
+                        <Badge text='In progress' color='orange' />
                       )}
-                      {pinned ? (
-                        <Badge
-                          text='Pinned'
-                          color='blue'
-                        />
-                      ) : null}
+                      {pinned ? <Badge text='Pinned' color='blue' /> : null}
                     </div>
                     <h3 className='text-xl font-medium mb-2'>{jobPosition}</h3>
                     <div className='flex flex-col'>
@@ -123,19 +99,12 @@ const PathsPage = async ({
                   <Dialog>
                     <DropdownMenu>
                       <DropdownMenuTrigger className='absolute top-4 right-4'>
-                        <Button
-                          size='icon'
-                          variant='ghost'
-                          className='size-8'
-                        >
+                        <Button size='icon' variant='ghost' className='size-8'>
                           <HiOutlineEllipsisHorizontal className='size-4' />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
-                        <PinPathBtn
-                          pathId={String(_id)}
-                          isPinned={pinned}
-                        />
+                        <PinPathBtn pathId={String(_id)} isPinned={pinned} />
                         <DropdownMenuItem asChild>
                           <Link href={`/exam/${String(_id)}`}>
                             <PiTreeStructureLight className='size-4 mr-2' />

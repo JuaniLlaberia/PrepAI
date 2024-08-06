@@ -74,15 +74,15 @@ const AnswerExamComponent = ({
         <h1 className='text-lg font-medium text-center mb-4 md:text-xl md:mb-6 lg:mb-8 lg:text-2xl xl:px-2'>
           {question.question}
         </h1>
-        <ul className='flex flex-col gap-2'>
+        <ul className='flex flex-col gap-3'>
           {question.options.map((option, i) => (
             <li
               key={i}
               className={cn(
-                'border-2 border-border rounded-lg p-3 cursor-pointer  transition-colors',
+                'flex items-start border-[1.5px] shadow-[0_2px_0_rgba(226,232,250,1)] dark:shadow-[#2d2d2d] active:shadow-none active:translate-y-[2px] rounded-xl p-3 cursor-pointer transition-colors',
                 selectedOption === i
-                  ? 'border-[#88a4f0] bg-[#8bacff17]'
-                  : 'md:hover:bg-background-2'
+                  ? 'shadow-violet-300 border-violet-300 bg-violet-100 dark:bg-violet-300/20'
+                  : 'md:hover:bg-background-2 dark:bg-background-2'
               )}
               onClick={() => setSelectedOption(i)}
             >
@@ -90,7 +90,7 @@ const AnswerExamComponent = ({
                 className={cn(
                   'px-2 py-1 border-2 border-border rounded-md text-sm font-semibold mr-3 text-muted-foreground/80 transition-colors',
                   selectedOption === i
-                    ? 'border-[#88a4f0] text-[#88a4f0]'
+                    ? 'border-violet-300 text-violet-400'
                     : null
                 )}
               >
@@ -208,7 +208,7 @@ const AnswerExamComponent = ({
             {formatTimer(timer)}
           </p>
         </div>
-        {crrStep}
+        <div className='pb-4'>{crrStep}</div>
       </section>
       <div className='flex items-center w-full max-w-[600px] md:justify-end'>
         {!isLastStep ? (
@@ -216,6 +216,7 @@ const AnswerExamComponent = ({
             onClick={nextQuestion}
             className='w-full md:w-auto'
             disabled={selectedOption === null}
+            size='lg'
           >
             Next question
             <HiMiniArrowLongRight className='size-4 ml-1.5' />

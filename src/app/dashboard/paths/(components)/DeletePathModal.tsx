@@ -84,33 +84,6 @@ const DeletePathModal = ({
             </p>
           ) : null}
         </div>
-        <div>
-          <label
-            htmlFor='confirm'
-            className='text-sm text-muted-foreground mb-1.5'
-          >
-            To confirm, type{' '}
-            <span className='text-primary font-semibold'>delete my path</span>{' '}
-            below:
-          </label>
-          <Input
-            id='confirm'
-            type='text'
-            {...register('confirm', {
-              validate: {
-                validator: fieldVal =>
-                  fieldVal === 'delete my path'
-                    ? true
-                    : 'Please confirm in order to continue',
-              },
-            })}
-          />
-          {errors.confirm?.message ? (
-            <p className='text-sm text-red-500 px-1'>
-              {errors.confirm?.message as string}
-            </p>
-          ) : null}
-        </div>
         <Alert variant='destructive'>
           <AlertTitle className='flex items-center gap-2 mb-0'>
             <HiOutlineExclamationCircle className='size-5' />
@@ -119,11 +92,11 @@ const DeletePathModal = ({
         </Alert>
         <div className='flex justify-between mt-2'>
           <DialogClose asChild>
-            <Button disabled={isPending} variant='outline' size='sm'>
+            <Button disabled={isPending} variant='ghost' size='sm'>
               Cancel
             </Button>
           </DialogClose>
-          <Button disabled={isPending} size='sm'>
+          <Button disabled={isPending} size='sm' variant='destructive'>
             {isPending ? (
               <LuLoader2 className='size-4 mr-1.5 animate-spin' />
             ) : null}
