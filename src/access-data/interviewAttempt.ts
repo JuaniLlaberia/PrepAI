@@ -53,7 +53,7 @@ export const createInterviewAttemptFeedback = async ({
     const passed = score >= 6;
 
     await Promise.all([
-      InterviewAttempt.findOne(
+      InterviewAttempt.findOneAndUpdate(
         { interviewId },
         { speechAnalysis, answers, passed, $max: { score } }
       ),
