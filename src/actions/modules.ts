@@ -5,9 +5,9 @@ import { revalidatePath } from 'next/cache';
 
 import { authenticatedAction } from '@/lib/safe-actions';
 import {
+  completeActivity,
   createExamForModule,
   createInterviewForModule,
-  updateActivity,
   updateModule,
 } from '@/access-data/modules';
 import { DifficultyEnum, ExamTypeEnum } from '@/lib/validators';
@@ -51,12 +51,13 @@ export const skipActivityAction = authenticatedAction
   .input(
     z.object({
       pathId: z.string(),
-      moduleId: z.string(),
+      moduleId: z.optional(z.string()),
+      moduleSlug: z.optional(z.string()),
       activityId: z.string(),
     })
   )
-  .handler(async ({ input: { pathId, moduleId, activityId } }) => {
-    await updateActivity({ moduleId, activityId });
+  .handler(async ({ input: { pathId, moduleId, activityId, moduleSlug } }) => {
+    await completeActivity({ moduleId, activityId, moduleSlug });
 
     revalidatePath(`/path/${pathId}/module/${moduleId}`);
   });

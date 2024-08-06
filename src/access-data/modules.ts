@@ -38,14 +38,24 @@ export const getModules = async ({
       },
     },
     {
+      $addFields: {
+        activitiesLength: { $size: '$activities' },
+      },
+    },
+    {
+      $sort: { order: 1 },
+    },
+    {
       $project: {
         _id: 1,
         title: 1,
         inProgress: 1,
         completed: 1,
         completedActivities: 1,
+        activitiesLength: 1,
         slug: 1,
         examType: 1,
+        order: 1,
       },
     },
   ]);
@@ -110,20 +120,25 @@ export const updateModule = async ({
   await Module.findByIdAndUpdate(moduleId, module);
 };
 
-export const updateActivity = async ({
+export const completeActivity = async ({
   moduleId,
+  moduleSlug,
   activityId,
 }: {
-  moduleId: string;
+  moduleId?: string;
+  moduleSlug?: string;
   activityId: string;
 }) => {
+  const filter = moduleId
+    ? { _id: new mongoose.Types.ObjectId(moduleId) }
+    : {
+        slug: moduleSlug,
+      };
+
   await Module.findOneAndUpdate(
+    filter,
     {
-      _id: new mongoose.Types.ObjectId(moduleId),
-      'activities.type': 'exam',
-    },
-    {
-      $set: { 'activities.$[e1].examId': '66ad261f5a9e42c9412e8e01' },
+      $set: { 'activities.$[e1].completed': true },
     },
     {
       arrayFilters: [
