@@ -1,12 +1,13 @@
+import type { ReactElement, ReactNode } from 'react';
+import { DropdownMenu } from '@radix-ui/react-dropdown-menu';
+import { HiOutlineCheck, HiOutlineEllipsisHorizontal } from 'react-icons/hi2';
+
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
-import { DropdownMenu } from '@radix-ui/react-dropdown-menu';
-import type { ReactElement, ReactNode } from 'react';
-import { HiOutlineCheck, HiOutlineEllipsisHorizontal } from 'react-icons/hi2';
 
 type CardType = {
   title: string;
@@ -15,13 +16,21 @@ type CardType = {
   icon: ReactElement;
   completed: boolean;
   menuContent: ReactNode;
+  actionButton?: ReactNode;
 };
 
-const Card = ({ title, comment, icon, menuContent, completed }: CardType) => {
+const Card = ({
+  title,
+  comment,
+  icon,
+  menuContent,
+  completed,
+  actionButton,
+}: CardType) => {
   return (
     <li
       className={cn(
-        'relative flex flex-col gap-6 p-4 rounded-xl shadow',
+        'relative flex flex-col gap-6 p-4 rounded-xl border-[1px] border-b-[3.5px] border-[#ebebeb] dark:border-accent',
         completed ? 'bg-green-100' : 'bg-background-2'
       )}
     >
@@ -48,16 +57,19 @@ const Card = ({ title, comment, icon, menuContent, completed }: CardType) => {
         {title}
       </h2>
       <p className='text-sm text-muted-foreground'>{comment}</p>
-      <DropdownMenu>
-        <DropdownMenuTrigger className='absolute top-4 right-4'>
-          <Button size='icon' variant='ghost' className='size-8'>
-            <HiOutlineEllipsisHorizontal className='size-4' />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className='mr-1'>
-          {menuContent}
-        </DropdownMenuContent>
-      </DropdownMenu>
+      {actionButton}
+      {menuContent && (
+        <DropdownMenu>
+          <DropdownMenuTrigger className='absolute top-4 right-4'>
+            <Button size='icon' variant='ghost' className='size-8'>
+              <HiOutlineEllipsisHorizontal className='size-4' />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className='mr-1'>
+            {menuContent}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )}
     </li>
   );
 };

@@ -15,21 +15,29 @@ import { IExamActivity } from '@/db/models/Activity';
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { useServerActionMutation } from '@/hooks/server-action-hooks';
 import { createExamForModuleAction } from '@/actions/modules';
+import { Button, buttonVariants } from '@/components/ui/button';
 
 type ExamCardType = {
   examActivity: IExamActivity;
   pathId: string;
   moduleId: string;
+  skipActivity: (activityId: string) => void;
 };
 
-const ExamCard = ({ examActivity, pathId, moduleId }: ExamCardType) => {
+const ExamCard = ({
+  examActivity,
+  pathId,
+  moduleId,
+  skipActivity,
+}: ExamCardType) => {
   const router = useRouter();
 
   const { title, completed, type, difficulty, _id, examId, passed, examType } =
     examActivity;
 
-  const { mutate: createExam, isPending: isPendingExam } =
-    useServerActionMutation(createExamForModuleAction, {
+  const { mutate: createExam, isPending: isPending } = useServerActionMutation(
+    createExamForModuleAction,
+    {
       mutationKey: ['create-module-exam'],
       onSuccess: (examId: string) => {
         router.push(`/exam/${examId}?pathId=${pathId}&moduleId=${moduleId}`);
@@ -43,7 +51,8 @@ const ExamCard = ({ examActivity, pathId, moduleId }: ExamCardType) => {
           description: 'We failed to create the exam. Please try again.',
         });
       },
-    });
+    }
+  );
 
   return (
     <Card
@@ -54,12 +63,35 @@ const ExamCard = ({ examActivity, pathId, moduleId }: ExamCardType) => {
         difficulty[0].toUpperCase() + difficulty.slice(1)
       } difficulty`}
       menuContent={
-        <>
-          {/* If it exist redirect, else generate exam */}
-          {!passed ? (
-            <DropdownMenuItem asChild>
-              {examId ? (
+        !completed ? (
+          <>
+            {!passed ? (
+              <DropdownMenuItem onClick={() => skipActivity(String(_id))}>
+                <HiOutlineRocketLaunch className='size-4 mr-1.5' />
+                Skip activity
+              </DropdownMenuItem>
+            ) : null}
+            {examId ? (
+              <DropdownMenuItem asChild>
                 <Link
+                  href={`/exam/${examId}/results?pathId=${pathId}&moduleId=${moduleId}`}
+                >
+                  <HiOutlineClipboardDocumentList className='size-4 mr-1.5' />{' '}
+                  See results
+                </Link>
+              </DropdownMenuItem>
+            ) : null}
+          </>
+        ) : null
+      }
+      icon={<HiOutlineDocumentText className='size-5' strokeWidth={1.5} />}
+      actionButton={
+        <>
+          {!passed ? (
+            <>
+              {completed ? (
+                <Link
+                  className={buttonVariants({ size: 'sm' })}
                   href={{
                     pathname: `/exam/${examId}`,
                     query: {
@@ -69,11 +101,11 @@ const ExamCard = ({ examActivity, pathId, moduleId }: ExamCardType) => {
                     },
                   }}
                 >
-                  <HiOutlineRocketLaunch className='size-4 mr-1.5' /> Go to exam
+                  {completed ? 'Re-take exam' : 'Go to exam'}
                 </Link>
               ) : (
-                <button
-                  disabled={isPendingExam}
+                <Button
+                  size='sm'
                   onClick={() =>
                     createExam({
                       moduleId,
@@ -82,47 +114,29 @@ const ExamCard = ({ examActivity, pathId, moduleId }: ExamCardType) => {
                       type: examType,
                     })
                   }
+                  disabled={isPending}
                 >
-                  {!isPendingExam ? (
-                    <>
-                      <HiOutlineRocketLaunch className='size-4 mr-1.5' />{' '}
-                      Generate exam
-                    </>
+                  {!isPending ? (
+                    <>Generate exam</>
                   ) : (
                     <>
-                      <LuLoader2 className='size-4 animate-spin' />
+                      <LuLoader2 className='size-4 mr-1.5 animate-spin' />
                       Generating...
                     </>
                   )}
-                </button>
+                </Button>
               )}
-            </DropdownMenuItem>
-          ) : null}
-          {/* To skip (mark as complete the activity) */}
-          {/* {!completed && !passed ? (
-            <DropdownMenuItem
-              onClick={() =>
-                skipActivity({ pathId, moduleId, activityId: String(_id) })
-              }
+            </>
+          ) : (
+            <Link
+              className={buttonVariants({ size: 'sm', variant: 'secondary' })}
+              href={`/exam/${examId}/results?pathId=${pathId}&moduleId=${moduleId}`}
             >
-              <HiOutlineCheckCircle className='size-4 mr-1.5' />
-              Skip activity
-            </DropdownMenuItem>
-          ) : null} */}
-          {/* Takes us to the exam results */}
-          {examId ? (
-            <DropdownMenuItem asChild>
-              <Link
-                href={`/exam/${examId}/results?pathId=${pathId}&moduleId=${moduleId}`}
-              >
-                <HiOutlineClipboardDocumentList className='size-4 mr-1.5' /> See
-                results
-              </Link>
-            </DropdownMenuItem>
-          ) : null}
+              See results
+            </Link>
+          )}
         </>
       }
-      icon={<HiOutlineDocumentText className='size-5' strokeWidth={1.5} />}
     />
   );
 };

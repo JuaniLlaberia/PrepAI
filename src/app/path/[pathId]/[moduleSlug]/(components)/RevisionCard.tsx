@@ -10,16 +10,16 @@ import { usePathname } from 'next/navigation';
 import Card from './Card';
 import { IRevisionActivity } from '@/db/models/Activity';
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
+import { buttonVariants } from '@/components/ui/button';
 
 type RevisionCardType = {
   revisionActivity: IRevisionActivity;
+  skipActivity: (activityId: string) => void;
 };
 
-const RevisionCard = ({
-  revisionActivity,
-}: RevisionCardType) => {
+const RevisionCard = ({ revisionActivity, skipActivity }: RevisionCardType) => {
   const pathname = usePathname();
-  const { title, type, completed } = revisionActivity;
+  const { title, type, completed, _id } = revisionActivity;
 
   return (
     <Card
@@ -28,17 +28,26 @@ const RevisionCard = ({
       completed={completed}
       comment='Revision • References'
       menuContent={
-        <>
-          <DropdownMenuItem asChild>
-            <Link href={`${pathname}/revision`}>
-              <HiOutlineRocketLaunch className='size-4 mr-1.5' />
-              Go to references
-            </Link>
+        !completed ? (
+          <DropdownMenuItem onClick={() => skipActivity(String(_id))}>
+            <HiOutlineRocketLaunch className='size-4 mr-1.5' />
+            Skip activity
           </DropdownMenuItem>
-        </>
+        ) : null
       }
       icon={
         <HiOutlineArrowTopRightOnSquare className='size-5' strokeWidth={1.5} />
+      }
+      actionButton={
+        <Link
+          href={`${pathname}/revision`}
+          className={buttonVariants({
+            size: 'sm',
+            variant: completed ? 'secondary' : 'default',
+          })}
+        >
+          {completed ? 'Review activity' : 'Go to references'}
+        </Link>
       }
     />
   );

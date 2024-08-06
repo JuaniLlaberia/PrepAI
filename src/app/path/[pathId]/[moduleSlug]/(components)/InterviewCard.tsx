@@ -15,17 +15,20 @@ import { createInterviewForModuleAction } from '@/actions/modules';
 import { IInterviewActivity } from '@/db/models/Activity';
 import { useServerActionMutation } from '@/hooks/server-action-hooks';
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
+import { Button, buttonVariants } from '@/components/ui/button';
 
 type InterviewCardType = {
   interviewActivity: IInterviewActivity;
   pathId: string;
   moduleId: string;
+  skipActivity: (activityId: string) => void;
 };
 
 const InterviewCard = ({
   interviewActivity,
   pathId,
   moduleId,
+  skipActivity,
 }: InterviewCardType) => {
   const router = useRouter();
   const { title, completed, type, _id, interviewId, passed } =
@@ -59,71 +62,78 @@ const InterviewCard = ({
       completed={completed}
       comment='Interview • Final assesment'
       menuContent={
-        <>
+        !completed ? (
           <>
             {!passed ? (
-              <DropdownMenuItem asChild>
-                {interviewId ? (
-                  <Link
-                    href={{
-                      pathname: `/interview/${interviewId}`,
-                      query: {
-                        pathId,
-                        moduleId,
-                        activityId: String(_id),
-                      },
-                    }}
-                  >
-                    <HiOutlineRocketLaunch className='size-4 mr-1.5' /> Go to
-                    interview
-                  </Link>
-                ) : (
-                  <button
-                    disabled={isPending}
-                    onClick={() =>
-                      createInterview({
-                        moduleId,
-                        activityId: String(_id),
-                      })
-                    }
-                  >
-                    {!isPending ? (
-                      <>
-                        <HiOutlineRocketLaunch className='size-4 mr-1.5' />{' '}
-                        Generate interview
-                      </>
-                    ) : (
-                      <>
-                        <LuLoader2 className='size-4 animate-spin' />
-                        Generating...
-                      </>
-                    )}
-                  </button>
-                )}
+              <DropdownMenuItem onClick={() => skipActivity(String(_id))}>
+                <HiOutlineRocketLaunch className='size-4 mr-1.5' />
+                Skip activity
               </DropdownMenuItem>
             ) : null}
-            {/* <DropdownMenuItem
-          onClick={() =>
-            skipActivity({ pathId, moduleId, activityId: String(_id) })
-          }
-        >
-          <HiOutlineCheckCircle className='size-4 mr-1.5' />
-          Skip activity
-        </DropdownMenuItem> */}
+            {interviewId ? (
+              <DropdownMenuItem asChild>
+                <Link
+                  href={`/interview/${interviewId}/feedback?pathId=${pathId}&moduleId=${moduleId}`}
+                >
+                  <HiOutlineClipboardDocumentList className='size-4 mr-1.5' />{' '}
+                  See feedback
+                </Link>
+              </DropdownMenuItem>
+            ) : null}
           </>
-          {interviewId ? (
-            <DropdownMenuItem asChild>
-              <Link
-                href={`/interview/${interviewId}/feedback?pathId=${pathId}&moduleId=${moduleId}`}
-              >
-                <HiOutlineClipboardDocumentList className='size-4 mr-1.5' /> See
-                feedback
-              </Link>
-            </DropdownMenuItem>
-          ) : null}
-        </>
+        ) : null
       }
       icon={<HiOutlineMicrophone className='size-5' strokeWidth={1.5} />}
+      actionButton={
+        <>
+          {!passed ? (
+            <>
+              {completed ? (
+                <Link
+                  className={buttonVariants({ size: 'sm' })}
+                  href={{
+                    pathname: `/interview/${interviewId}`,
+                    query: {
+                      pathId,
+                      moduleId,
+                      activityId: String(_id),
+                    },
+                  }}
+                >
+                  {completed ? 'Re-take interview' : 'Go to interview'}
+                </Link>
+              ) : (
+                <Button
+                  size='sm'
+                  onClick={() =>
+                    createInterview({
+                      moduleId,
+                      activityId: String(_id),
+                    })
+                  }
+                  disabled={isPending}
+                >
+                  {!isPending ? (
+                    <>Generate exam</>
+                  ) : (
+                    <>
+                      <LuLoader2 className='size-4 mr-1.5 animate-spin' />
+                      Generating...
+                    </>
+                  )}
+                </Button>
+              )}
+            </>
+          ) : (
+            <Link
+              className={buttonVariants({ size: 'sm', variant: 'secondary' })}
+              href={`/interview/${interviewId}/results?pathId=${pathId}&moduleId=${moduleId}`}
+            >
+              See feedback
+            </Link>
+          )}
+        </>
+      }
     />
   );
 };

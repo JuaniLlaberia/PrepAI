@@ -10,14 +10,16 @@ import { usePathname } from 'next/navigation';
 import Card from './Card';
 import { IProjectActivity } from '@/db/models/Activity';
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
+import { buttonVariants } from '@/components/ui/button';
 
 type ProjectCardType = {
   projectActivity: IProjectActivity;
+  skipActivity: (activityId: string) => void;
 };
 
-const ProjectCard = ({ projectActivity }: ProjectCardType) => {
+const ProjectCard = ({ projectActivity, skipActivity }: ProjectCardType) => {
   const pathname = usePathname();
-  const { title, type, completed } = projectActivity;
+  const { title, type, completed, _id } = projectActivity;
 
   return (
     <Card
@@ -26,16 +28,25 @@ const ProjectCard = ({ projectActivity }: ProjectCardType) => {
       completed={completed}
       comment='Project • Optional'
       menuContent={
-        <>
-          <DropdownMenuItem asChild>
-            <Link href={`${pathname}/project`}>
-              <HiOutlineRocketLaunch className='size-4 mr-1.5' />
-              Start project
-            </Link>
+        !completed ? (
+          <DropdownMenuItem onClick={() => skipActivity(String(_id))}>
+            <HiOutlineRocketLaunch className='size-4 mr-1.5' />
+            Skip activity
           </DropdownMenuItem>
-        </>
+        ) : null
       }
       icon={<HiOutlineWrenchScrewdriver className='size-5' strokeWidth={1.5} />}
+      actionButton={
+        <Link
+          href={`${pathname}/project`}
+          className={buttonVariants({
+            size: 'sm',
+            variant: completed ? 'secondary' : 'default',
+          })}
+        >
+          {completed ? 'Review project' : 'Start project'}
+        </Link>
+      }
     />
   );
 };
