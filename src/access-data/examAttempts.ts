@@ -49,12 +49,6 @@ export const getExamResults = async ({ examId }: { examId: string }) => {
   };
 };
 
-export const getExamAttempts = async ({ examId }: { examId: string }) => {
-  await getAuthUser();
-
-  return await ExamAttempt.find({ examId }).select('_id');
-};
-
 export const updateExamAttempt = async ({
   examId,
   examAttempt,
