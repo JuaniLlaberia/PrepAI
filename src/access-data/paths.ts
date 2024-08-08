@@ -77,7 +77,7 @@ export const getPathById = async ({
 }): Promise<IPathDocument> => {
   const userId = await getAuthUser();
 
-  const path = await Path.findById(pathId);
+  const path = await Path.findById(pathId).lean();
   if (!path) throw new Error('Path not found');
   if (String(path?.userId) !== userId)
     throw new Error('This path does not belong to you');

@@ -12,7 +12,7 @@ export const getInterviewFeedback = async ({
 }) => {
   await getAuthUser();
 
-  return await InterviewAttempt.findOne({ interviewId });
+  return await InterviewAttempt.findOne({ interviewId }).lean();
 };
 
 export const createInterviewAttempt = async ({

@@ -25,7 +25,8 @@ export const getUserInterviews = async ({
       sort === 'createdAt'
         ? { pinned: 'desc', createdAt: 'desc' }
         : { pinned: 'desc', jobRole: 'desc' }
-    );
+    )
+    .lean();
 };
 
 export const getInterviewById = async ({

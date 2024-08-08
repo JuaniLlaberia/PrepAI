@@ -23,7 +23,8 @@ export const getUserExams = async ({
       sort === 'createdAt'
         ? { pinned: 'desc', createdAt: 'desc' }
         : { pinned: 'desc', subject: 'desc' }
-    );
+    )
+    .lean();
 };
 
 export const getExamQuestions = async ({ examId }: { examId: string }) => {
