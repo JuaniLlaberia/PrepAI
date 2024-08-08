@@ -25,6 +25,7 @@ export const createExamForModuleAction = authenticatedAction
   .createServerAction()
   .input(
     z.object({
+      pathId: z.string(),
       moduleId: z.string(),
       activityId: z.string(),
       difficulty: z.nativeEnum(DifficultyEnum),
@@ -34,15 +35,23 @@ export const createExamForModuleAction = authenticatedAction
   .handler(async ({ input }) => {
     const { id } = await createExamForModule({ ...input });
 
+    revalidatePath(`/path/${input.pathId}/module/${input.moduleId}`);
     return id;
   });
 
 export const createInterviewForModuleAction = authenticatedAction
   .createServerAction()
-  .input(z.object({ moduleId: z.string(), activityId: z.string() }))
+  .input(
+    z.object({
+      pathId: z.string(),
+      moduleId: z.string(),
+      activityId: z.string(),
+    })
+  )
   .handler(async ({ input }) => {
     const { id } = await createInterviewForModule({ ...input });
 
+    revalidatePath(`/path/${input.pathId}/module/${input.moduleId}`);
     return id;
   });
 
@@ -52,12 +61,11 @@ export const skipActivityAction = authenticatedAction
     z.object({
       pathId: z.string(),
       moduleId: z.optional(z.string()),
-      moduleSlug: z.optional(z.string()),
       activityId: z.string(),
     })
   )
-  .handler(async ({ input: { pathId, moduleId, activityId, moduleSlug } }) => {
-    await completeActivity({ moduleId, activityId, moduleSlug });
+  .handler(async ({ input: { pathId, moduleId, activityId } }) => {
+    await completeActivity({ moduleId, activityId });
 
     revalidatePath(`/path/${pathId}/module/${moduleId}`);
   });

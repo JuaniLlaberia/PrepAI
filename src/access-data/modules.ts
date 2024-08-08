@@ -53,7 +53,6 @@ export const getModules = async ({
         completed: 1,
         completedActivities: 1,
         activitiesLength: 1,
-        slug: 1,
         examType: 1,
         order: 1,
       },
@@ -61,49 +60,33 @@ export const getModules = async ({
   ]);
 };
 
-export const getModuleBySlug = async ({
-  slug,
-  pathId,
-}: {
-  slug: string;
-  pathId: string;
-}) => {
+export const getModuleById = async ({ moduleId }: { moduleId: string }) => {
   await getAuthUser();
 
-  const moduleData = await Module.findOne({ pathId, slug }).lean();
+  const moduleData = await Module.findById(moduleId).lean();
   return JSON.parse(JSON.stringify(moduleData)) as IModuleDocument;
 };
 
-export const getModuleRevision = async ({
-  pathId,
-  moduleSlug,
-}: {
-  pathId: string;
-  moduleSlug: string;
-}) => {
+export const getModuleRevision = async ({ moduleId }: { moduleId: string }) => {
   const revisionData = await Module.findOne({
-    pathId,
-    slug: moduleSlug,
+    _id: moduleId,
     'activities.type': 'revision',
-  }).select('activities.$');
+  })
+    .select('activities.$')
+    .lean();
 
   if (!revisionData) throw new Error('Not found');
 
   return revisionData.activities[0] as IRevisionActivity;
 };
 
-export const getModuleProject = async ({
-  pathId,
-  moduleSlug,
-}: {
-  pathId: string;
-  moduleSlug: string;
-}) => {
+export const getModuleProject = async ({ moduleId }: { moduleId: string }) => {
   const revisionData = await Module.findOne({
-    pathId,
-    slug: moduleSlug,
+    _id: moduleId,
     'activities.type': 'project',
-  }).select('activities.$');
+  })
+    .select('activities.$')
+    .lean();
 
   if (!revisionData) throw new Error('Not found');
 
@@ -122,21 +105,13 @@ export const updateModule = async ({
 
 export const completeActivity = async ({
   moduleId,
-  moduleSlug,
   activityId,
 }: {
   moduleId?: string;
-  moduleSlug?: string;
   activityId: string;
 }) => {
-  const filter = moduleId
-    ? { _id: new mongoose.Types.ObjectId(moduleId) }
-    : {
-        slug: moduleSlug,
-      };
-
   await Module.findOneAndUpdate(
-    filter,
+    { _id: new mongoose.Types.ObjectId(moduleId) },
     {
       $set: { 'activities.$[e1].completed': true },
     },

@@ -15,20 +15,18 @@ const ModuleButton = ({
   moduleId,
   stageNum,
   inProgress,
-  moduleSlug,
 }: {
   pathId: string;
   moduleId: string;
   stageNum: number;
   inProgress: boolean;
-  moduleSlug: string;
 }) => {
   const router = useRouter();
   const { mutate: startModule, isPending } = useServerActionMutation(
     startModuleAction,
     {
       mutationKey: ['start-module'],
-      onSuccess: () => router.push(`/path/${pathId}/${moduleSlug}`),
+      onSuccess: () => router.push(`/path/${pathId}/module/${moduleId}`),
       onError: () =>
         toast.error('Failed to start module.', {
           description: "We could't start the module. Please try again!",
@@ -40,7 +38,7 @@ const ModuleButton = ({
     <>
       {inProgress ? (
         <Link
-          href={`/path/${pathId}/${moduleSlug}`}
+          href={`/path/${pathId}/module/${moduleId}`}
           className={cn(buttonVariants({ size: 'lg', variant: 'secondary' }))}
         >
           CONTINUE
