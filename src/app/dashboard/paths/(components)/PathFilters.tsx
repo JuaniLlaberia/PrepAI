@@ -21,6 +21,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const PathSorts = ({
   sortBy = 'createdAt',
@@ -109,6 +110,18 @@ const PathSorts = ({
           </ul>
         </DrawerContent>
       </Drawer>
+      <Tabs
+        className='hidden md:flex'
+        onValueChange={val => {
+          setSeachParam('filter', val);
+        }}
+        defaultValue={filter}
+      >
+        <TabsList>
+          <TabsTrigger value='progress'>In Progress</TabsTrigger>
+          <TabsTrigger value='completed'>Completed</TabsTrigger>
+        </TabsList>
+      </Tabs>
       <Select
         value={sortBy}
         onValueChange={val => {
@@ -121,20 +134,6 @@ const PathSorts = ({
         <SelectContent>
           <SelectItem value='createdAt'>Sorty by creation</SelectItem>
           <SelectItem value='name'>Sorty by name</SelectItem>
-        </SelectContent>
-      </Select>
-      <Select
-        value={filter}
-        onValueChange={val => {
-          setSeachParam('filter', val);
-        }}
-      >
-        <SelectTrigger className='w-[240px] bg-background hidden md:flex'>
-          <SelectValue placeholder='Filter by' />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value='progress'>Show in progress</SelectItem>
-          <SelectItem value='completed'>Show completed</SelectItem>
         </SelectContent>
       </Select>
     </>
