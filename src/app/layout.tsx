@@ -28,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className={roboto.className}>
-        <NextTopLoader />
+        <NextTopLoader color='#8b5cf6' />
         <Toaster richColors />
         <ThemeProvider
           attribute='class'
