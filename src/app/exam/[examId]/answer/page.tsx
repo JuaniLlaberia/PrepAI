@@ -25,7 +25,6 @@ const ExamAnswerPage = async ({
   return (
     <>
       <PageHeader
-        text='Quit exam'
         link={
           moduleId ? `/path/${pathId}/module/${moduleId}` : '/dashboard/exams'
         }

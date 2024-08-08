@@ -26,7 +26,6 @@ const AnswerPage = async ({
   return (
     <>
       <PageHeader
-        text='Quit interview'
         link={
           moduleId
             ? `/path/${pathId}/module/${moduleId}`

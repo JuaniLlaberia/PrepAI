@@ -12,7 +12,6 @@ const ExamPage = ({
   return (
     <>
       <PageHeader
-        text={moduleId ? 'Go to modules' : 'Go to exams'}
         link={
           moduleId ? `/path/${pathId}/module/${moduleId}` : '/dashboard/exams'
         }

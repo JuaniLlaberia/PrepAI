@@ -31,7 +31,7 @@ const PathPage = async ({
   return (
     <>
       {path.completed ? <ConfettiComponent /> : null}
-      <PageHeader text='Go to paths' link='/dashboard/paths' />
+      <PageHeader link='/dashboard/paths' />
       <div className='flex flex-col items-center mt-2'>
         <section className='w-full max-w-[800px] overflow-x-hidden pb-3'>
           <div>
@@ -77,7 +77,6 @@ const PathPage = async ({
                     inProgress,
                     completedActivities,
                     title,
-                    slug,
                     order,
                     activitiesLength,
                   },
@@ -88,17 +87,17 @@ const PathPage = async ({
                     className={cn(
                       'flex flex-col gap-4 p-5 rounded-xl border-[1px] border-b-[3.5px]',
                       inProgress && !completed
-                        ? 'bg-violet-200 border-violet-300'
+                        ? 'bg-violet-200 border-violet-300 dark:bg-violet-400 dark:border-violet-600'
                         : completed
-                        ? 'bg-green-100 border-green-200'
-                        : 'bg-background-2 border-[#ebebeb]'
+                        ? 'bg-green-100 border-green-200 dark:bg-green-400 dark:border-green-600'
+                        : 'bg-background-2 border-[#ebebeb] dark:border-accent'
                     )}
                   >
                     <div
                       className={cn(
                         'mb-1',
                         !inProgress || completed
-                          ? 'text-muted-foreground'
+                          ? 'text-muted-foreground dark:text-white/80'
                           : null
                       )}
                     >
@@ -128,7 +127,7 @@ const PathPage = async ({
                     <div className='flex items-center justify-between mt-5'>
                       {completed ? (
                         <div>
-                          <p className='flex items-center gap-1.5 text-green-500 font-semibold'>
+                          <p className='flex items-center gap-1.5 text-green-500 dark:text-green-50 font-semibold'>
                             <HiCheckCircle className='size-6' /> COMPLETED!
                           </p>
                         </div>
@@ -138,7 +137,6 @@ const PathPage = async ({
                           moduleId={String(_id)}
                           stageNum={i + 1}
                           inProgress={inProgress}
-                          moduleSlug={slug}
                         />
                       )}
                     </div>
