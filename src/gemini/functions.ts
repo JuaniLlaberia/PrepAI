@@ -32,7 +32,7 @@ export const generateExamWithGemini = async ({
     difficulty === 'easy' || difficulty === 'medium' ? '10' : '15'
   } related questions (${examDescription}). Provide
    it in JSON format with this schema: ${promptSchema}.
-   Remember to scape any special characters used in Javascript, such as "\n"
+   In case it is a coding topic, do not include code snippets.
    `;
 
   const result = await model.generateContent(prompt);
@@ -138,7 +138,6 @@ export const generateModulesWithGemini = async ({
             title: 'string' (Module title),
             description: 'string' (What this module includes),
             subject: 'string' (Module topic),
-            slug: 'string' (short unique slug for each module),
             order: 'number',
             activities: [
                 {
