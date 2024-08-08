@@ -15,17 +15,16 @@ type BadgeType = {
 
 const getColorClass = (color: ColorsType) => {
   const colorClasses = {
-    red: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300 border-red-800 dark:border-red-400',
-    blue: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 border-blue-800 dark:border-blue-400',
-    green:
-      'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 border-green-800 dark:border-green-400',
-    gray: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300 border-gray-800 dark:border-gray-400',
+    red: 'bg-red-200 text-red-700 dark:bg-red-900 dark:text-red-200',
+    blue: 'bg-blue-200 text-blue-700 dark:bg-blue-900 dark:text-blue-200',
+    green: 'bg-green-200 text-green-700 dark:bg-green-900 dark:text-green-200',
+    gray: 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-200',
     purple:
-      'bg-purple-100 text-purple-800 dark:bg-purple-700 dark:text-purple-300 border-purple-800 dark:border-purple-400',
+      'bg-purple-200 text-purple-700 dark:bg-purple-700 dark:text-purple-200',
     orange:
-      'bg-orange-100 text-orange-800 dark:bg-orange-700 dark:text-orange-300 border-orange-800 dark:border-orange-400',
+      'bg-orange-200 text-orange-700 dark:bg-orange-700 dark:text-orange-200',
     yellow:
-      'bg-yellow-100 text-yellow-800 dark:bg-yellow-700 dark:text-yellow-300 border-yellow-800 dark:border-yellow-400',
+      'bg-yellow-100 text-yellow-700 dark:bg-yellow-700 dark:text-yellow-200',
   };
 
   return colorClasses[color] || colorClasses.gray;
@@ -34,7 +33,7 @@ const getColorClass = (color: ColorsType) => {
 const Badge = ({ text, color, decorated = false }: BadgeType) => {
   return (
     <span
-      className={`inline-flex capitalize items-center rounded-full px-3 border py-1 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ${getColorClass(
+      className={`inline-flex capitalize items-center rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-nowrap ${getColorClass(
         color
       )}`}
     >
