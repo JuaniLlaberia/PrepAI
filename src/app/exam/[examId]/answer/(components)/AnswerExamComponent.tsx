@@ -38,7 +38,7 @@ const AnswerExamComponent = ({
       isCorrect: boolean;
     }[]
   >([]);
-  const { timer } = useTimer();
+  const { timer, stopTimer } = useTimer();
 
   const { mutate: submitExamAttempt, isPending } = useServerActionMutation(
     updateExamAttemptAction,
@@ -129,6 +129,8 @@ const AnswerExamComponent = ({
       },
     ];
 
+    stopTimer();
+
     const data = {
       time: timer,
       answers,
@@ -148,6 +150,7 @@ const AnswerExamComponent = ({
     timer,
     userAnswers,
     submitExamAttempt,
+    stopTimer,
   ]);
 
   //Allow users to use keyboard to answer
