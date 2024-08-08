@@ -93,7 +93,7 @@ const DeleteExamModal = ({
               Cancel
             </Button>
           </DialogClose>
-          <Button disabled={isPending} size='sm'>
+          <Button disabled={isPending} size='sm' variant='destructive'>
             {isPending ? (
               <LuLoader2 className='size-4 mr-1.5 animate-spin' />
             ) : null}
