@@ -55,7 +55,7 @@ const pathSchema = new mongoose.Schema<IPathDocument>(
   { timestamps: true }
 );
 
-pathSchema.index({ userId: 1 });
+pathSchema.index({ userId: 1, completed: 1 });
 
 const Path: Model<IPathDocument> =
   mongoose.models?.Path || mongoose.model('Path', pathSchema);
