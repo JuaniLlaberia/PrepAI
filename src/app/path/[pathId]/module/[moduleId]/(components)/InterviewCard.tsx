@@ -46,12 +46,10 @@ const InterviewCard = ({
           description: 'Redirecting...',
         });
       },
-      onError: err => {
-        console.log(err);
+      onError: () =>
         toast.error('Something went wrong.', {
           description: 'We failed to create the interview. Please try again.',
-        });
-      },
+        }),
     }
   );
 

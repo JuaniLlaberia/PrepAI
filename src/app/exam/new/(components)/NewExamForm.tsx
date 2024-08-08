@@ -36,10 +36,7 @@ const NewExamForm = () => {
         toast.success('Mock exam created successfully');
         router.push(`/exam/${examId}`);
       },
-      onError: err => {
-        console.log(err);
-        toast.error('Failed to create mock exam');
-      },
+      onError: () => toast.error('Failed to create mock exam'),
     }
   );
 

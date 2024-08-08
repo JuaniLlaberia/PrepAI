@@ -45,12 +45,10 @@ const ExamCard = ({
           description: 'Redirecting...',
         });
       },
-      onError: err => {
-        console.log(err);
+      onError: () =>
         toast.error('Something went wrong.', {
           description: 'We failed to create the exam. Please try again.',
-        });
-      },
+        }),
     }
   );
 
