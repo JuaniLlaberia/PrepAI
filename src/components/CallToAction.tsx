@@ -78,16 +78,16 @@ const CallToAction = () => {
         <div className='absolute flex flex-col items-center justify-center gap-2 px-8'>
           <div className='size-20 bg-primary rounded-2xl mb-3'></div>
           <h3 className='text-3xl font-semibold text-center'>
-            Start your Mock Interview today.
+            Start your preparation today.
           </h3>
           <p className='text-muted-foreground'>
             Get started with MockAI for free.
           </p>
           <Link
-            href='/dashboard'
+            href='/dashboard/paths'
             className={cn(
-              buttonVariants({ size: 'lg' }),
-              'rounded-full mt-3 group bg-background hover:bg-background-2 border border-border text-primary shadow-none'
+              buttonVariants({ size: 'lg', variant: 'secondary' }),
+              'text-black group'
             )}
           >
             Get started now{' '}
