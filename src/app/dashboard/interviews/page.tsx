@@ -58,7 +58,7 @@ const InterviewsPage = async ({
           {interviews.length > 0 ? (
             interviews.map(
               ({
-                id,
+                _id,
                 jobExperience,
                 jobRole,
                 createdAt,
@@ -67,12 +67,12 @@ const InterviewsPage = async ({
                 passed,
               }) => (
                 <li
-                  key={id}
+                  key={String(_id)}
                   className='relative p-4 bg-background rounded-xl border-[1px] border-b-[3.5px] border-[#ebebeb] dark:border-accent dark:bg-background-2 hover:border-[#cdcdcd] dark:hover:border-[#474747] transition-colors'
                 >
                   <Link
                     href={
-                      taken ? `/interview/${id}/feedback` : `/interview/${id}`
+                      taken ? `/interview/${_id}/feedback` : `/interview/${_id}`
                     }
                     className='flex flex-col gap-4'
                   >
@@ -97,10 +97,13 @@ const InterviewsPage = async ({
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
-                        <PinInterviewBtn interviewId={id} isPinned={pinned} />
+                        <PinInterviewBtn
+                          interviewId={String(_id)}
+                          isPinned={pinned}
+                        />
                         {!taken ? (
                           <DropdownMenuItem asChild>
-                            <Link href={`/interview/${id}`}>
+                            <Link href={`/interview/${_id}`}>
                               <HiOutlinePlay className='size-4 mr-2' />
                               Start now
                             </Link>
@@ -108,13 +111,13 @@ const InterviewsPage = async ({
                         ) : (
                           <>
                             <DropdownMenuItem asChild>
-                              <Link href={`/interview/${id}`}>
+                              <Link href={`/interview/${_id}`}>
                                 <PiArrowClockwiseLight className='size-4 mr-2' />
                                 Re-take
                               </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem asChild>
-                              <Link href={`/interview/${id}/feedback`}>
+                              <Link href={`/interview/${_id}/feedback`}>
                                 <HiOutlineClipboardDocumentList className='size-4 mr-2' />
                                 Feedback
                               </Link>
@@ -135,7 +138,7 @@ const InterviewsPage = async ({
                     </DropdownMenu>
                     <DialogContent>
                       <DeleteInterviewModal
-                        interviewId={id}
+                        interviewId={String(_id)}
                         jobRole={jobRole}
                       />
                     </DialogContent>
