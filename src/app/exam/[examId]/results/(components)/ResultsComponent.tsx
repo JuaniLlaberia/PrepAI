@@ -82,46 +82,48 @@ const ResultsComponent = async ({ examId }: { examId: string }) => {
                   },
                   i
                 ) => (
-                  <Collapsible key={i}>
-                    <CollapsibleTrigger className='flex justify-between w-full p-3 border-[1px] border-b-[2.5px] border-border rounded-xl bg-background-2 md:hover:opacity-80'>
-                      <p className='font-medium'>Question {i + 1}</p>
-                      {isCorrect ? (
-                        <p className='flex items-center gap-1 text-green-500'>
-                          <HiOutlineCheck strokeWidth={2} />
-                          Correct
-                        </p>
-                      ) : (
-                        <p className='flex items-center gap-1 text-red-500'>
-                          <HiOutlineXMark strokeWidth={2} />
-                          Wrong
-                        </p>
-                      )}
-                    </CollapsibleTrigger>
-                    <CollapsibleContent asChild>
-                      <div className='bg-background-2 tracking-tight p-4 mt-1 lg:mt-2 rounded-xl border border-border'>
-                        <p className='font-medium mb-3'>{question}</p>
-                        <p
-                          className={cn(
-                            'p-2 border rounded-lg',
-                            isCorrect
-                              ? 'bg-green-100  border-green-200'
-                              : 'bg-red-100  border-red-200'
-                          )}
-                        >
-                          <span className='font-medium'>Your answer:</span>{' '}
-                          {options[answer] || 'No answer'}
-                        </p>
-                        <p className='p-2 bg-green-100 border border-green-200 rounded-lg mt-2'>
-                          <span className='font-medium'>Correct answer:</span>{' '}
-                          {options[correctAnswer]}
-                        </p>
-                        <h2 className='text-sm lg:text-base xl:text-lg font-semibold mt-3'>
-                          Explanation
-                        </h2>
-                        <p>{explanation}</p>
-                      </div>
-                    </CollapsibleContent>
-                  </Collapsible>
+                  <li key={i}>
+                    <Collapsible>
+                      <CollapsibleTrigger className='flex justify-between w-full p-3 border-[1px] border-b-[2.5px] border-border rounded-xl bg-background-2 md:hover:opacity-80'>
+                        <p className='font-medium'>Question {i + 1}</p>
+                        {isCorrect ? (
+                          <p className='flex items-center gap-1 text-green-500'>
+                            <HiOutlineCheck strokeWidth={2} />
+                            Correct
+                          </p>
+                        ) : (
+                          <p className='flex items-center gap-1 text-red-500'>
+                            <HiOutlineXMark strokeWidth={2} />
+                            Wrong
+                          </p>
+                        )}
+                      </CollapsibleTrigger>
+                      <CollapsibleContent asChild>
+                        <div className='bg-background-2 tracking-tight p-4 mt-1 lg:mt-2 rounded-xl border border-border'>
+                          <p className='font-medium mb-3'>{question}</p>
+                          <p
+                            className={cn(
+                              'p-2 border rounded-lg',
+                              isCorrect
+                                ? 'bg-green-100  border-green-200'
+                                : 'bg-red-100  border-red-200'
+                            )}
+                          >
+                            <span className='font-medium'>Your answer:</span>{' '}
+                            {options[answer] || 'No answer'}
+                          </p>
+                          <p className='p-2 bg-green-100 border border-green-200 rounded-lg mt-2'>
+                            <span className='font-medium'>Correct answer:</span>{' '}
+                            {options[correctAnswer]}
+                          </p>
+                          <h2 className='text-sm lg:text-base xl:text-lg font-semibold mt-3'>
+                            Explanation
+                          </h2>
+                          <p>{explanation}</p>
+                        </div>
+                      </CollapsibleContent>
+                    </Collapsible>
+                  </li>
                 )
               )}
             </ul>

@@ -91,8 +91,17 @@ const InterviewsPage = async ({
                   </Link>
                   <Dialog>
                     <DropdownMenu>
-                      <DropdownMenuTrigger className='absolute top-4 right-4'>
-                        <Button size='icon' variant='ghost' className='size-8'>
+                      <DropdownMenuTrigger
+                        className='absolute top-4 right-4'
+                        asChild
+                      >
+                        <Button
+                          size='icon'
+                          variant='ghost'
+                          className='size-8'
+                          aria-label='interview options dropdown'
+                        >
+                          <span className='sr-only'>Interview options</span>
                           <HiOutlineEllipsisHorizontal className='size-4' />
                         </Button>
                       </DropdownMenuTrigger>

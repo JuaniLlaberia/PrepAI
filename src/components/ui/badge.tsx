@@ -17,12 +17,12 @@ const getColorClass = (color: ColorsType) => {
   const colorClasses = {
     red: 'bg-red-200 text-red-700 dark:bg-red-900 dark:text-red-200',
     blue: 'bg-blue-200 text-blue-700 dark:bg-blue-900 dark:text-blue-200',
-    green: 'bg-green-200 text-green-700 dark:bg-green-900 dark:text-green-200',
+    green: 'bg-green-200 text-green-800 dark:bg-green-900 dark:text-green-200',
     gray: 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-200',
     purple:
       'bg-purple-200 text-purple-700 dark:bg-purple-700 dark:text-purple-200',
     orange:
-      'bg-orange-200 text-orange-700 dark:bg-orange-700 dark:text-orange-200',
+      'bg-orange-200 text-orange-800 dark:bg-orange-700 dark:text-orange-200',
     yellow:
       'bg-yellow-100 text-yellow-700 dark:bg-yellow-700 dark:text-yellow-200',
   };

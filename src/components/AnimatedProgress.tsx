@@ -22,6 +22,7 @@ const AnimatedProgress = ({
     <Progress
       value={progress}
       className={cn('h-3', className)}
+      aria-label='progress bar'
     />
   );
 };
