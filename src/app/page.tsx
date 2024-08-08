@@ -14,7 +14,7 @@ const Home = () => {
     <>
       <Navbar />
       <header
-        className='relative overflow-hidden flex flex-col items-center justify-center px-6 pt-28 mb-6 md:pt-48 md:mb-16 lg:pt-52 lg:mb-20 w-full'
+        className='relative overflow-hidden flex flex-col items-center justify-center px-6 pt-28 mb-6 md:pt-48 md:mb-16 lg:pt-48 lg:mb-20 w-full'
         id='hero'
       >
         <div className='mb-7 z-10'>
@@ -35,18 +35,21 @@ const Home = () => {
           </h1>
           <h2 className='text-5xl md:text-6xl lg:text-7xl font-medium md:mt-2'>
             with{' '}
-            <span className='bg-gradient-to-b from-blue-500 dark:from-blue-400 from-40% to-blue-700 dark:to-blue-600 bg-clip-text text-transparent'>
+            <span className='bg-gradient-to-b from-violet-500 dark:from-violet-400 from-40% to-violet-700 dark:to-violet-600 bg-clip-text text-transparent'>
               AI-Driven
             </span>{' '}
             Practice
           </h2>
           <p className='mt-6 text-start text-xl lg:text-2xl max-w-[700px] text-muted-foreground/90 dark:text-muted-foreground/80'>
-            Dive into AI fully customizable interviews based on your needs with
-            AI generated challenges.
+            Dive into AI fully customizable paths based on your needs to land
+            your next job with AI generated challenges.
           </p>
         </div>
-        <div className='flex justify-start w-full md:justify-center md:w-auto gap-2 py-12 z-10'>
-          <Link href='/dashboard' className={cn(buttonVariants({}), 'group')}>
+        <div className='flex justify-start w-full md:justify-center md:w-auto gap-2 py-10 z-10'>
+          <Link
+            href='/dashboard/paths'
+            className={cn(buttonVariants({}), 'group')}
+          >
             Start practicing
             <HiMiniArrowLongRight className='size-4 ml-1.5 group-hover:translate-x-1 transition-transform' />
           </Link>
@@ -112,16 +115,14 @@ const Home = () => {
             </h4>
             <div className='flex p-4'>
               <p className='bg-background text-muted-foreground border border-border p-1 px-4 rounded-full uppercase  font-medium text-sm'>
-                Coding challenges
+                Feedback & score
               </p>
             </div>
             <div className='px-5 mt-2'>
-              <h4 className='text-lg font-medium '>
-                Take the Interview One More Step.
-              </h4>
+              <h4 className='text-lg font-medium '>AI as the Interviewer.</h4>
               <p className='text-muted-foreground'>
-                Practice with AI generated techinical interview excercises to be
-                ready for any challenge.
+                Get feedback on how you answer the questions to improve in the
+                future.
               </p>
             </div>
           </li>
