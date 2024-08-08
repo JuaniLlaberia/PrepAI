@@ -61,7 +61,7 @@ const PathsPage = async ({
               }) => (
                 <li
                   key={String(_id)}
-                  className='relative p-4 bg-background rounded-xl border-[1px] border-b-[3.5px] border-[#ebebeb] dark:border-accent dark:bg-background-2'
+                  className='relative p-4 bg-background rounded-xl border-[1px] border-b-[3.5px] border-[#ebebeb] dark:border-accent dark:bg-background-2 hover:border-[#cdcdcd] dark:hover:border-[#474747] transition-colors'
                 >
                   <Link
                     href={`/path/${String(_id)}`}
