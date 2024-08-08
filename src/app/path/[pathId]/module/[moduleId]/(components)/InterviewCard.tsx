@@ -1,54 +1,55 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
-import { LuLoader2 } from 'react-icons/lu';
 import {
   HiOutlineClipboardDocumentList,
-  HiOutlineDocumentText,
+  HiOutlineMicrophone,
   HiOutlineRocketLaunch,
 } from 'react-icons/hi2';
+import { LuLoader2 } from 'react-icons/lu';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 import Card from './Card';
-import { IExamActivity } from '@/db/models/Activity';
-import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
+import { createInterviewForModuleAction } from '@/actions/modules';
+import { IInterviewActivity } from '@/db/models/Activity';
 import { useServerActionMutation } from '@/hooks/server-action-hooks';
-import { createExamForModuleAction } from '@/actions/modules';
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { Button, buttonVariants } from '@/components/ui/button';
 
-type ExamCardType = {
-  examActivity: IExamActivity;
+type InterviewCardType = {
+  interviewActivity: IInterviewActivity;
   pathId: string;
   moduleId: string;
   skipActivity: (activityId: string) => void;
 };
 
-const ExamCard = ({
-  examActivity,
+const InterviewCard = ({
+  interviewActivity,
   pathId,
   moduleId,
   skipActivity,
-}: ExamCardType) => {
+}: InterviewCardType) => {
   const router = useRouter();
+  const { title, completed, type, _id, interviewId, passed } =
+    interviewActivity;
 
-  const { title, completed, type, difficulty, _id, examId, passed, examType } =
-    examActivity;
-
-  const { mutate: createExam, isPending: isPending } = useServerActionMutation(
-    createExamForModuleAction,
+  const { mutate: createInterview, isPending } = useServerActionMutation(
+    createInterviewForModuleAction,
     {
-      mutationKey: ['create-module-exam'],
-      onSuccess: (examId: string) => {
-        router.push(`/exam/${examId}?pathId=${pathId}&moduleId=${moduleId}`);
-        toast.success('Exam was created successfully', {
+      mutationKey: ['create-module-interview'],
+      onSuccess: (interviewId: string) => {
+        router.push(
+          `/interview/${interviewId}?pathId=${pathId}&moduleId=${moduleId}`
+        );
+        toast.success('Interview was created successfully', {
           description: 'Redirecting...',
         });
       },
       onError: err => {
         console.log(err);
         toast.error('Something went wrong.', {
-          description: 'We failed to create the exam. Please try again.',
+          description: 'We failed to create the interview. Please try again.',
         });
       },
     }
@@ -59,9 +60,7 @@ const ExamCard = ({
       title={title}
       type={type}
       completed={completed}
-      comment={`Exam • ${
-        difficulty[0].toUpperCase() + difficulty.slice(1)
-      } difficulty`}
+      comment='Interview • Final assesment'
       menuContent={
         !completed ? (
           <>
@@ -71,29 +70,29 @@ const ExamCard = ({
                 Skip activity
               </DropdownMenuItem>
             ) : null}
-            {examId ? (
+            {interviewId ? (
               <DropdownMenuItem asChild>
                 <Link
-                  href={`/exam/${examId}/results?pathId=${pathId}&moduleId=${moduleId}`}
+                  href={`/interview/${interviewId}/feedback?pathId=${pathId}&moduleId=${moduleId}`}
                 >
                   <HiOutlineClipboardDocumentList className='size-4 mr-1.5' />{' '}
-                  See results
+                  See feedback
                 </Link>
               </DropdownMenuItem>
             ) : null}
           </>
         ) : null
       }
-      icon={<HiOutlineDocumentText className='size-5' strokeWidth={1.5} />}
+      icon={<HiOutlineMicrophone className='size-5' strokeWidth={1.5} />}
       actionButton={
         <>
           {!passed ? (
             <>
-              {completed ? (
+              {!completed && interviewId ? (
                 <Link
                   className={buttonVariants({ size: 'sm' })}
                   href={{
-                    pathname: `/exam/${examId}`,
+                    pathname: `/interview/${interviewId}`,
                     query: {
                       pathId,
                       moduleId,
@@ -101,23 +100,22 @@ const ExamCard = ({
                     },
                   }}
                 >
-                  {completed ? 'Re-take exam' : 'Go to exam'}
+                  {completed ? 'Re-take interview' : 'Go to interview'}
                 </Link>
               ) : (
                 <Button
                   size='sm'
                   onClick={() =>
-                    createExam({
+                    createInterview({
+                      pathId,
                       moduleId,
-                      difficulty,
                       activityId: String(_id),
-                      type: examType,
                     })
                   }
                   disabled={isPending}
                 >
                   {!isPending ? (
-                    <>Generate exam</>
+                    <>Generate interview</>
                   ) : (
                     <>
                       <LuLoader2 className='size-4 mr-1.5 animate-spin' />
@@ -130,9 +128,9 @@ const ExamCard = ({
           ) : (
             <Link
               className={buttonVariants({ size: 'sm', variant: 'secondary' })}
-              href={`/exam/${examId}/results?pathId=${pathId}&moduleId=${moduleId}`}
+              href={`/interview/${interviewId}/results?pathId=${pathId}&moduleId=${moduleId}`}
             >
-              See results
+              See feedback
             </Link>
           )}
         </>
@@ -141,4 +139,4 @@ const ExamCard = ({
   );
 };
 
-export default ExamCard;
+export default InterviewCard;

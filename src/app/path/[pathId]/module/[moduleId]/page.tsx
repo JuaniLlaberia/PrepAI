@@ -2,21 +2,21 @@ import { notFound } from 'next/navigation';
 
 import ActivityCard from './(components)/ActivityCard';
 import PageHeader from '@/components/PageHeader';
-import { getModuleBySlug } from '@/access-data/modules';
+import { getModuleById } from '@/access-data/modules';
 
 const ModulePage = async ({
-  params: { pathId, moduleSlug: slug },
+  params: { pathId, moduleId },
 }: {
-  params: { pathId: string; moduleSlug: string };
+  params: { pathId: string; moduleId: string };
 }) => {
-  const moduleData = await getModuleBySlug({ slug, pathId });
+  const moduleData = await getModuleById({ moduleId });
   if (!moduleData) return notFound();
 
   const { title, description, activities, order } = moduleData;
 
   return (
     <>
-      <PageHeader text='Go to path' link={`/path/${pathId}`} />
+      <PageHeader link={`/path/${pathId}`} />
       <div className='flex flex-col items-center mt-2'>
         <section className='w-full max-w-[800px] overflow-x-hidden pb-3'>
           <div className='bg-background-2 p-4 rounded-xl border-[1px] border-b-[3.5px] border-[#ebebeb] dark:border-accent'>

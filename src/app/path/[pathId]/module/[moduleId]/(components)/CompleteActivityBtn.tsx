@@ -11,13 +11,11 @@ import { skipActivityAction } from '@/actions/modules';
 
 type CompleteBtnType = {
   pathId: string;
-  moduleSlug: string;
   activityId: string;
 };
 
 const CompleteActivityBtn = ({
   pathId,
-  moduleSlug,
   activityId,
 }: CompleteBtnType) => {
   const router = useRouter();
@@ -36,7 +34,7 @@ const CompleteActivityBtn = ({
     <Button
       className='w-full'
       disabled={isPending}
-      onClick={() => completeActivity({ pathId, moduleSlug, activityId })}
+      onClick={() => completeActivity({ pathId, activityId })}
     >
       {isPending ? (
         <LuLoader2 className='size-4 animate-spin' />

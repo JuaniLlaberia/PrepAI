@@ -5,16 +5,16 @@ import CompleteActivityBtn from '../(components)/CompleteActivityBtn';
 import { getModuleRevision } from '@/access-data/modules';
 
 const ModuleRevisionPage = async ({
-  params: { pathId, moduleSlug },
+  params: { pathId, moduleId },
 }: {
-  params: { pathId: string; moduleSlug: string };
+  params: { pathId: string; moduleId: string };
 }) => {
-  const revisionData = await getModuleRevision({ pathId, moduleSlug });
+  const revisionData = await getModuleRevision({ moduleId });
   const { title, description, references, _id, completed } = revisionData;
 
   return (
     <>
-      <PageHeader text='Go to path' link={`/path/${pathId}/${moduleSlug}`} />
+      <PageHeader link={`/path/${pathId}/module/${moduleId}`} />
       <section className='bg-background-2 p-4 rounded-xl border-[1px] border-b-[3.5px] border-[#ebebeb] dark:border-accent'>
         <h1 className='text-2xl font-medium mb-2'>{title}</h1>
         <p className='text-muted-foreground'>{description}</p>
@@ -44,11 +44,7 @@ const ModuleRevisionPage = async ({
         </ul>
         {!completed ? (
           <div className='mt-5'>
-            <CompleteActivityBtn
-              pathId={pathId}
-              moduleSlug={moduleSlug}
-              activityId={String(_id)}
-            />
+            <CompleteActivityBtn pathId={pathId} activityId={String(_id)} />
           </div>
         ) : null}
       </section>

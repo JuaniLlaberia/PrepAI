@@ -5,16 +5,16 @@ import CompleteActivityBtn from '../(components)/CompleteActivityBtn';
 import { getModuleProject } from '@/access-data/modules';
 
 const ModuleProjectPage = async ({
-  params: { pathId, moduleSlug },
+  params: { pathId, moduleId },
 }: {
-  params: { pathId: string; moduleSlug: string };
+  params: { pathId: string; moduleId: string };
 }) => {
-  const projectData = await getModuleProject({ pathId, moduleSlug });
+  const projectData = await getModuleProject({ moduleId });
   const { title, content, steps, references, completed, _id } = projectData;
 
   return (
     <>
-      <PageHeader text='Go to path' link={`/path/${pathId}/${moduleSlug}`} />
+      <PageHeader link={`/path/${pathId}/module/${moduleId}`} />
       <div className='bg-background-2 p-4 rounded-xl border-[1px] border-b-[3.5px] border-[#ebebeb] dark:border-accent'>
         <h1 className='text-2xl font-medium mb-1'>{title}</h1>
         <p className='text-muted-foreground'>{content}</p>
@@ -56,11 +56,7 @@ const ModuleProjectPage = async ({
       </div>
       {!completed ? (
         <div className='mt-5'>
-          <CompleteActivityBtn
-            pathId={pathId}
-            moduleSlug={moduleSlug}
-            activityId={String(_id)}
-          />
+          <CompleteActivityBtn pathId={pathId} activityId={String(_id)} />
         </div>
       ) : null}
     </>
