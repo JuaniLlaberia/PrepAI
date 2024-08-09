@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { HiOutlineChevronLeft } from 'react-icons/hi2';
 
+import Logo from '@/components/Logo';
 import NewPathForm from './(components)/NewPathForm';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -22,7 +23,7 @@ const NewPathPage = () => {
           <HiOutlineChevronLeft className='size-4 mr-1.5 group-hover:-translate-x-1 transition-transform' />
           Go back
         </Link>
-        <h2>MockAI</h2>
+        <Logo />
       </div>
     </section>
   );

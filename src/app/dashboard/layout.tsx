@@ -1,15 +1,11 @@
 import { ReactElement, ReactNode } from 'react';
-import {
-  HiOutlineArrowUpCircle,
-  HiOutlineDocumentText,
-  HiOutlineSquares2X2,
-} from 'react-icons/hi2';
+import { HiOutlineDocumentText, HiOutlineSquares2X2 } from 'react-icons/hi2';
 import { PiTreeStructureLight } from 'react-icons/pi';
 
 import UserMenu from './(components)/UserMenu';
 import DashboardTabs from './(components)/NavbarTabs';
 import SidebarLinks from './(components)/Sidebar';
-import { Button } from '@/components/ui/button';
+import Logo from '@/components/Logo';
 
 export type NavigationLinksType = {
   id: string;
@@ -43,8 +39,8 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
   return (
     <>
       <nav className='flex flex-col justify-between items-center w-full border-b border-border px-4 md:px-16 lg:px-32 xl:px-56 pt-2 lg:hidden'>
-        <div className='flex items-center justify-between w-full'>
-          <h1>MockAI</h1>
+        <div className='flex items-center justify-between w-full py-1 pb-2'>
+          <Logo />
           <UserMenu />
         </div>
         <DashboardTabs links={navigationLinks} />
@@ -52,7 +48,9 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
       <div className='lg:flex lg:flex-row h-screen'>
         <aside className='p-3 w-[300px] border-r border-border hidden lg:flex flex-col h-screen'>
           <div className='flex-1'>
-            <h1 className='text-center mb-6'>MockAI</h1>
+            <div className='flex items-center justify-center mb-12'>
+              <Logo />
+            </div>
             <h2 className='px-1 mb-1 text-xs font-medium text-muted-foreground'>
               Features
             </h2>
