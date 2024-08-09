@@ -15,6 +15,8 @@ const AuthPage = () => {
     retryDelay: 500,
   });
 
+  console.log(isAuth, isPending);
+
   if (isAuth && !isPending) {
     router.push('/dashboard/paths');
   } else {
