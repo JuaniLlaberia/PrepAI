@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 
 import Badge from '@/components/ui/badge';
+import Logo from '@/components/Logo';
 import { Button } from '@/components/ui/button';
 
 const ErrorPage = ({ error }: { error: Error & { digest?: string } }) => {
@@ -10,7 +11,7 @@ const ErrorPage = ({ error }: { error: Error & { digest?: string } }) => {
   return (
     <main className='flex flex-col py-2 px-4 md:px-16 lg:px-32 xl:px-56 h-screen'>
       <header className='flex items-center py-3'>
-        <h1>MockAI</h1>
+        <Logo />
       </header>
       <section className='flex flex-col flex-1 items-center justify-center'>
         <div className='flex flex-col gap-3 items-start'>
@@ -29,7 +30,7 @@ const ErrorPage = ({ error }: { error: Error & { digest?: string } }) => {
       </section>
       <footer className='px-4 pb-4'>
         <p className='text-xs md:text-sm text-center text-muted-foreground'>
-          MockAI &copy; {new Date().getFullYear()} All rights reserved
+          PrepAI &copy; {new Date().getFullYear()} All rights reserved
         </p>
       </footer>
     </main>

@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { HiOutlineChevronLeft } from 'react-icons/hi2';
 import { ReactNode } from 'react';
 
+import Logo from './Logo';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
@@ -41,7 +42,7 @@ const PageHeader = ({
           Go back
         </Link>
       )}
-      <h2>MockAI</h2>
+      <Logo />
     </header>
   );
 };
