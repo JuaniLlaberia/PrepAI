@@ -9,11 +9,7 @@ export const authenticateUser = async () => {
 
   if (!user?.email || !user.id) throw new Error('Failed to authenticate');
 
-  console.log('USER', user);
-
   const userDB = await findUserByKindeId(user.id);
-
-  console.log('userDB',userDB);
 
   if (!userDB) {
     await createUser({

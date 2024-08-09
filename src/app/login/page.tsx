@@ -3,6 +3,7 @@ import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 import { redirect } from 'next/navigation';
 
 import Authentication from '@/components/auth/Authentication';
+import Logo from '@/components/Logo';
 
 const LoginPage = async () => {
   const { isAuthenticated } = getKindeServerSession();
@@ -30,8 +31,11 @@ const LoginPage = async () => {
           </Link>
         </p>
       </div>
-      <Link href='/' className='absolute top-5 left-5'>
-        LOGO
+      <Link
+        href='/'
+        className='absolute top-5 left-5 px-4 md:px-16 lg:px-20 2xl:px-80'
+      >
+        <Logo />
       </Link>
     </section>
   );
