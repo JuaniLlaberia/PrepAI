@@ -13,11 +13,9 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: 'MockAI',
-  description: '',
-  icons: {
-    icon: [],
-  },
+  title: 'PrepAI | Master interviews with AI',
+  description:
+    'Dive into AI fully customizable paths based on your needs to land your next job.',
 };
 
 export default function RootLayout({
