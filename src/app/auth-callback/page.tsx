@@ -16,7 +16,7 @@ const AuthPage = () => {
   });
 
   if (isAuth && !isPending) {
-    router.push('/dashboard');
+    router.push('/dashboard/paths');
   } else {
     router.push('/');
   }
@@ -24,10 +24,7 @@ const AuthPage = () => {
   return (
     <section className='h-full flex flex-col items-center justify-center'>
       <div className='flex items-center gap-3 mb-2'>
-        <LuLoader2
-          className='size-7 animate-spin'
-          strokeWidth={1}
-        />
+        <LuLoader2 className='size-7 animate-spin' strokeWidth={1} />
         <h1 className='font-medium'>Logging in</h1>
       </div>
       <p className='text-sm text-muted-foreground'>

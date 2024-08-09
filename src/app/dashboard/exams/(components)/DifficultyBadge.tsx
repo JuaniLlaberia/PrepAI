@@ -1,14 +1,16 @@
-import { Difficulty } from '@prisma/client';
-
 import Badge, { ColorsType } from '@/components/ui/badge';
 
 const difficultyColors = {
-  easy: 'green',
-  medium: 'yellow',
+  easy: 'yellow',
+  medium: 'orange',
   hard: 'red',
 };
 
-const DifficultyBadge = ({ difficulty }: { difficulty: Difficulty }) => {
+const DifficultyBadge = ({
+  difficulty,
+}: {
+  difficulty: 'easy' | 'medium' | 'hard';
+}) => {
   return (
     <Badge
       text={`${difficulty}`}

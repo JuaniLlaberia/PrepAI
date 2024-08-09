@@ -1,10 +1,11 @@
 import Link from 'next/link';
 import { HiChevronRight } from 'react-icons/hi2';
 
-import Marquee from './ui/marquee';
-import ReviewCard from './ui/review-card';
 import { cn } from '@/lib/utils';
-import { buttonVariants } from './ui/button';
+import Image from 'next/image';
+import Marquee from '../ui/marquee';
+import ReviewCard from '../ui/review-card';
+import { buttonVariants } from '../ui/button';
 
 const reviews = [
   {
@@ -76,18 +77,20 @@ const CallToAction = () => {
         </div>
         <div className='absolute inset-x-0 bottom-0 h-full bg-gradient-to-b from-transparent to-white to-70% dark:to-black'></div>
         <div className='absolute flex flex-col items-center justify-center gap-2 px-8'>
-          <div className='size-20 bg-primary rounded-2xl mb-3'></div>
+          <div className='relative size-16 mb-3'>
+            <Image alt='logo' src='/logo-icon.png' fill />
+          </div>
           <h3 className='text-3xl font-semibold text-center'>
-            Start your Mock Interview today.
+            Start your preparation today.
           </h3>
           <p className='text-muted-foreground'>
-            Get started with MockAI for free.
+            Get started with PrepAI for free.
           </p>
           <Link
-            href='/dashboard'
+            href='/dashboard/paths'
             className={cn(
-              buttonVariants({ size: 'lg' }),
-              'rounded-full mt-3 group bg-background hover:bg-background-2 border border-border text-primary shadow-none'
+              buttonVariants({ size: 'lg', variant: 'secondary' }),
+              'text-black group'
             )}
           >
             Get started now{' '}

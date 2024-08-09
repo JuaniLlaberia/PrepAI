@@ -12,7 +12,6 @@ const InterviewPage = async ({
   return (
     <>
       <PageHeader
-        text={moduleId ? 'Go to module' : 'Go to interviews'}
         link={
           moduleId
             ? `/path/${pathId}/module/${moduleId}`

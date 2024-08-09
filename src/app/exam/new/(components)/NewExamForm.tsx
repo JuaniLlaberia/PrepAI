@@ -32,9 +32,9 @@ const NewExamForm = () => {
     createExamAction,
     {
       mutationKey: ['create-exam'],
-      onSuccess: interviewId => {
+      onSuccess: (examId: string) => {
         toast.success('Mock exam created successfully');
-        router.push(`/exam/${interviewId}`);
+        router.push(`/exam/${examId}`);
       },
       onError: () => toast.error('Failed to create mock exam'),
     }
@@ -67,10 +67,7 @@ const NewExamForm = () => {
           />
         </InputWrapper>
         <div className='flex justify-end mt-3 md:mt-5'>
-          <Button
-            disabled={isPending}
-            className='w-full md:w-auto px-6'
-          >
+          <Button disabled={isPending} className='w-full md:w-auto px-6'>
             Next
           </Button>
         </div>
@@ -102,10 +99,43 @@ const NewExamForm = () => {
           </InputWrapper>
         </div>
         <div className='mt-5 md:mt-7 flex flex-col gap-2 md:flex-row-reverse items-end'>
+          <Button disabled={isPending} className='w-full md:w-auto px-6'>
+            Next
+          </Button>
           <Button
-            disabled={isPending}
+            onClick={e => prevStep(e)}
+            variant='ghost'
             className='w-full md:w-auto px-6'
           >
+            <HiMiniArrowLongLeft className='size-4 mr-1.5' />
+            Go back
+          </Button>
+        </div>
+      </motion.div>,
+      <motion.div
+        initial={{ x: '50%', opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        exit={{ x: '-50%', opacity: 0 }}
+        transition={{ duration: 0.3, ease: 'easeInOut' }}
+        key='type-step'
+      >
+        <p className='text-3xl font-medium tracking-tight mb-3 text-center'>
+          What type of exam you want to practice?
+        </p>
+        <div className='text-center lg:pt-4 lg:text-start'>
+          <InputWrapper inputId='type' error={errors.type?.message as string}>
+            <Radio
+              options={[
+                { label: 'Multiple Choice', value: 'multiple-choice' },
+                { label: 'True or False', value: 'true-false' },
+              ]}
+              fieldName='type'
+              register={register}
+            />
+          </InputWrapper>
+        </div>
+        <div className='mt-5 md:mt-7 flex flex-col gap-2 md:flex-row-reverse items-end'>
+          <Button disabled={isPending} className='w-full md:w-auto px-6'>
             {isPending ? (
               <LuLoader2
                 strokeWidth={2}
@@ -136,6 +166,7 @@ const NewExamForm = () => {
               createExam({
                 subject: data.subject,
                 difficulty: data.difficulty,
+                type: data.type,
               });
             })
           : async e => {
@@ -149,7 +180,7 @@ const NewExamForm = () => {
               nextStep();
             }
       }
-      className='flex flex-col gap-2 overflow-hidden px-1'
+      className='flex flex-col gap-2 overflow-hidden px-1 pb-4'
     >
       {crrStep}
     </form>

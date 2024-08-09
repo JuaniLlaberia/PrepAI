@@ -16,7 +16,7 @@ const LoginPage = async () => {
         <div className='mb-6 text-xl font-bold tracking-tight'>
           <h1>Welcome back!</h1>
           <h2 className='text-muted-foreground/60'>
-            Log in to your MockAI account
+            Log in to your PrepAI account
           </h2>
         </div>
         <Authentication />
@@ -30,10 +30,7 @@ const LoginPage = async () => {
           </Link>
         </p>
       </div>
-      <Link
-        href='/'
-        className='absolute top-5 left-5'
-      >
+      <Link href='/' className='absolute top-5 left-5'>
         LOGO
       </Link>
     </section>

@@ -32,7 +32,7 @@ const CameraComponent = () => {
               <>
                 <Avatar className='size-16'>
                   <AvatarFallback>{user?.family_name?.[0]}</AvatarFallback>
-                  <AvatarImage src={user?.picture!} />
+                  <AvatarImage src={user?.picture!} alt='User profile photo' />
                 </Avatar>
                 <p className='text-sm text-muted-foreground'>
                   {user?.given_name} {user?.family_name}

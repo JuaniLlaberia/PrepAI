@@ -1,12 +1,7 @@
 import { notFound } from 'next/navigation';
-import {
-  HiOutlineCheck,
-  HiOutlineQuestionMarkCircle,
-  HiOutlineXMark,
-} from 'react-icons/hi2';
+import { HiOutlineCheck, HiOutlineXMark } from 'react-icons/hi2';
 
 import AnimatedProgress from '@/components/AnimatedProgress';
-import Attempts from '@/components/Attempts';
 import ConfettiComponent from '@/components/Confetti';
 import { formatTimer } from '@/lib/helpers';
 import {
@@ -14,20 +9,13 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
-import { getExamAttempts, getExamResults } from '@/access-data/examAttempts';
+import { getExamResults } from '@/access-data/examAttempts';
+import { Separator } from '@/components/ui/separator';
+import { cn } from '@/lib/utils';
 
-const ResultsComponent = async ({
-  examId,
-  attemptId,
-}: {
-  examId: string;
-  attemptId: string;
-}) => {
-  const attempts = await getExamAttempts({ examId: examId });
-
+const ResultsComponent = async ({ examId }: { examId: string }) => {
   const results = await getExamResults({
-    examId: examId,
-    attemptId: attemptId ?? attempts[0]._id,
+    examId,
   });
 
   if (!results) return notFound();
@@ -43,7 +31,7 @@ const ResultsComponent = async ({
             <div>
               <h1 className='text-2xl font-medium'>Mock exam results</h1>
               {passed ? (
-                <h2 className='text-xl font-medium text-green-500'>
+                <h2 className='text-2xl font-medium text-green-500'>
                   Congratulations, you passed.
                 </h2>
               ) : (
@@ -52,39 +40,34 @@ const ResultsComponent = async ({
                 </h2>
               )}
             </div>
-            <Attempts
-              attempts={
-                JSON.parse(JSON.stringify(attempts)) as { _id: string }[]
-              }
-              crrAttempt={attemptId ?? String(attempts[0].id)}
-            />
           </div>
 
           <div className='mt-6'>
             <div className='flex items-center justify-between mb-1'>
               <h2 className='text-sm lg:text-base xl:text-lg font-semibold'>
-                Your time
-              </h2>
-              <p className='text-sm text-muted-foreground md:text-base'>
-                {formatTimer(time)}
-              </p>
-            </div>
-          </div>
-          <div className='mt-3'>
-            <div className='flex items-center justify-between mb-1'>
-              <h2 className='text-sm lg:text-base xl:text-lg font-semibold'>
-                Your score
+                Your max score
               </h2>
               <p className='text-sm text-muted-foreground'>
-                {score}/{questions.length}
+                {score || 0}/{questions.length}
               </p>
             </div>
             <AnimatedProgress value={(score / questions.length) * 100} />
           </div>
+          <Separator className='my-6' />
+          <div className='mt-2'>
+            <div className='flex items-center justify-between mb-1'>
+              <h2 className='text-sm lg:text-base xl:text-lg font-semibold'>
+                Attempt time
+              </h2>
+              <p className='text-sm text-muted-foreground md:text-base'>
+                {formatTimer(time || 0)}
+              </p>
+            </div>
+          </div>
 
           <div className='mt-6'>
             <h2 className='text-sm lg:text-base xl:text-lg font-semibold mb-1'>
-              Your results
+              Attempt results
             </h2>
             <ul className='flex flex-col gap-1.5'>
               {questions.map(
@@ -99,39 +82,48 @@ const ResultsComponent = async ({
                   },
                   i
                 ) => (
-                  <Collapsible key={i}>
-                    <CollapsibleTrigger className='flex justify-between w-full p-2 border border-border rounded-lg bg-background-2'>
-                      <p className='font-medium'>Question {i + 1}</p>
-                      {isCorrect ? (
-                        <p className='flex items-center gap-1 text-green-500'>
-                          <HiOutlineCheck strokeWidth={2} />
-                          Correct
-                        </p>
-                      ) : (
-                        <p className='flex items-center gap-1 text-red-500'>
-                          <HiOutlineXMark strokeWidth={2} />
-                          Wrong
-                        </p>
-                      )}
-                    </CollapsibleTrigger>
-                    <CollapsibleContent asChild>
-                      <div className='bg-background-2 tracking-tight shadow p-4 mt-1 lg:mt-2 rounded-lg dark:border dark:border-border'>
-                        <p className='font-medium mb-2'>{question}</p>
-                        <p>
-                          <span className='font-medium'>Your answer:</span> "
-                          {options[answer]}"
-                        </p>
-                        <p>
-                          <span className='font-medium'>Correct answer:</span> "
-                          {options[correctAnswer]}"
-                        </p>
-                        <h2 className='text-sm lg:text-base xl:text-lg font-semibold mt-3'>
-                          Explanation
-                        </h2>
-                        <p>{explanation}</p>
-                      </div>
-                    </CollapsibleContent>
-                  </Collapsible>
+                  <li key={i}>
+                    <Collapsible>
+                      <CollapsibleTrigger className='flex justify-between w-full p-3 border-[1px] border-b-[2.5px] border-border rounded-xl bg-background-2 md:hover:opacity-80'>
+                        <p className='font-medium'>Question {i + 1}</p>
+                        {isCorrect ? (
+                          <p className='flex items-center gap-1 text-green-500'>
+                            <HiOutlineCheck strokeWidth={2} />
+                            Correct
+                          </p>
+                        ) : (
+                          <p className='flex items-center gap-1 text-red-500'>
+                            <HiOutlineXMark strokeWidth={2} />
+                            Wrong
+                          </p>
+                        )}
+                      </CollapsibleTrigger>
+                      <CollapsibleContent asChild>
+                        <div className='bg-background-2 tracking-tight p-4 mt-1 lg:mt-2 rounded-xl border border-border'>
+                          <p className='font-medium mb-3'>{question}</p>
+                          <p
+                            className={cn(
+                              'p-2 border rounded-lg',
+                              isCorrect
+                                ? 'bg-green-100  border-green-200'
+                                : 'bg-red-100  border-red-200'
+                            )}
+                          >
+                            <span className='font-medium'>Your answer:</span>{' '}
+                            {options[answer] || 'No answer'}
+                          </p>
+                          <p className='p-2 bg-green-100 border border-green-200 rounded-lg mt-2'>
+                            <span className='font-medium'>Correct answer:</span>{' '}
+                            {options[correctAnswer]}
+                          </p>
+                          <h2 className='text-sm lg:text-base xl:text-lg font-semibold mt-3'>
+                            Explanation
+                          </h2>
+                          <p>{explanation}</p>
+                        </div>
+                      </CollapsibleContent>
+                    </Collapsible>
+                  </li>
                 )
               )}
             </ul>

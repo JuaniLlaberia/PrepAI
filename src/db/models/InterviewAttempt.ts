@@ -4,6 +4,8 @@ export interface IInterviewAttempt {
   speechAnalysis?: string;
   interviewId: ObjectId;
   userId: ObjectId;
+  score: number;
+  passed: boolean;
   answers: {
     _id: ObjectId;
     question: string;
@@ -41,10 +43,13 @@ const interviewAttemptSchema = new mongoose.Schema<IInterviewAttemptDocument>(
         score: { type: Number, required: true },
       },
     ],
+    score: Number,
+    passed: Boolean,
   },
   { timestamps: true }
 );
 
+interviewAttemptSchema.index({ interviewId: 1 });
 interviewAttemptSchema.index({ userId: 1, interviewId: 1 });
 
 const InterviewAttempt: Model<IInterviewAttemptDocument> =

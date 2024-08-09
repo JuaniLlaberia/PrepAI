@@ -4,7 +4,6 @@ import {
   HiOutlineTrash,
   HiOutlinePlay,
   HiOutlineClipboardDocumentList,
-  HiMiniArrowLongRight,
   HiOutlinePlus,
 } from 'react-icons/hi2';
 import { PiArrowClockwiseLight } from 'react-icons/pi';
@@ -12,6 +11,7 @@ import { PiArrowClockwiseLight } from 'react-icons/pi';
 import DeleteInterviewModal from '../(components)/DeleteInterviewModal';
 import Badge from '@/components/ui/badge';
 import InterviewsFilters from '../(components)/InterviewsFilter';
+import EmptyDashboardMsg from '@/components/EmptyDashboardMsg';
 import PinInterviewBtn from '../(components)/PinInterviewBtn';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
@@ -22,8 +22,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { cn } from '@/lib/utils';
 import { getUserInterviews } from '@/access-data/interview';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'PrepAI | Interviews',
+};
 
 const InterviewsPage = async ({
   searchParams,
@@ -46,7 +50,8 @@ const InterviewsPage = async ({
           filter={searchParams.filter}
         />
         <Link className={buttonVariants({ size: 'sm' })} href='/interview/new'>
-          <HiOutlinePlus className='size-4 mr-2' /> New interview
+          <HiOutlinePlus className='size-4 mr-2' strokeWidth={2.5} /> New
+          interview
         </Link>
       </div>
       <div>
@@ -56,53 +61,62 @@ const InterviewsPage = async ({
         <ul className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2.5 pb-4'>
           {interviews.length > 0 ? (
             interviews.map(
-              ({ id, jobExperience, jobRole, createdAt, taken, pinned }) => (
+              ({
+                _id,
+                jobExperience,
+                jobRole,
+                createdAt,
+                taken,
+                pinned,
+                passed,
+              }) => (
                 <li
-                  key={id}
-                  className='relative bg-background dark:bg-background-2 p-4 border border-border rounded-lg shadow'
+                  key={String(_id)}
+                  className='relative p-4 bg-background rounded-xl border-[1px] border-b-[3.5px] border-[#ebebeb] dark:border-accent dark:bg-background-2 hover:border-[#cdcdcd] dark:hover:border-[#474747] transition-colors'
                 >
                   <Link
                     href={
-                      taken ? `/interview/${id}/feedback` : `/interview/${id}`
+                      taken ? `/interview/${_id}/feedback` : `/interview/${_id}`
                     }
+                    className='flex flex-col gap-4'
                   >
-                    <h3 className='text-base lg:text-lg font-medium line-clamp-2 mb-2'>
-                      {jobRole}
-                    </h3>
                     <div className='flex items-center gap-2'>
                       <Badge text={`${jobExperience} level`} color='purple' />
                       <Badge
-                        text={taken ? 'Taken' : 'New'}
-                        color={taken ? 'gray' : 'orange'}
+                        text={passed ? 'Passed' : taken ? 'Taken' : 'New'}
+                        color={passed ? 'green' : taken ? 'gray' : 'orange'}
                       />
                       {pinned ? <Badge text='Pinned' color='blue' /> : null}
                     </div>
-                    <p className='text-muted-foreground text-sm text-end mt-3'>
+                    <h3 className='text-xl font-medium mb-2'>{jobRole}</h3>
+                    <p className='text-muted-foreground text-sm text-start mt-3'>
                       {createdAt.toDateString()}
                     </p>
-                    <div className='flex items-center mt-4'>
-                      <Button
-                        variant='outline'
-                        size='sm'
-                        className='w-full group'
-                      >
-                        {taken ? 'See feedback' : 'Start interview'}
-                        <HiMiniArrowLongRight className='size-4 ml-2 group-hover:translate-x-1 transition-transform' />
-                      </Button>
-                    </div>
                   </Link>
                   <Dialog>
                     <DropdownMenu>
-                      <DropdownMenuTrigger className='absolute top-4 right-4'>
-                        <Button size='icon' variant='ghost' className='size-8'>
+                      <DropdownMenuTrigger
+                        className='absolute top-4 right-4'
+                        asChild
+                      >
+                        <Button
+                          size='icon'
+                          variant='ghost'
+                          className='size-8'
+                          aria-label='interview options dropdown'
+                        >
+                          <span className='sr-only'>Interview options</span>
                           <HiOutlineEllipsisHorizontal className='size-4' />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
-                        <PinInterviewBtn interviewId={id} isPinned={pinned} />
+                        <PinInterviewBtn
+                          interviewId={String(_id)}
+                          isPinned={pinned}
+                        />
                         {!taken ? (
                           <DropdownMenuItem asChild>
-                            <Link href={`/interview/${id}`}>
+                            <Link href={`/interview/${_id}`}>
                               <HiOutlinePlay className='size-4 mr-2' />
                               Start now
                             </Link>
@@ -110,13 +124,13 @@ const InterviewsPage = async ({
                         ) : (
                           <>
                             <DropdownMenuItem asChild>
-                              <Link href={`/interview/${id}`}>
+                              <Link href={`/interview/${_id}`}>
                                 <PiArrowClockwiseLight className='size-4 mr-2' />
                                 Re-take
                               </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem asChild>
-                              <Link href={`/interview/${id}/feedback`}>
+                              <Link href={`/interview/${_id}/feedback`}>
                                 <HiOutlineClipboardDocumentList className='size-4 mr-2' />
                                 Feedback
                               </Link>
@@ -137,7 +151,7 @@ const InterviewsPage = async ({
                     </DropdownMenu>
                     <DialogContent>
                       <DeleteInterviewModal
-                        interviewId={id}
+                        interviewId={String(_id)}
                         jobRole={jobRole}
                       />
                     </DialogContent>
@@ -146,16 +160,11 @@ const InterviewsPage = async ({
               )
             )
           ) : (
-            <div className='flex flex-col col-span-full gap-2 justify-center items-center py-6 text-muted-foreground'>
-              <p>No interviews found</p>
-              <Link
-                className={cn(buttonVariants({ variant: 'default' }), 'group')}
-                href='/interview/new'
-              >
-                New interview
-                <HiMiniArrowLongRight className='size-4 ml-2 group-hover:translate-x-1 transition-transform' />
-              </Link>
-            </div>
+            <EmptyDashboardMsg
+              type='interview'
+              crrLink='/dashboard/interviews'
+              newPageLink='/interview/new'
+            />
           )}
         </ul>
       </div>

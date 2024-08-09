@@ -14,7 +14,7 @@ const SignupPage = async () => {
     <section className='h-full flex flex-col items-center justify-center'>
       <div className='w-full max-w-[400px] px-8'>
         <div className='mb-6 text-xl font-bold'>
-          <h1>Create your MockAI account</h1>
+          <h1>Create your PrepAI account</h1>
           <h2 className='text-muted-foreground/60'>Smash that interview</h2>
         </div>
         <Authentication />

@@ -1,6 +1,7 @@
 'use server';
 
 import { z } from 'zod';
+import { revalidatePath } from 'next/cache';
 
 import { authenticatedAction } from '@/lib/safe-actions';
 import {
@@ -13,8 +14,7 @@ export const createExamAttemptAction = authenticatedAction
   .createServerAction()
   .input(z.object({ examId: z.string() }))
   .handler(async ({ input: { examId }, ctx: { userId } }) => {
-    const { id } = await createExamAttempt({ examId, userId });
-    return id;
+    await createExamAttempt({ examId, userId });
   });
 
 export const updateExamAttemptAction = authenticatedAction
@@ -22,7 +22,6 @@ export const updateExamAttemptAction = authenticatedAction
   .input(
     z.object({
       examId: z.string(),
-      attemptId: z.string(),
       data: z.object({
         time: z.number(),
         answers: z.array(
@@ -36,28 +35,21 @@ export const updateExamAttemptAction = authenticatedAction
       moduleId: z.optional(z.string()),
     })
   )
-  .handler(
-    async ({
-      input: { examId, attemptId, data, moduleId },
-      ctx: { userId },
-    }) => {
-      const score = data.answers?.filter(answer => answer.isCorrect).length!;
-      const passed = score > data.answers?.length! - score;
+  .handler(async ({ input: { examId, data, moduleId } }) => {
+    const score = data.answers?.filter(answer => answer.isCorrect).length!;
+    const passed = score > data.answers?.length! - score;
 
-      if (!moduleId)
-        await updateExamAttempt({
-          examId,
-          attemptId,
-          examAttempt: { userId, passed, score, ...data },
-        });
-      else
-        await updateExamAttemptFromModule({
-          examId,
-          attemptId,
-          examAttempt: { userId, passed, score, ...data },
-          moduleId,
-        });
+    if (!moduleId)
+      await updateExamAttempt({
+        examId,
+        examAttempt: { passed, score, ...data },
+      });
+    else
+      await updateExamAttemptFromModule({
+        examId,
+        examAttempt: { passed, score, ...data },
+        moduleId,
+      });
 
-      return passed;
-    }
-  );
+    revalidatePath(`/exam/${examId}/results`);
+  });

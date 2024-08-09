@@ -12,7 +12,6 @@ const ExamPage = ({
   return (
     <>
       <PageHeader
-        text={moduleId ? 'Go to modules' : 'Go to exams'}
         link={
           moduleId ? `/path/${pathId}/module/${moduleId}` : '/dashboard/exams'
         }
@@ -22,17 +21,13 @@ const ExamPage = ({
           moduleId ? "Let's start the assigment" : "Let's start your mock exam"
         }
         options={[
-          'Answer 10-15 multiple choice questions',
+          'Answer 10-15 questions',
           'Get your results feedback',
           'Score 60% or more to pass',
         ]}
         infoMessage="Once the mock exam has started, it can't be paused."
         startBtn={
-          <StartExamBtn
-            examId={examId}
-            moduleId={moduleId}
-            pathId={pathId}
-          />
+          <StartExamBtn examId={examId} moduleId={moduleId} pathId={pathId} />
         }
       />
     </>

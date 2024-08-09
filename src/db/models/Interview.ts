@@ -6,8 +6,10 @@ export interface IInterview {
   jobExperience: 'intership' | 'junior' | 'ssr' | 'senior' | 'lead';
   taken: boolean;
   pinned: boolean;
+  passed: boolean;
   userId: ObjectId;
   moduleId: ObjectId;
+  activityId: ObjectId;
   pathId: ObjectId;
   questions: { _id: string; question: string; hint: string }[];
 }
@@ -39,10 +41,14 @@ const interviewSchema = new mongoose.Schema<IInterviewDocument>(
     pinned: {
       type: Boolean,
     },
+    passed: {
+      type: Boolean,
+    },
     //userId for interviews created by an user
     userId: { type: mongoose.Schema.ObjectId, ref: 'User' },
     //moduleId & pathId for interviews created inside a module
     moduleId: { type: mongoose.Schema.ObjectId, ref: 'Module' },
+    activityId: { type: mongoose.Schema.ObjectId, ref: 'Module.activities' },
     pathId: {
       type: mongoose.Schema.ObjectId,
       ref: 'Path',

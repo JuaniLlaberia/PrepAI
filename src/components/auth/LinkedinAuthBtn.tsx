@@ -10,9 +10,9 @@ const LinkedinAuthBtn = ({ className }: { className?: string }) => {
   return (
     <RegisterLink
       className={cn(
-        buttonVariants({}),
-        'bg-white text-black border border-border hover:bg-[#f3f3f3] dark:bg-background-2 dark:text-primary dark:hover:bg-[#2b2b2b59] font-medium w-full',
-        className
+        buttonVariants({ variant: 'secondary' }),
+        className,
+        'text-black'
       )}
       authUrlParams={{
         connection_id: process.env

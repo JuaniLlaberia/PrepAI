@@ -3,11 +3,13 @@ import { model } from '@/gemini/index';
 type GeminiExamTypes = {
   subject: string;
   difficulty: 'easy' | 'medium' | 'hard';
+  type: 'multiple-choice' | 'true-false';
 };
 
 export const generateExamWithGemini = async ({
   subject,
   difficulty,
+  type,
 }: GeminiExamTypes) => {
   const promptSchema = `
   {
@@ -17,13 +19,20 @@ export const generateExamWithGemini = async ({
   }
   `;
 
-  const prompt = `Generate an multiple choice exam about ${subject}
+  const examType =
+    type === 'multiple-choice' ? 'multiple choice' : 'true or false';
+
+  const examDescription =
+    type === 'multiple-choice'
+      ? 'each with the question, 4 options, the correct option (being the option index) and an explanation of the correct answer in 3-4 lines'
+      : 'each with the question, 2 options (true or false), the correct option (being the option index) and an explanation of the correct answer in 3-4 lines';
+
+  const prompt = `Generate a ${examType} exam about ${subject}
    with a ${difficulty} difficulty level. Provide ${
     difficulty === 'easy' || difficulty === 'medium' ? '10' : '15'
-  } related questions
-   (each with the question, 4 options, the correct option (being the option index) and an explanation of the correct answer in 3-4 lines). Provide
+  } related questions (${examDescription}). Provide
    it in JSON format with this schema: ${promptSchema}.
-   Remember to scape any special characters used in Javascript, such as "\n"
+   In case it is a coding topic, do not include code snippets.
    `;
 
   const result = await model.generateContent(prompt);
@@ -122,35 +131,96 @@ export const generateModulesWithGemini = async ({
   jobExperience,
   topics,
 }: GeminiModulesTypes) => {
-  const promptSchema = `
-    {modules: [
-      {
-        title: 'string' (Module title),
-        description: 'string' (What this module includes),
-        subject: 'string' (Module topic),
-        topics: [
-          {
-            label: 'string' (topic name),
-            link: 'string' (reference/url to this topic in order for the user to learn/practice it, make sure that the urls actually exist. Provide at least 5 references for each)
-          }
-        ]
-      }
-    ]}
-  `;
+  const prompt = `
+    Generate a JSON format of a list of modules (at least 7 and no more than 10 modules) for a ${jobExperience} level ${jobPosition} preparing for interviews. The interview topics include ${topics}. The modules should be ordered by difficulty (first the easier topics and then the harder ones), with each module having the following schema:
+      {modules: [
+        {
+            title: 'string' (Module title),
+            description: 'string' (What this module includes),
+            subject: 'string' (Module topic),
+            order: 'number',
+            activities: [
+                {
+                  title: {subject} references,
+                  type: 'revision',
+                  completed: false,
+                  description: 'string' (module description of 100 words),
+                  references: {
+                      label: 'string' (reference label),
+                      link: 'string' (link to reference related to this module)
+                    }[] (generate 5 references)
+                },
+                {
+                    title: {subject} introduction exam,
+                    type: 'exam',
+                    examType: 'multiple-choice',
+                    difficulty: 'string' (easy difficulty),
+                    examId: undefined,
+                    taken: 'boolean' (false),
+                    passed: 'boolean' (false),
+                    completed: false
+                },
+                {
+                    title: True or False Challenge,
+                    type: 'exam',
+                    examType: 'true-false',
+                    difficulty: 'string' (medium difficulty),
+                    examId: undefined,
+                    taken: 'boolean' (false),
+                    passed: 'boolean' (false),
+                    completed: false
+                },
+                {
+                    title: Practice {subject} exam,
+                    type: 'exam',
+                    examType: 'multiple-choice',
+                    difficulty: 'string' (medium difficulty),
+                    examId: undefined,
+                    taken: 'boolean' (false),
+                    passed: 'boolean' (false),
+                    completed: false
+                },
+                {
+                    title: 'string' (activity title),
+                    type: 'project',
+                    completed: 'boolean' (false),
+                    content: 'string' (Project presentation and what needs to be done. Also provide some real world project ideas),
+                    steps: 'string'[] (Steps that the user should follow to complete this project),
+                    references: {
+                      label: 'string' (reference label),
+                      link: 'string' (link to reference that will help the user with the task)
+                    }[] (Between 2 and 5 references)
+                },
+                {
+                    title: 'string' (activity title),
+                    type: 'exam',
+                    examType: 'multiple-choice',
+                    difficulty: 'string' (hard difficulty),
+                    examId: undefined,
+                    taken: 'boolean' (false),
+                    passed: 'boolean' (false),
+                    completed: false
+                },
+                {
+                    title: {subject} final interview,
+                    type: 'interview',
+                    interviewId: undefined,
+                    taken: 'boolean' (false),
+                    passed: 'boolean' (false),
+                    completed: false
+                }
+            ] (Generate the 7 activities for each module, as specified in the schema)
+        }
 
-  const prompt = `Generate a list of modules (min 5, max 10) to get an user prepare for it's interviews for a ${jobExperience}
-   level job position as a ${jobPosition} with the next topics: ${topics}. Each module should have this schema and data: ${promptSchema} returned in JSON format.`;
+      ]}. The difficulty levels should be ordered as follows: 'easy', 'medium', 'hard'. Sort the modules in ascending order of difficulty, add and order field to sort them properly.
+  `;
 
   const result = await model.generateContent(prompt);
   const response = await result.response;
   const jsonData = response.text();
 
-  const modules: {
-    title: string;
-    description: string;
-    subject: string;
-    topics: { label: string; link: string }[];
-  }[] = JSON.parse(jsonData).modules;
+  //Check parsin type
+  const modules: {}[] = JSON.parse(jsonData).modules;
 
   return modules;
 };

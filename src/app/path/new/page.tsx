@@ -1,8 +1,10 @@
 import Link from 'next/link';
-import { HiArrowLeft } from 'react-icons/hi2';
+import { HiOutlineChevronLeft } from 'react-icons/hi2';
 
+import Logo from '@/components/Logo';
 import NewPathForm from './(components)/NewPathForm';
 import { buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 const NewPathPage = () => {
   return (
@@ -12,12 +14,16 @@ const NewPathPage = () => {
       </div>
       <div className='flex items-center justify-between w-full absolute top-4 left-0 px-4 md:px-16 lg:px-32 xl:px-56'>
         <Link
-          className={buttonVariants({ variant: 'ghost', size: 'sm' })}
+          className={cn(
+            buttonVariants({ variant: 'ghost', size: 'sm' }),
+            'group'
+          )}
           href='/dashboard/paths'
         >
-          <HiArrowLeft className='size-4 mr-1.5' /> Go back
+          <HiOutlineChevronLeft className='size-4 mr-1.5 group-hover:-translate-x-1 transition-transform' />
+          Go back
         </Link>
-        <h2>MockAI</h2>
+        <Logo />
       </div>
     </section>
   );

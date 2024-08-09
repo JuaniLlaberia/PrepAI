@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import {
-  HiMiniArrowLongRight,
   HiOutlineClipboardDocumentList,
   HiOutlineEllipsisHorizontal,
   HiOutlinePlay,
@@ -10,7 +9,9 @@ import {
 import { PiArrowClockwiseLight } from 'react-icons/pi';
 
 import DifficultyBadge from './(components)/DifficultyBadge';
+import EmptyDashboardMsg from '@/components/EmptyDashboardMsg';
 import Badge from '@/components/ui/badge';
+import PinExamBtn from './(components)/PinExamBtn';
 import DeleteExamModal from './(components)/DeleteExamModal';
 import ExamFilters from './(components)/ExamsFilters';
 import { Button, buttonVariants } from '@/components/ui/button';
@@ -22,9 +23,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { cn } from '@/lib/utils';
-import PinExamBtn from './(components)/PinExamBtn';
 import { getUserExams } from '@/access-data/exams';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'PrepAI | Exams',
+};
 
 const ExamsPage = async ({
   searchParams,
@@ -46,11 +50,9 @@ const ExamsPage = async ({
           sortBy={searchParams.sortBy}
           filter={searchParams.filter}
         />
-        <Link
-          className={buttonVariants({ size: 'sm' })}
-          href='/exam/new'
-        >
-          <HiOutlinePlus className='size-4 mr-2' /> New mock exam
+        <Link className={buttonVariants({ size: 'sm' })} href='/exam/new'>
+          <HiOutlinePlus className='size-4 mr-2' strokeWidth={2.5} /> New mock
+          exam
         </Link>
       </div>
       <div>
@@ -61,68 +63,56 @@ const ExamsPage = async ({
           {exams.length > 0 ? (
             exams.map(
               ({
-                id,
+                _id,
                 subject,
                 difficulty,
                 createdAt,
                 taken,
-                passed,
                 pinned,
+                passed,
               }) => (
                 <li
-                  key={id}
-                  className='relative bg-background dark:bg-background-2 p-4 border border-border rounded-lg shadow'
+                  key={String(_id)}
+                  className='relative p-4 bg-background rounded-xl border-[1px] border-b-[3.5px] border-[#ebebeb] dark:border-accent dark:bg-background-2 hover:border-[#cdcdcd] dark:hover:border-[#474747] transition-colors'
                 >
-                  <Link href={taken ? `/exam/${id}/results` : `/exam/${id}`}>
-                    <h3 className='text-base lg:text-lg font-medium line-clamp-2 mb-2'>
-                      {subject}
-                    </h3>
+                  <Link
+                    href={taken ? `/exam/${_id}/results` : `/exam/${_id}`}
+                    className='flex flex-col gap-4'
+                  >
                     <div className='flex items-center gap-2'>
                       <DifficultyBadge difficulty={difficulty} />
                       <Badge
-                        text={taken ? 'Taken' : 'New'}
-                        color={taken ? 'gray' : 'orange'}
+                        text={passed ? 'Passed' : taken ? 'Taken' : 'New'}
+                        color={passed ? 'green' : taken ? 'gray' : 'orange'}
                       />
-                      {pinned ? (
-                        <Badge
-                          text='Pinned'
-                          color='blue'
-                        />
-                      ) : null}
+                      {pinned ? <Badge text='Pinned' color='blue' /> : null}
                     </div>
-                    <p className='text-muted-foreground text-sm text-end mt-3'>
+                    <h3 className='text-xl font-medium mb-2'>{subject}</h3>
+                    <p className='text-muted-foreground text-sm text-start mt-3'>
                       {createdAt.toDateString()}
                     </p>
-                    <div className='flex items-center mt-4'>
-                      <Button
-                        variant='outline'
-                        size='sm'
-                        className='w-full group'
-                      >
-                        {taken ? 'See results' : 'Start mock exam'}
-                        <HiMiniArrowLongRight className='size-4 ml-2 group-hover:translate-x-1 transition-transform' />
-                      </Button>
-                    </div>
                   </Link>
                   <Dialog>
                     <DropdownMenu>
-                      <DropdownMenuTrigger className='absolute top-4 right-4'>
+                      <DropdownMenuTrigger
+                        className='absolute top-4 right-4'
+                        asChild
+                      >
                         <Button
                           size='icon'
                           variant='ghost'
                           className='size-8'
+                          aria-label='exam options dropdown'
                         >
+                          <span className='sr-only'>Exam options</span>
                           <HiOutlineEllipsisHorizontal className='size-4' />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
-                        <PinExamBtn
-                          isPinned={pinned}
-                          examId={id}
-                        />
+                        <PinExamBtn isPinned={pinned} examId={String(_id)} />
                         {!taken ? (
                           <DropdownMenuItem asChild>
-                            <Link href={`/exam/${id}`}>
+                            <Link href={`/exam/${_id}`}>
                               <HiOutlinePlay className='size-4 mr-2' />
                               Start now
                             </Link>
@@ -130,13 +120,13 @@ const ExamsPage = async ({
                         ) : (
                           <>
                             <DropdownMenuItem asChild>
-                              <Link href={`/exam/${id}`}>
+                              <Link href={`/exam/${_id}`}>
                                 <PiArrowClockwiseLight className='size-4 mr-2' />
                                 Re-take
                               </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem asChild>
-                              <Link href={`/exam/${id}/results`}>
+                              <Link href={`/exam/${_id}/results`}>
                                 <HiOutlineClipboardDocumentList className='size-4 mr-2' />
                                 Results
                               </Link>
@@ -156,26 +146,18 @@ const ExamsPage = async ({
                       </DropdownMenuContent>
                     </DropdownMenu>
                     <DialogContent>
-                      <DeleteExamModal
-                        examId={id}
-                        subject={subject}
-                      />
+                      <DeleteExamModal examId={String(_id)} subject={subject} />
                     </DialogContent>
                   </Dialog>
                 </li>
               )
             )
           ) : (
-            <div className='flex flex-col col-span-full gap-2 justify-center items-center py-6 text-muted-foreground'>
-              <p>No exams found</p>
-              <Link
-                className={cn(buttonVariants({ variant: 'default' }), 'group')}
-                href='/exam/new'
-              >
-                New mock exam
-                <HiMiniArrowLongRight className='size-4 ml-2 group-hover:translate-x-1 transition-transform' />
-              </Link>
-            </div>
+            <EmptyDashboardMsg
+              type='exam'
+              crrLink='/dashboard/exams'
+              newPageLink='/exam/new'
+            />
           )}
         </ul>
       </div>

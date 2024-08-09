@@ -4,52 +4,57 @@ import Exam from '@/db/models/Exam';
 import Interview from '@/db/models/Interview';
 import InterviewAttempt from '@/db/models/InterviewAttempt';
 import ExamAttempt, { IExamAttemptDocument } from '@/db/models/ExamAttempt';
-import Module from '@/db/models/Modules';
-import { IPathDocument } from '@/db/models/Path';
+import Module, { IModuleDocument } from '@/db/models/Modules';
 import {
   generateExamWithGemini,
   generateInterviewFeedbackWithGemini,
   generateInterviewWithGemini,
 } from '@/gemini/functions';
 import { getAuthUser } from '@/actions/user';
+import { DifficultyEnum, ExamTypeEnum } from '@/lib/validators';
+import { IPathDocument } from '@/db/models/Path';
+import { IProjectActivity, IRevisionActivity } from '@/db/models/Activity';
 
-export const getModules = async ({ pathId }: { pathId: string }) => {
+export const getModules = async ({
+  pathId,
+}: {
+  pathId: string;
+}): Promise<IModuleDocument[]> => {
   await getAuthUser();
 
   return await Module.aggregate([
     { $match: { pathId: new mongoose.Types.ObjectId(pathId) } },
     {
       $addFields: {
-        passedValue: {
-          $cond: [
-            {
-              $and: [
-                { $eq: ['$exam.passed', true] },
-                { $eq: ['$interview.passed', true] },
-              ],
+        completedActivities: {
+          $size: {
+            $filter: {
+              input: '$activities',
+              as: 'activity',
+              cond: { $eq: ['$$activity.completed', true] },
             },
-            2,
-            {
-              $cond: [
-                {
-                  $or: [
-                    { $eq: ['$exam.passed', true] },
-                    { $eq: ['$interview.passed', true] },
-                  ],
-                },
-                1,
-                0,
-              ],
-            },
-          ],
+          },
         },
       },
+    },
+    {
+      $addFields: {
+        activitiesLength: { $size: '$activities' },
+      },
+    },
+    {
+      $sort: { order: 1 },
     },
     {
       $project: {
         _id: 1,
         title: 1,
-        passedValue: 1,
+        inProgress: 1,
+        completed: 1,
+        completedActivities: 1,
+        activitiesLength: 1,
+        examType: 1,
+        order: 1,
       },
     },
   ]);
@@ -58,121 +63,231 @@ export const getModules = async ({ pathId }: { pathId: string }) => {
 export const getModuleById = async ({ moduleId }: { moduleId: string }) => {
   await getAuthUser();
 
-  return await Module.findById(moduleId);
+  const moduleData = await Module.findById(moduleId).lean();
+  return JSON.parse(JSON.stringify(moduleData)) as IModuleDocument;
+};
+
+export const getModuleRevision = async ({ moduleId }: { moduleId: string }) => {
+  const revisionData = await Module.findOne({
+    _id: moduleId,
+    'activities.type': 'revision',
+  })
+    .select('activities.$')
+    .lean();
+
+  if (!revisionData) throw new Error('Not found');
+
+  return revisionData.activities[0] as IRevisionActivity;
+};
+
+export const getModuleProject = async ({ moduleId }: { moduleId: string }) => {
+  const revisionData = await Module.findOne({
+    _id: moduleId,
+    'activities.type': 'project',
+  })
+    .select('activities.$')
+    .lean();
+
+  if (!revisionData) throw new Error('Not found');
+
+  return revisionData.activities[0] as IProjectActivity;
+};
+
+export const updateModule = async ({
+  moduleId,
+  module,
+}: {
+  moduleId: string;
+  module: Partial<IModuleDocument>;
+}) => {
+  await Module.findByIdAndUpdate(moduleId, module);
+};
+
+export const completeActivity = async ({
+  moduleId,
+  activityId,
+}: {
+  moduleId?: string;
+  activityId: string;
+}) => {
+  await Module.findOneAndUpdate(
+    { _id: new mongoose.Types.ObjectId(moduleId) },
+    {
+      $set: { 'activities.$[e1].completed': true },
+    },
+    {
+      arrayFilters: [
+        {
+          'e1._id': activityId,
+        },
+      ],
+    }
+  );
 };
 
 export const createExamForModule = async ({
   moduleId,
+  activityId,
+  difficulty,
+  type,
 }: {
   moduleId: string;
+  activityId: string;
+  difficulty: DifficultyEnum;
+  type: ExamTypeEnum;
 }) => {
-  //Find module's path data
-  const moduleDB = await Module.findById(moduleId)
-    .select('_id topics.label subject pathId')
-    .populate<Pick<IPathDocument, 'jobExperience'>>('pathId', 'jobExperience');
+  const moduleDB = await Module.findById(moduleId).select('_id subject pathId');
   if (!moduleDB) throw new Error('Invalid module ID');
 
-  //@ts-ignore
-  const experience = moduleDB.pathId.jobExperience;
-  const difficulty =
-    experience === 'senior' || experience === 'lead' ? 'hard' : 'medium';
+  const { subject, pathId } = moduleDB;
 
-  //Generate exam questions & create exam
   const questions = await generateExamWithGemini({
-    subject: moduleDB.subject,
+    subject,
     difficulty,
+    type,
   });
 
   const { id } = await Exam.create({
-    subject: moduleDB.subject,
+    subject,
     difficulty,
     questions,
+    pathId,
     moduleId,
-    pathId: moduleDB.pathId,
+    activityId,
   });
 
-  //Store the exam id in the module object
-  await Module.findByIdAndUpdate(moduleId, {
-    exam: { passed: false, examId: id },
-  });
+  await Module.findOneAndUpdate(
+    {
+      _id: new mongoose.Types.ObjectId(moduleId),
+      'activities.type': 'exam',
+    },
+    {
+      $set: { 'activities.$[e1].examId': id },
+    },
+    {
+      arrayFilters: [
+        {
+          'e1._id': activityId,
+        },
+      ],
+    }
+  );
 
   return { id };
 };
 
 export const updateExamAttemptFromModule = async ({
   examId,
-  attemptId,
   examAttempt,
   moduleId,
 }: {
   examId: string;
-  attemptId: string;
   examAttempt: Partial<IExamAttemptDocument>;
   moduleId: string;
 }) => {
-  if (examAttempt.passed) {
-    const mongoSession = await mongoose.startSession();
-    mongoSession.startTransaction();
+  const { passed, score, time, answers } = examAttempt;
 
-    try {
-      await Promise.all([
-        Module.findByIdAndUpdate(moduleId, {
-          exam: { passed: true },
-        }),
-        Exam.findByIdAndDelete(examId),
-        ExamAttempt.deleteMany({ examId }),
-      ]);
-    } catch (err) {
-      await mongoSession.abortTransaction();
-    } finally {
-      mongoSession.endSession();
+  const mongoSession = await mongoose.startSession();
+  mongoSession.startTransaction();
+
+  try {
+    if (passed) {
+      const exam = await Exam.findById(examId).select('_id activityId');
+
+      await Module.findOneAndUpdate(
+        {
+          _id: new mongoose.Types.ObjectId(moduleId),
+          'activities.type': 'exam',
+        },
+        {
+          $set: {
+            'activities.$[e1].passed': true,
+            'activities.$[e1].completed': true,
+          },
+        },
+        {
+          arrayFilters: [
+            {
+              'e1._id': exam?.activityId,
+            },
+          ],
+        }
+      );
     }
-  } else {
-    await ExamAttempt.findByIdAndUpdate(attemptId, {
-      ...examAttempt,
-      examId,
-    });
+
+    await Promise.all([
+      ExamAttempt.updateOne(
+        { examId },
+        {
+          $max: { score },
+          passed,
+          time,
+          answers,
+        }
+      ),
+      Exam.findByIdAndUpdate(examId, { taken: true, passed }),
+    ]);
+  } catch (err) {
+    await mongoSession.abortTransaction();
+  } finally {
+    mongoSession.endSession();
   }
 };
 
 export const createInterviewForModule = async ({
   moduleId,
+  activityId,
 }: {
   moduleId: string;
+  activityId: string;
 }) => {
   const moduleDB = await Module.findById(moduleId)
-    .select('_id topics.label subject')
-    .populate('pathId', 'jobExperience');
+    .select('_id subject title')
+    .populate<{ pathId: Pick<IPathDocument, '_id' | 'jobExperience'> }>(
+      'pathId',
+      '_id jobExperience'
+    );
+
   if (!moduleDB) throw new Error('Invalid module ID');
 
-  //@ts-ignore
-  const experience = moduleDB.pathId.jobExperience as
-    | 'intership'
-    | 'junior'
-    | 'ssr'
-    | 'senior'
-    | 'lead';
-
-  const topics = moduleDB.topics.map(topic => topic.label).join(' ');
+  const {
+    subject,
+    title,
+    pathId: { _id: pathId, jobExperience },
+  } = moduleDB;
 
   const questions = await generateInterviewWithGemini({
-    jobRole: moduleDB.subject,
-    jobDescription: topics,
-    jobExperience: experience,
+    jobRole: subject,
+    jobDescription: title,
+    jobExperience,
   });
 
   const { id } = await Interview.create({
-    jobRole: moduleDB.subject,
-    jobDescription: topics,
-    jobExperience: experience,
+    jobRole: subject,
+    jobDescription: title,
+    jobExperience,
     questions,
     moduleId,
-    pathId: moduleDB.pathId,
+    pathId,
+    activityId,
   });
 
-  await Module.findByIdAndUpdate(moduleId, {
-    interview: { passed: false, interviewId: id },
-  });
+  await Module.findOneAndUpdate(
+    {
+      _id: new mongoose.Types.ObjectId(moduleId),
+      'activities.type': 'interview',
+    },
+    {
+      $set: { 'activities.$[e1].interviewId': id },
+    },
+    {
+      arrayFilters: [
+        {
+          'e1._id': activityId,
+        },
+      ],
+    }
+  );
 
   return { id };
 };
@@ -180,7 +295,6 @@ export const createInterviewForModule = async ({
 export const createInterviewAttemptFeedbackForModule = async ({
   userResponses,
   interviewId,
-  attemptId,
   moduleId,
 }: {
   userResponses: {
@@ -188,38 +302,61 @@ export const createInterviewAttemptFeedbackForModule = async ({
     answer: string;
   }[];
   interviewId?: string;
-  attemptId?: string;
   moduleId: string;
 }) => {
   const { answers, speechAnalysis } = await generateInterviewFeedbackWithGemini(
     { userResponses }
   );
 
-  const totalScore =
+  const score =
     answers.reduce((prev, crr) => prev + crr.score, 0) / answers.length;
-  const passed = totalScore >= 6;
+  const passed = score >= 6;
 
-  if (passed) {
-    const mongoSession = await mongoose.startSession();
-    mongoSession.startTransaction();
+  const mongoSession = await mongoose.startSession();
+  mongoSession.startTransaction();
 
-    try {
-      await Promise.all([
-        Module.findByIdAndUpdate(moduleId, {
-          interview: { passed: true },
-        }),
-        Interview.findByIdAndDelete(interviewId),
-        InterviewAttempt.findByIdAndDelete(attemptId),
-      ]);
-    } catch (err) {
-      await mongoSession.abortTransaction();
-    } finally {
-      mongoSession.endSession();
+  try {
+    if (passed) {
+      const interview = await Interview.findById(interviewId).select(
+        '_id activityId'
+      );
+
+      await Module.findOneAndUpdate(
+        {
+          _id: new mongoose.Types.ObjectId(moduleId),
+          'activities.type': 'interview',
+        },
+        {
+          $set: {
+            'activities.$[e1].passed': true,
+            'activities.$[e1].completed': true,
+          },
+        },
+        {
+          arrayFilters: [
+            {
+              'e1._id': interview?.activityId,
+            },
+          ],
+        }
+      );
     }
-  } else {
-    await InterviewAttempt.findByIdAndUpdate(attemptId, {
-      answers,
-      speechAnalysis,
-    });
+
+    await Promise.all([
+      InterviewAttempt.updateOne(
+        { interviewId },
+        {
+          $max: { score },
+          passed,
+          answers,
+          speechAnalysis,
+        }
+      ),
+      Interview.findByIdAndUpdate(interviewId, { taken: true, passed }),
+    ]);
+  } catch (err) {
+    await mongoSession.abortTransaction();
+  } finally {
+    mongoSession.endSession();
   }
 };

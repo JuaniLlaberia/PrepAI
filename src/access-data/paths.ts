@@ -18,41 +18,71 @@ export const getUserPaths = async ({
 }) => {
   const userId = await getAuthUser();
 
-  return await Path.find({
-    userId,
-    completed: filter === 'completed' ? true : false,
-  })
-    .select('_id jobPosition jobExperience completed pinned createdAt')
-    .sort(
-      sort === 'createdAt'
-        ? { pinned: 'desc', createdAt: 'desc' }
-        : { pinned: 'desc', jobRole: 'desc' }
-    );
-};
-
-export const getPathById = async ({ pathId }: { pathId: string }) => {
-  const userId = await getAuthUser();
-
-  const passedModules = await Module.aggregate([
+  const paths = await Path.aggregate<IPathDocument>([
     {
       $match: {
-        'exam.passed': true,
-        'interview.passed': true,
+        userId: new mongoose.Types.ObjectId(userId),
+        completed: filter === 'completed' ? true : false,
       },
     },
     {
-      $group: {
-        _id: '$pathId',
-        passedModules: { $sum: 1 },
+      $lookup: {
+        from: 'modules',
+        localField: '_id',
+        foreignField: 'pathId',
+        as: 'modules',
       },
     },
-  ]);
+    {
+      $addFields: {
+        completedModules: {
+          $size: {
+            $filter: {
+              input: '$modules',
+              as: 'module',
+              cond: { $eq: ['$$module.completed', true] },
+            },
+          },
+        },
+        totalModules: { $size: '$modules' },
+      },
+    },
+    {
+      $project: {
+        _id: 1,
+        jobPosition: 1,
+        jobExperience: 1,
+        completed: 1,
+        pinned: 1,
+        createdAt: 1,
+        completedModules: 1,
+        totalModules: 1,
+      },
+    },
+    {
+      $sort:
+        sort === 'createdAt'
+          ? { pinned: -1, createdAt: -1 }
+          : { pinned: -1, jobPosition: -1 },
+    },
+  ]).exec();
 
-  const path = await Path.findById(pathId);
+  return paths;
+};
+
+export const getPathById = async ({
+  pathId,
+}: {
+  pathId: string;
+}): Promise<IPathDocument> => {
+  const userId = await getAuthUser();
+
+  const path = await Path.findById(pathId).lean();
+  if (!path) throw new Error('Path not found');
   if (String(path?.userId) !== userId)
     throw new Error('This path does not belong to you');
 
-  return [path, passedModules[0]?.passedModules ?? 0];
+  return path;
 };
 
 export const createPath = async ({
@@ -62,21 +92,30 @@ export const createPath = async ({
   userId: string;
   path: Pick<IPathDocument, 'jobPosition' | 'topics' | 'jobExperience'>;
 }) => {
-  const modules = await generateModulesWithGemini({ ...path });
+  const mongoSession = await mongoose.startSession();
+  mongoSession.startTransaction();
 
-  const { id } = await Path.create({
-    ...path,
-    userId,
-    modules: modules.length,
-  });
+  try {
+    const modules = await generateModulesWithGemini({ ...path });
 
-  const modulesWithId = modules.map(module => {
-    return { ...module, pathId: id };
-  });
+    const { id } = await Path.create({
+      ...path,
+      userId,
+      totalModules: modules.length,
+    });
 
-  await Module.create([...modulesWithId]);
+    const modulesWithId = modules.map(module => {
+      return { ...module, pathId: id };
+    });
+    await Module.create([...modulesWithId]);
 
-  return id;
+    return { id };
+  } catch (err) {
+    await mongoSession.abortTransaction();
+    throw err;
+  } finally {
+    mongoSession.endSession();
+  }
 };
 
 export const updatePath = async ({

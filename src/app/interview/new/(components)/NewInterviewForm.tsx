@@ -176,7 +176,7 @@ const NewInterviewForm = () => {
               nextStep();
             }
       }
-      className='flex flex-col gap-2 overflow-hidden px-1'
+      className='flex flex-col gap-2 overflow-hidden px-1 pb-4'
     >
       {crrStep}
     </form>

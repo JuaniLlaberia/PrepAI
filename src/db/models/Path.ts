@@ -7,7 +7,8 @@ export interface IPath {
   completed: boolean;
   pinned: boolean;
   userId: ObjectId;
-  modules: number;
+  totalModules: number;
+  completedModules: number;
 }
 
 export interface IPathDocument extends IPath, Document {
@@ -49,12 +50,12 @@ const pathSchema = new mongoose.Schema<IPathDocument>(
       default: false,
     },
     userId: { type: mongoose.Schema.ObjectId, ref: 'User', required: true },
-    modules: Number,
+    totalModules: Number,
   },
   { timestamps: true }
 );
 
-pathSchema.index({ userId: 1 });
+pathSchema.index({ userId: 1, completed: 1 });
 
 const Path: Model<IPathDocument> =
   mongoose.models?.Path || mongoose.model('Path', pathSchema);

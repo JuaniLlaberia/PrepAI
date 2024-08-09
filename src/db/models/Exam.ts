@@ -9,6 +9,7 @@ export interface IExam {
   userId: ObjectId | string;
   moduleId: ObjectId;
   pathId: ObjectId;
+  activityId: ObjectId;
   questions: {
     question: string;
     options: string[];
@@ -40,6 +41,7 @@ const examSchema = new mongoose.Schema<IExamDocument>(
     userId: { type: mongoose.Schema.ObjectId, ref: 'User' },
     //moduleId & pathId for interviews created inside a module
     moduleId: { type: mongoose.Schema.ObjectId, ref: 'Module' },
+    activityId: { type: mongoose.Schema.ObjectId, ref: 'Module.activities' },
     pathId: {
       type: mongoose.Schema.ObjectId,
       ref: 'Path',

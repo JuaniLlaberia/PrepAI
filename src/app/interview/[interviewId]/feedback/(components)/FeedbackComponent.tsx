@@ -1,48 +1,33 @@
 import { notFound } from 'next/navigation';
+import { HiOutlineCheck, HiOutlineXMark } from 'react-icons/hi2';
 
 import ConfettiComponent from '@/components/Confetti';
-import Attempts from '@/components/Attempts';
 import AnimatedProgress from '@/components/AnimatedProgress';
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
-import {
-  getAttemptFeedback,
-  getInterviewAttempts,
-} from '@/access-data/interviewAttempt';
+import { getInterviewFeedback } from '@/access-data/interviewAttempt';
 
-const FeedbackComponent = async ({
-  interviewId,
-  attemptId,
-}: {
-  interviewId: string;
-  attemptId: string;
-}) => {
-  const attempts = await getInterviewAttempts({ interviewId: interviewId });
-
-  const interviewAttempt = await getAttemptFeedback({
-    interviewAttemptId: attemptId ?? attempts[0]._id,
+const FeedbackComponent = async ({ interviewId }: { interviewId: string }) => {
+  const interviewFeedback = await getInterviewFeedback({
+    interviewId,
   });
 
-  if (!interviewAttempt) return notFound();
+  if (!interviewFeedback) return notFound();
 
-  const totalScore =
-    interviewAttempt.answers.reduce((prev, crr) => prev + crr.score, 0) /
-    interviewAttempt.answers.length;
-
-  const hasPassed = totalScore >= 6;
+  const { passed, score, answers, speechAnalysis } = interviewFeedback;
 
   return (
     <>
-      {hasPassed ? <ConfettiComponent /> : null}{' '}
+      {passed ? <ConfettiComponent /> : null}{' '}
       <div className='flex flex-col items-center mt-2'>
         <section className='king-tight pb-3 max-w-[700px] overflow-x-hidden w-full'>
           <div className='flex items-start justify-between flex-col-reverse md:flex-row'>
             <div>
               <h1 className='text-2xl font-medium'>Interview feedback</h1>
-              {hasPassed ? (
+              {passed ? (
                 <h2 className='text-xl font-medium text-green-500'>
                   Congratulations, you passed.
                 </h2>
@@ -52,38 +37,46 @@ const FeedbackComponent = async ({
                 </h2>
               )}
             </div>
-            <Attempts
-              attempts={
-                JSON.parse(JSON.stringify(attempts)) as { _id: string }[]
-              }
-              crrAttempt={attemptId ?? String(attempts[0].id)}
-            />
           </div>
 
           <div className='mt-6'>
             <div className='flex items-center justify-between mb-1'>
               <h2 className='text-sm lg:text-base xl:text-lg font-semibold'>
-                Your score
+                Your max score
               </h2>
-              <p className='text-sm text-muted-foreground'>{totalScore}/10</p>
+              <p className='text-sm text-muted-foreground'>{score}/10</p>
             </div>
-            <AnimatedProgress value={totalScore * 10} />
+            <AnimatedProgress value={score * 10} />
           </div>
           <div className='mt-6'>
             <h2 className='mb-1 text-sm lg:text-base xl:text-lg font-semibold'>
-              Your questions
+              Attempt answers
             </h2>
-            <ul className='flex flex-col gap-3'>
-              {interviewAttempt.answers.map(feedback => (
+            <ul className='flex flex-col gap-2.5'>
+              {answers.map((feedback, i) => (
                 <li key={String(feedback._id)}>
                   <Collapsible>
-                    <CollapsibleTrigger className='flex w-full items-center justify-between gap-3 shadow bg-background-2 rounded-lg p-2 dark:border dark:border-border'>
-                      <p className='font-medium line-clamp-1 text-start'>
-                        {feedback.question}
+                    <CollapsibleTrigger className='flex w-full items-center justify-between gap-3 border-[1px] border-b-[2.5px] border-border bg-background-2 rounded-xl p-3'>
+                      <p className='flex items-center justify-between font-medium w-full'>
+                        <span>Question {i + 1}</span>
+                        {score > 6 ? (
+                          <span className='flex items-center gap-1 text-green-500'>
+                            <HiOutlineCheck strokeWidth={2} />
+                            Correct
+                          </span>
+                        ) : (
+                          <span className='flex items-center gap-1 text-red-500'>
+                            <HiOutlineXMark strokeWidth={2} />
+                            Wrong
+                          </span>
+                        )}
                       </p>
                     </CollapsibleTrigger>
                     <CollapsibleContent asChild>
-                      <div className='bg-background-2 tracking-tight shadow p-4 mt-1 lg:mt-2 rounded-lg dark:border dark:border-border'>
+                      <div className='bg-background-2 tracking-tight p-4 mt-1 lg:mt-2 rounded-xl border-[1px] border-b-[2.5px] border-border'>
+                        <p className='font-medium text-start mb-4'>
+                          {feedback.question}
+                        </p>
                         <h3 className='mb-1 text-sm lg:text-base xl:text-lg font-semibold'>
                           Feedback
                         </h3>
@@ -103,10 +96,10 @@ const FeedbackComponent = async ({
           </div>
           <div className='mt-6'>
             <h2 className='mb-1 text-sm lg:text-base xl:text-lg font-semibold'>
-              Analysis
+              Attempt speech analysis
             </h2>
-            <p className='shadow tracking-tight bg-background-2 p-4 rounded-lg dark:border dark:border-border'>
-              {interviewAttempt.speechAnalysis}
+            <p className='tracking-tight bg-background-2 p-4 rounded-xl border-[1px] border-b-[2.5px] border-border'>
+              {speechAnalysis}
             </p>
           </div>
         </section>

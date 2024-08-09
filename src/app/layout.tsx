@@ -13,11 +13,9 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: 'MockAI',
-  description: '',
-  icons: {
-    icon: [],
-  },
+  title: 'PrepAI | Master interviews with AI',
+  description:
+    'Dive into AI fully customizable paths based on your needs to land your next job.',
 };
 
 export default function RootLayout({
@@ -28,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className={roboto.className}>
-        <NextTopLoader />
+        <NextTopLoader color='#8b5cf6' />
         <Toaster richColors />
         <ThemeProvider
           attribute='class'

@@ -13,41 +13,34 @@ export const createInterviewAttemptAction = authenticatedAction
   .createServerAction()
   .input(z.object({ interviewId: z.string() }))
   .handler(async ({ input: { interviewId }, ctx: { userId } }) => {
-    const { id } = await createInterviewAttempt({ interviewId, userId });
-
-    return id;
+    await createInterviewAttempt({ interviewId, userId });
   });
 
 export const createInterviewAttemptFeedbackAction = authenticatedAction
   .createServerAction()
   .input(
     z.object({
+      interviewId: z.optional(z.string()),
       userResponses: z.array(
         z.object({
           question: z.string(),
           answer: z.string(),
         })
       ),
-      interviewId: z.optional(z.string()),
-      attemptId: z.optional(z.string()),
       //Just for modules
       moduleId: z.optional(z.string()),
     })
   )
-  .handler(
-    async ({ input: { userResponses, interviewId, attemptId, moduleId } }) => {
-      if (!moduleId)
-        await createInterviewAttemptFeedback({
-          userResponses,
-          interviewId,
-          attemptId,
-        });
-      else
-        await createInterviewAttemptFeedbackForModule({
-          userResponses,
-          interviewId,
-          attemptId,
-          moduleId,
-        });
-    }
-  );
+  .handler(async ({ input: { userResponses, interviewId, moduleId } }) => {
+    if (!moduleId)
+      await createInterviewAttemptFeedback({
+        userResponses,
+        interviewId,
+      });
+    else
+      await createInterviewAttemptFeedbackForModule({
+        userResponses,
+        interviewId,
+        moduleId,
+      });
+  });

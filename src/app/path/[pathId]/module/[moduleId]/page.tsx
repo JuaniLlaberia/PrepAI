@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 
+import ActivityCard from './(components)/ActivityCard';
 import PageHeader from '@/components/PageHeader';
-import Assessments from './(components)/Assessments';
 import { getModuleById } from '@/access-data/modules';
 
 const ModulePage = async ({
@@ -9,44 +9,38 @@ const ModulePage = async ({
 }: {
   params: { pathId: string; moduleId: string };
 }) => {
-  const moduleData = await getModuleById({ moduleId: moduleId });
+  const moduleData = await getModuleById({ moduleId });
   if (!moduleData) return notFound();
 
-  const { title, description, topics, interview, exam } = moduleData;
+  const { title, description, activities, order } = moduleData;
 
   return (
     <>
-      <PageHeader text='Go to path' link={`/path/${pathId}`} />
+      <PageHeader link={`/path/${pathId}`} />
       <div className='flex flex-col items-center mt-2'>
-        <section className='w-full max-w-[700px] overflow-x-hidden pb-3'>
-          <div>
-            <h1 className='text-2xl font-medium mb-1'>{title}</h1>
+        <section className='w-full max-w-[800px] overflow-x-hidden pb-3'>
+          <div className='bg-background-2 p-4 rounded-xl border-[1px] border-b-[3.5px] border-[#ebebeb] dark:border-accent'>
+            <h1 className='font-semibold text-sm mb-1 text-muted-foreground'>
+              STAGE {order}
+            </h1>
+            <h2 className='text-xl font-medium mb-3'>{title}</h2>
             <p className='text-muted-foreground'>{description}</p>
           </div>
-          <div className='mt-4'>
+          <div className='mt-6'>
             <h2 className='text-sm lg:text-base xl:text-lg font-semibold mb-1'>
-              Topics to learn
+              Activities
             </h2>
-            <ul className='flex flex-col gap-1 tracking-tight'>
-              {topics.map((topic, i) => (
-                <li
+            <ul className='grid grid-cols-1 lg:grid-cols-2 gap-3'>
+              {activities.map((activity, i) => (
+                <ActivityCard
                   key={i}
-                  className='text-lg flex items-center gap-2 underline'
-                >
-                  <div className='size-1.5 min-w-[6px] rounded-full bg-blue-600' />
-                  <a href={topic.link} target='_blank'>
-                    {topic.label}
-                  </a>
-                </li>
+                  activity={activity}
+                  pathId={pathId}
+                  moduleId={String(moduleData._id)}
+                />
               ))}
             </ul>
           </div>
-          <Assessments
-            moduleId={moduleId}
-            pathId={pathId}
-            examData={JSON.parse(JSON.stringify(exam))}
-            interviewData={JSON.parse(JSON.stringify(interview))}
-          />
         </section>
       </div>
     </>
