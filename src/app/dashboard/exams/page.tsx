@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import {
-  HiMiniArrowLongRight,
   HiOutlineClipboardDocumentList,
   HiOutlineEllipsisHorizontal,
   HiOutlinePlay,
@@ -10,6 +9,7 @@ import {
 import { PiArrowClockwiseLight } from 'react-icons/pi';
 
 import DifficultyBadge from './(components)/DifficultyBadge';
+import EmptyDashboardMsg from '@/components/EmptyDashboardMsg';
 import Badge from '@/components/ui/badge';
 import PinExamBtn from './(components)/PinExamBtn';
 import DeleteExamModal from './(components)/DeleteExamModal';
@@ -23,8 +23,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { cn } from '@/lib/utils';
 import { getUserExams } from '@/access-data/exams';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'PrepAI | Exams',
+};
 
 const ExamsPage = async ({
   searchParams,
@@ -149,16 +153,11 @@ const ExamsPage = async ({
               )
             )
           ) : (
-            <div className='flex flex-col col-span-full gap-2 justify-center items-center py-6 text-muted-foreground'>
-              <p>No exams found</p>
-              <Link
-                className={cn(buttonVariants({ variant: 'default' }), 'group')}
-                href='/exam/new'
-              >
-                New mock exam
-                <HiMiniArrowLongRight className='size-4 ml-2 group-hover:translate-x-1 transition-transform' />
-              </Link>
-            </div>
+            <EmptyDashboardMsg
+              type='exam'
+              crrLink='/dashboard/exams'
+              newPageLink='/exam/new'
+            />
           )}
         </ul>
       </div>

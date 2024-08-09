@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import {
-  HiMiniArrowLongRight,
   HiOutlineEllipsisHorizontal,
   HiOutlinePlus,
   HiOutlineTrash,
@@ -11,6 +10,7 @@ import PinPathBtn from './(components)/PinPathBtn';
 import PathFilters from './(components)/PathFilters';
 import Badge from '@/components/ui/badge';
 import DeletePathModal from './(components)/DeletePathModal';
+import EmptyDashboardMsg from '@/components/EmptyDashboardMsg';
 import AnimatedProgress from '@/components/AnimatedProgress';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
@@ -21,8 +21,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { cn } from '@/lib/utils';
+import { Metadata } from 'next';
 import { getUserPaths } from '@/access-data/paths';
+
+export const metadata: Metadata = {
+  title: 'PrepAI | Paths',
+};
 
 const PathsPage = async ({
   searchParams: { sortBy, filter },
@@ -143,16 +147,11 @@ const PathsPage = async ({
               )
             )
           ) : (
-            <div className='flex flex-col col-span-full gap-2 justify-center items-center py-6 text-muted-foreground'>
-              <p>No paths found</p>
-              <Link
-                className={cn(buttonVariants({ variant: 'default' }), 'group')}
-                href='/path/new'
-              >
-                New preparation path
-                <HiMiniArrowLongRight className='size-4 ml-2 group-hover:translate-x-1 transition-transform' />
-              </Link>
-            </div>
+            <EmptyDashboardMsg
+              type='path'
+              crrLink='/dashboard/paths'
+              newPageLink='/path/new'
+            />
           )}
         </ul>
       </div>

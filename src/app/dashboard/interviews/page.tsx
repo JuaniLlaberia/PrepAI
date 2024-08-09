@@ -4,7 +4,6 @@ import {
   HiOutlineTrash,
   HiOutlinePlay,
   HiOutlineClipboardDocumentList,
-  HiMiniArrowLongRight,
   HiOutlinePlus,
 } from 'react-icons/hi2';
 import { PiArrowClockwiseLight } from 'react-icons/pi';
@@ -12,6 +11,7 @@ import { PiArrowClockwiseLight } from 'react-icons/pi';
 import DeleteInterviewModal from '../(components)/DeleteInterviewModal';
 import Badge from '@/components/ui/badge';
 import InterviewsFilters from '../(components)/InterviewsFilter';
+import EmptyDashboardMsg from '@/components/EmptyDashboardMsg';
 import PinInterviewBtn from '../(components)/PinInterviewBtn';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
@@ -22,8 +22,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { cn } from '@/lib/utils';
 import { getUserInterviews } from '@/access-data/interview';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'PrepAI | Interviews',
+};
 
 const InterviewsPage = async ({
   searchParams,
@@ -156,16 +160,11 @@ const InterviewsPage = async ({
               )
             )
           ) : (
-            <div className='flex flex-col col-span-full gap-2 justify-center items-center py-6 text-muted-foreground'>
-              <p>No interviews found</p>
-              <Link
-                className={cn(buttonVariants({ variant: 'default' }), 'group')}
-                href='/interview/new'
-              >
-                New interview
-                <HiMiniArrowLongRight className='size-4 ml-2 group-hover:translate-x-1 transition-transform' />
-              </Link>
-            </div>
+            <EmptyDashboardMsg
+              type='interview'
+              crrLink='/dashboard/interviews'
+              newPageLink='/interview/new'
+            />
           )}
         </ul>
       </div>
