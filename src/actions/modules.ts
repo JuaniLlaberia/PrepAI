@@ -11,12 +11,17 @@ import {
   updateModule,
 } from '@/access-data/modules';
 import { DifficultyEnum, ExamTypeEnum } from '@/lib/validators';
+import { generateActivitiesWithGemini } from '@/gemini/functions';
 
 export const startModuleAction = authenticatedAction
   .createServerAction()
-  .input(z.object({ moduleId: z.string(), pathId: z.string() }))
-  .handler(async ({ input: { moduleId, pathId } }) => {
-    await updateModule({ moduleId, module: { inProgress: true } });
+  .input(
+    z.object({ moduleId: z.string(), pathId: z.string(), subject: z.string() })
+  )
+  .handler(async ({ input: { moduleId, pathId, subject } }) => {
+    const activities = await generateActivitiesWithGemini({ subject });
+
+    await updateModule({ moduleId, module: { activities, inProgress: true } });
 
     revalidatePath(`/path/${pathId}`);
   });
@@ -60,7 +65,7 @@ export const skipActivityAction = authenticatedAction
   .input(
     z.object({
       pathId: z.string(),
-      moduleId: z.optional(z.string()),
+      moduleId: z.string(),
       activityId: z.string(),
     })
   )

@@ -55,6 +55,7 @@ export const getModules = async ({
         activitiesLength: 1,
         examType: 1,
         order: 1,
+        subject: 1,
       },
     },
   ]);

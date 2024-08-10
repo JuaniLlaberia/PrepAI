@@ -15,9 +15,11 @@ const ModuleButton = ({
   moduleId,
   stageNum,
   inProgress,
+  subject,
 }: {
   pathId: string;
   moduleId: string;
+  subject: string;
   stageNum: number;
   inProgress: boolean;
 }) => {
@@ -48,7 +50,7 @@ const ModuleButton = ({
           disabled={isPending}
           size='lg'
           className='min-w-[200px]'
-          onClick={() => startModule({ pathId, moduleId })}
+          onClick={() => startModule({ pathId, moduleId, subject })}
         >
           {isPending ? (
             <LuLoader2 className='size-4  animate-spin' />

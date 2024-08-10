@@ -79,6 +79,7 @@ const PathPage = async ({
                     title,
                     order,
                     activitiesLength,
+                    subject,
                   },
                   i
                 ) => (
@@ -107,7 +108,7 @@ const PathPage = async ({
                           <span>{completed ? 'Completed' : 'In progress'}</span>
                         ) : (
                           <span className='flex items-center gap-1 text-sm font-semibold'>
-                            {activitiesLength} sections
+                            7 sections
                           </span>
                         )}
                       </h3>
@@ -137,6 +138,7 @@ const PathPage = async ({
                           moduleId={String(_id)}
                           stageNum={i + 1}
                           inProgress={inProgress}
+                          subject={subject}
                         />
                       )}
                     </div>
