@@ -56,7 +56,11 @@ const ModuleProjectPage = async ({
           </ul>
           {!completed ? (
             <div className='mt-5'>
-              <CompleteActivityBtn pathId={pathId} activityId={String(_id)} />
+              <CompleteActivityBtn
+                pathId={pathId}
+                moduleId={moduleId}
+                activityId={String(_id)}
+              />
             </div>
           ) : null}
         </div>
