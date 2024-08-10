@@ -7,7 +7,7 @@ export interface IExamAttempt {
   userId: ObjectId | string;
   examId: ObjectId;
 
-  answers: { answer: number; isCorrect: boolean }[];
+  answers: { answer: number; isCorrect: boolean; explanation?: string }[];
 }
 
 export interface IExamAttemptDocument extends IExamAttempt, Document {
@@ -34,6 +34,7 @@ const examAttemptSchema = new mongoose.Schema<IExamAttemptDocument>(
       {
         answer: { type: Number },
         isCorrect: { type: Boolean },
+        explanation: { type: String },
       },
     ],
   },

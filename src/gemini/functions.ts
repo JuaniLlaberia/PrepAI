@@ -15,7 +15,7 @@ export const generateExamWithGemini = async ({
   const promptSchema = `
   {
     questions: [
-      {question: 'string', options: 'string'[], correctAnswer: 'number', explanation: 'string'}
+      {question: 'string', options: 'string'[], correctAnswer: 'number' (option index)}
     ]
   }
   `;
@@ -23,15 +23,8 @@ export const generateExamWithGemini = async ({
   const examType =
     type === 'multiple-choice' ? 'multiple choice' : 'true or false';
 
-  const examDescription =
-    type === 'multiple-choice'
-      ? 'each with the question, 4 options, the correct option (being the option index) and an explanation of the correct answer in 3-4 lines'
-      : 'each with the question, 2 options (true or false), the correct option (being the option index) and an explanation of the correct answer in 3-4 lines';
-
   const prompt = `Generate a ${examType} exam about ${subject}
-   with a ${difficulty} difficulty level. Provide ${
-    difficulty === 'easy' || difficulty === 'medium' ? '10' : '15'
-  } related questions (${examDescription}). Provide
+   with a ${difficulty} difficulty level. Provide 10 questions. Provide
    it in JSON format with this schema: ${promptSchema}.
    In case it is a coding topic, do not include code snippets.
    `;
@@ -44,10 +37,54 @@ export const generateExamWithGemini = async ({
     question: string;
     options: string[];
     correctAnswer: number;
-    explanation: string;
   }[] = JSON.parse(jsonData).questions;
 
   return questions;
+};
+
+export const test = async ({
+  data,
+}: {
+  data: {
+    question: string;
+    isCorrect: boolean;
+    answerIndex: number;
+  }[];
+}) => {
+  // Format the data for the prompt
+  const formattedData = data
+    .map((item, index) => {
+      return `Question ${index + 1}: ${item.question}\nUser Answer: ${
+        item.answerIndex
+      }\nIs Correct: ${item.isCorrect}\n\n`;
+    })
+    .join('');
+
+  // Construct the prompt for Gemini
+  const prompt = `Generate explanations for each question and user answer provided below. 
+      Format the explanations in a JSON object with the following schema:
+
+      {
+        answers: [
+          {answer: data.answerIndex, isCorrect, explanation: 'string'}
+        ]
+      }
+
+      User responses: 
+
+      ${formattedData}`;
+
+  const result = await model.generateContent(prompt);
+  const response = await result.response;
+  const jsonData = response.text();
+
+  const answers: {
+    answer: number;
+    isCorrect: boolean;
+    explanation?: string;
+  }[] = JSON.parse(jsonData).answers;
+
+  return answers;
 };
 
 type GeminiInterviewTypes = {
