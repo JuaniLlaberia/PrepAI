@@ -34,8 +34,9 @@ const AnswerExamComponent = ({
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [userAnswers, setUserAnswers] = useState<
     {
-      answer: number;
       isCorrect: boolean;
+      answerIndex: number;
+      question: string;
     }[]
   >([]);
   const { timer, stopTimer } = useTimer();
@@ -108,8 +109,9 @@ const AnswerExamComponent = ({
     if (selectedOption == null) return;
 
     const answer = {
-      answer: selectedOption,
       isCorrect: selectedOption === questions[crrIndex].correctAnswer,
+      question: questions[crrIndex].question,
+      answerIndex: selectedOption,
     };
 
     setUserAnswers(prev => [...prev, answer]);
@@ -124,8 +126,9 @@ const AnswerExamComponent = ({
     const answers = [
       ...userAnswers,
       {
-        answer: selectedOption!,
         isCorrect: selectedOption === questions[crrIndex].correctAnswer,
+        question: questions[crrIndex].question,
+        answerIndex: selectedOption,
       },
     ];
 

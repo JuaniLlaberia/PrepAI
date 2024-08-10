@@ -35,7 +35,7 @@ export const getExamResults = async ({ examId }: { examId: string }) => {
       correctAnswer: question.correctAnswer,
       question: question.question,
       options: question.options,
-      explanation: question.explanation,
+      explanation: answers?.answers[i]?.explanation,
       isCorrect: answers?.answers[i]?.isCorrect,
       answer: answers?.answers[i]?.answer,
     };

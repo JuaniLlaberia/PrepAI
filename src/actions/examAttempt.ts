@@ -9,6 +9,7 @@ import {
   updateExamAttempt,
 } from '@/access-data/examAttempts';
 import { updateExamAttemptFromModule } from '@/access-data/modules';
+import { test } from '@/gemini/functions';
 
 export const createExamAttemptAction = authenticatedAction
   .createServerAction()
@@ -26,8 +27,9 @@ export const updateExamAttemptAction = authenticatedAction
         time: z.number(),
         answers: z.array(
           z.object({
-            answer: z.number(),
+            answerIndex: z.number(),
             isCorrect: z.boolean(),
+            question: z.string(),
           })
         ),
       }),
@@ -38,16 +40,19 @@ export const updateExamAttemptAction = authenticatedAction
   .handler(async ({ input: { examId, data, moduleId } }) => {
     const score = data.answers?.filter(answer => answer.isCorrect).length!;
     const passed = score > data.answers?.length! - score;
+    const time = data.time;
+
+    const answers = await test({ data: data.answers });
 
     if (!moduleId)
       await updateExamAttempt({
         examId,
-        examAttempt: { passed, score, ...data },
+        examAttempt: { passed, score, time, answers },
       });
     else
       await updateExamAttemptFromModule({
         examId,
-        examAttempt: { passed, score, ...data },
+        examAttempt: { passed, score, time, answers },
         moduleId,
       });
 

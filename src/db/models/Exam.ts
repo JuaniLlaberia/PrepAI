@@ -14,7 +14,6 @@ export interface IExam {
     question: string;
     options: string[];
     correctAnswer: number;
-    explanation: string;
   }[];
 }
 
@@ -51,7 +50,6 @@ const examSchema = new mongoose.Schema<IExamDocument>(
         question: { type: String },
         options: { type: [String] },
         correctAnswer: { type: Number },
-        explanation: { type: String },
       },
     ],
   },
