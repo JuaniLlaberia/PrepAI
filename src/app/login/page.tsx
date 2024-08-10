@@ -9,7 +9,7 @@ const LoginPage = async () => {
   const { isAuthenticated } = getKindeServerSession();
   const isAuth = await isAuthenticated();
 
-  if (isAuth) return redirect('/dashboard');
+  if (isAuth) return redirect('/dashboard/paths');
 
   return (
     <section className='h-full flex flex-col items-center justify-center'>

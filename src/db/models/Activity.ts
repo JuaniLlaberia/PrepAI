@@ -81,7 +81,11 @@ const examActivitySchema = new mongoose.Schema<IExamActivity>(
       type: String,
       enum: Object.values(ExamTypeEnum),
     },
-    examId: { type: mongoose.Schema.Types.ObjectId, ref: 'Exam' },
+    examId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Exam',
+      default: undefined,
+    },
     passed: { type: Boolean, default: false },
   },
   baseOptions
@@ -98,7 +102,11 @@ const projectActivitySchema = new mongoose.Schema<IProjectActivity>(
 
 const interviewActivitySchema = new mongoose.Schema<IInterviewActivity>(
   {
-    interviewId: { type: mongoose.Schema.Types.ObjectId, ref: 'Interview' },
+    interviewId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Interview',
+      default: undefined,
+    },
     passed: { type: Boolean, default: false },
   },
   baseOptions

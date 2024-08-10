@@ -47,10 +47,7 @@ const Home = () => {
           </p>
         </div>
         <div className='flex justify-start w-full md:justify-center md:w-auto gap-2 py-10 z-10'>
-          <Link
-            href='/dashboard/paths'
-            className={cn(buttonVariants({}), 'group')}
-          >
+          <Link href='/login' className={cn(buttonVariants({}), 'group')}>
             Start practicing
             <HiMiniArrowLongRight className='size-4 ml-1.5 group-hover:translate-x-1 transition-transform' />
           </Link>

@@ -15,9 +15,11 @@ const ModuleButton = ({
   moduleId,
   stageNum,
   inProgress,
+  subject,
 }: {
   pathId: string;
   moduleId: string;
+  subject: string;
   stageNum: number;
   inProgress: boolean;
 }) => {
@@ -26,7 +28,10 @@ const ModuleButton = ({
     startModuleAction,
     {
       mutationKey: ['start-module'],
-      onSuccess: () => router.push(`/path/${pathId}/module/${moduleId}`),
+      onSuccess: () => {
+        toast.success('Module created successfully');
+        router.push(`/path/${pathId}/module/${moduleId}`);
+      },
       onError: () =>
         toast.error('Failed to start module.', {
           description: "We could't start the module. Please try again!",
@@ -48,7 +53,7 @@ const ModuleButton = ({
           disabled={isPending}
           size='lg'
           className='min-w-[200px]'
-          onClick={() => startModule({ pathId, moduleId })}
+          onClick={() => startModule({ pathId, moduleId, subject })}
         >
           {isPending ? (
             <LuLoader2 className='size-4  animate-spin' />
