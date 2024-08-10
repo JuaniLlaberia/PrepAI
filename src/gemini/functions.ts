@@ -1,3 +1,4 @@
+import { IActivity } from '@/db/models/Activity';
 import { model } from '@/gemini/index';
 
 type GeminiExamTypes = {
@@ -132,84 +133,13 @@ export const generateModulesWithGemini = async ({
   topics,
 }: GeminiModulesTypes) => {
   const prompt = `
-    Generate a JSON format of a list of modules (at least 7 and no more than 10 modules) for a ${jobExperience} level ${jobPosition} preparing for interviews. The interview topics include ${topics}. The modules should be ordered by difficulty (first the easier topics and then the harder ones), with each module having the following schema:
+    Generate in a JSON format, a list of modules (between 6 and 8) for a ${jobExperience} level ${jobPosition} preparing for interviews. The interview topics include ${topics}. Each module having the following schema:
       {modules: [
         {
             title: 'string' (Module title),
             description: 'string' (What this module includes),
             subject: 'string' (Module topic),
             order: 'number',
-            activities: [
-                {
-                  title: {subject} references,
-                  type: 'revision',
-                  completed: false,
-                  description: 'string' (module description of 100 words),
-                  references: {
-                      label: 'string' (reference label),
-                      link: 'string' (link to reference related to this module)
-                    }[] (generate 5 references)
-                },
-                {
-                    title: {subject} introduction exam,
-                    type: 'exam',
-                    examType: 'multiple-choice',
-                    difficulty: 'string' (easy difficulty),
-                    examId: undefined,
-                    taken: 'boolean' (false),
-                    passed: 'boolean' (false),
-                    completed: false
-                },
-                {
-                    title: True or False Challenge,
-                    type: 'exam',
-                    examType: 'true-false',
-                    difficulty: 'string' (medium difficulty),
-                    examId: undefined,
-                    taken: 'boolean' (false),
-                    passed: 'boolean' (false),
-                    completed: false
-                },
-                {
-                    title: Practice {subject} exam,
-                    type: 'exam',
-                    examType: 'multiple-choice',
-                    difficulty: 'string' (medium difficulty),
-                    examId: undefined,
-                    taken: 'boolean' (false),
-                    passed: 'boolean' (false),
-                    completed: false
-                },
-                {
-                    title: 'string' (activity title),
-                    type: 'project',
-                    completed: 'boolean' (false),
-                    content: 'string' (Project presentation and what needs to be done. Also provide some real world project ideas),
-                    steps: 'string'[] (Steps that the user should follow to complete this project),
-                    references: {
-                      label: 'string' (reference label),
-                      link: 'string' (link to reference that will help the user with the task)
-                    }[] (Between 2 and 5 references)
-                },
-                {
-                    title: 'string' (activity title),
-                    type: 'exam',
-                    examType: 'multiple-choice',
-                    difficulty: 'string' (hard difficulty),
-                    examId: undefined,
-                    taken: 'boolean' (false),
-                    passed: 'boolean' (false),
-                    completed: false
-                },
-                {
-                    title: {subject} final interview,
-                    type: 'interview',
-                    interviewId: undefined,
-                    taken: 'boolean' (false),
-                    passed: 'boolean' (false),
-                    completed: false
-                }
-            ] (Generate the 7 activities for each module, as specified in the schema)
         }
 
       ]}. The difficulty levels should be ordered as follows: 'easy', 'medium', 'hard'. Sort the modules in ascending order of difficulty, add and order field to sort them properly.
@@ -223,4 +153,74 @@ export const generateModulesWithGemini = async ({
   const modules: {}[] = JSON.parse(jsonData).modules;
 
   return modules;
+};
+
+export const generateActivitiesWithGemini = async ({
+  subject,
+}: {
+  subject: string;
+}) => {
+  const prompt = `
+    Generate in a JSON format, a list of activities for a module with the ${subject} subject. Follow this schema:
+    {
+      activities: [
+        {
+          title: {subject} references,
+          type: 'revision',
+          description: 'string' (module description of 100 words),
+          references: {
+              label: 'string' (reference label),
+              link: 'string' (link to reference related to this module)
+            }[] (generate 5 references)
+        },
+        {
+            title: {subject} introduction exam,
+            type: 'exam',
+            examType: 'multiple-choice',
+            difficulty: 'string' (easy difficulty),
+        },
+        {
+            title: True or False Challenge,
+            type: 'exam',
+            examType: 'true-false',
+            difficulty: 'string' (medium difficulty),
+        },
+        {
+            title: Practice {subject} exam,
+            type: 'exam',
+            examType: 'multiple-choice',
+            difficulty: 'string' (medium difficulty),
+        },
+        {
+            title: 'string' (activity title),
+            type: 'project',
+            content: 'string' (Project presentation and what needs to be done. Also provide some real world project ideas),
+            steps: 'string'[] (Steps that the user should follow to complete this project),
+            references: {
+              label: 'string' (reference label),
+              link: 'string' (link to reference that will help the user with the task)
+            }[] (Between 2 and 5 references)
+        },
+        {
+            title: 'string' (activity title),
+            type: 'exam',
+            examType: 'multiple-choice',
+            difficulty: 'string' (hard difficulty),
+        },
+        {
+            title: {subject} final interview,
+            type: 'interview',
+        }
+
+      ]
+    }
+  `;
+
+  const result = await model.generateContent(prompt);
+  const response = await result.response;
+  const jsonData = response.text();
+
+  const activities: IActivity[] = JSON.parse(jsonData).activities;
+
+  return activities;
 };
