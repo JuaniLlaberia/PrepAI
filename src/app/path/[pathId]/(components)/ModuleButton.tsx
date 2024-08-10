@@ -28,7 +28,10 @@ const ModuleButton = ({
     startModuleAction,
     {
       mutationKey: ['start-module'],
-      onSuccess: () => router.push(`/path/${pathId}/module/${moduleId}`),
+      onSuccess: () => {
+        toast.success('Module created successfully');
+        router.push(`/path/${pathId}/module/${moduleId}`);
+      },
       onError: () =>
         toast.error('Failed to start module.', {
           description: "We could't start the module. Please try again!",
