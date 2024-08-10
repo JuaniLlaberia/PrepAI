@@ -87,7 +87,7 @@ const CallToAction = () => {
             Get started with PrepAI for free.
           </p>
           <Link
-            href='/dashboard/paths'
+            href='/login'
             className={cn(
               buttonVariants({ size: 'lg', variant: 'secondary' }),
               'text-black group'
