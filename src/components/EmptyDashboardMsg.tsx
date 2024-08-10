@@ -14,7 +14,7 @@ const EmptyDashboardMsg = ({
   newPageLink: string;
 }) => {
   return (
-    <div className='flex flex-col col-span-full gap-2 justify-center items-center py-10 px-2'>
+    <div className='flex flex-col col-span-full gap-2 justify-center items-center py-10 lg:py-20 px-2'>
       <div className='border border-border rounded-xl p-3'>
         <HiOutlineFolder className='size-6' />
       </div>

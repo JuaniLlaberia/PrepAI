@@ -47,9 +47,6 @@ const PathsPage = async ({
         </Link>
       </div>
       <div>
-        <h2 className='mb-2 text-sm lg:text-base xl:text-lg font-medium'>
-          Your paths
-        </h2>
         <ul className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2.5 pb-4'>
           {paths.length > 0 ? (
             paths.map(
