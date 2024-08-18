@@ -1,63 +1,47 @@
 import { useEffect, useState } from 'react';
 
+let recognition: any = null;
+if (typeof window !== 'undefined') {
+  if ('webkitSpeechRecognition' in window) {
+    const SpeechRecognition = window.webkitSpeechRecognition;
+
+    recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.lang = 'en-US';
+  }
+}
+
 export const useSpeechRecognition = () => {
   const [transcript, setTranscript] = useState<string>('');
   const [isListening, setIsListening] = useState<boolean>(false);
-  const [recognition, setRecognition] = useState<SpeechRecognition | null>(
-    null
-  );
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const SpeechRecognition =
-        window?.SpeechRecognition || window?.webkitSpeechRecognition;
+    if (!recognition) return;
 
-      if (SpeechRecognition) {
-        const recognitionInstance = new SpeechRecognition();
-        recognitionInstance.continuous = true;
-        recognitionInstance.interimResults = false;
-        recognitionInstance.lang = 'en-US';
-
-        recognitionInstance.onresult = async event => {
-          let transcriptText = '';
-          for (let i = event.resultIndex; i < event.results.length; ++i) {
-            transcriptText += event.results[i][0].transcript;
-          }
-
-          setTranscript(prev => prev + transcriptText);
-        };
-
-        setRecognition(recognitionInstance);
-      } else {
-        throw new Error('Not supported in your browser');
+    recognition.onresult = async (event: SpeechRecognitionEvent) => {
+      for (let i = event.resultIndex; i < event.results.length; ++i) {
+        setTranscript(prev => prev + ' ' + event.results[i][0].transcript);
       }
-    }
+    };
   }, [isListening]);
 
   const startListening = () => {
-    if (!recognition) return;
-
+    setTranscript('');
     setIsListening(true);
+
     recognition.start();
   };
 
-  //Not working as expected
   const stopListening = () => {
-    if (!recognition) return;
-
     setIsListening(false);
-    recognition.continuous = false;
     recognition.stop();
-    recognition.abort();
   };
-
-  const resetTranscript = () => setTranscript('');
 
   return {
     transcript,
     isListening,
     startListening,
     stopListening,
-    resetTranscript,
+    hasRecognitionSupport: Boolean(recognition),
   };
 };

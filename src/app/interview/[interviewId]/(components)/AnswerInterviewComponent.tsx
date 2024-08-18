@@ -35,13 +35,8 @@ const AnswerComponent = ({
   moduleId,
   pathId,
 }: AnswerComponentPropsType) => {
-  const {
-    transcript,
-    isListening,
-    startListening,
-    stopListening,
-    resetTranscript,
-  } = useSpeechRecognition();
+  const { transcript, isListening, startListening, stopListening } =
+    useSpeechRecognition();
 
   const [userAnswers, setUserAnswers] = useState<
     { question: string; answer: string; questionId: string }[]
@@ -85,16 +80,21 @@ const AnswerComponent = ({
 
   const nextQuestion = () => {
     //Save crr question answer in object
-    setUserAnswers(prev => [
-      ...prev,
-      {
-        question: questions[crrQuestion].question,
-        answer: transcript,
-        questionId: questions[crrQuestion]._id,
-      },
-    ]);
+    setUserAnswers(prev => {
+      return [
+        ...prev,
+        {
+          question: questions[crrQuestion].question,
+          answer: transcript,
+          questionId: questions[crrQuestion]._id,
+        },
+      ];
+    });
+
+    console.log(transcript);
+
     //Reset transcript
-    resetTranscript();
+    // resetTranscript();
     setHasAnswered(false);
     //Show next question
     setCrrQuestion(prev => prev + 1);
@@ -159,6 +159,8 @@ const AnswerComponent = ({
           </Button>
         )}
 
+        {transcript}
+
         {hasAnswered && !isListening && isLastQuestion && (
           <Button
             disabled={isPending}
@@ -179,6 +181,10 @@ const AnswerComponent = ({
           </Button>
         )}
       </div>
+      {/* {isListening ? 'TRUE' : 'FASLE'}
+      <Button onClick={startListening}>START LISTENING</Button>
+      <Button onClick={stopListening}>STOP LISTENING</Button>
+      {transcript} */}
     </div>
   );
 };
