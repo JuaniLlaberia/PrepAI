@@ -91,8 +91,6 @@ const AnswerComponent = ({
       ];
     });
 
-    console.log(transcript);
-
     //Reset transcript
     // resetTranscript();
     setHasAnswered(false);
@@ -158,9 +156,6 @@ const AnswerComponent = ({
             <HiOutlineMicrophone className='size-4 mr-1.5' /> Start recording
           </Button>
         )}
-
-        {transcript}
-
         {hasAnswered && !isListening && isLastQuestion && (
           <Button
             disabled={isPending}
@@ -181,10 +176,6 @@ const AnswerComponent = ({
           </Button>
         )}
       </div>
-      {/* {isListening ? 'TRUE' : 'FASLE'}
-      <Button onClick={startListening}>START LISTENING</Button>
-      <Button onClick={stopListening}>STOP LISTENING</Button>
-      {transcript} */}
     </div>
   );
 };

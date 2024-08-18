@@ -44,7 +44,9 @@ const FeedbackComponent = async ({ interviewId }: { interviewId: string }) => {
               <h2 className='text-sm lg:text-base xl:text-lg font-semibold'>
                 Your max score
               </h2>
-              <p className='text-sm text-muted-foreground'>{score}/10</p>
+              <p className='text-sm text-muted-foreground'>
+                {Math.round(score)}/10
+              </p>
             </div>
             <AnimatedProgress value={score * 10} />
           </div>
