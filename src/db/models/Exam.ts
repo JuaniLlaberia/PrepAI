@@ -3,6 +3,7 @@ import mongoose, { Document, Model, ObjectId } from 'mongoose';
 export interface IExam {
   subject: string;
   difficulty: 'easy' | 'medium' | 'hard';
+  examType: 'multiple-choice' | 'true-false';
   passed: boolean;
   taken: boolean;
   pinned: boolean;
@@ -35,6 +36,11 @@ const examSchema = new mongoose.Schema<IExamDocument>(
     },
     taken: { type: Boolean, default: false },
     passed: { type: Boolean, default: false },
+    examType: {
+      type: String,
+      required: true,
+      enum: ['multiple-choice', 'true-false'],
+    },
     pinned: { type: Boolean },
     //userId for interviews created by an user
     userId: { type: mongoose.Schema.ObjectId, ref: 'User' },
