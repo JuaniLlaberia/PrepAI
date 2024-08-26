@@ -17,7 +17,7 @@ const SidebarLinks = ({ links }: { links: NavigationLinksType[] }) => {
             href={link.link}
             key={link.id}
             className={cn(
-              'flex items-center gap-2 py-1.5 px-3 rounded-lg font-medium cursor-pointer text-muted-foreground hover:bg-accent transition-colors',
+              'flex items-center gap-2 py-2 px-3 rounded-lg font-medium cursor-pointer text-muted-foreground hover:bg-accent transition-colors',
               pathname === link.link ? 'text-primary bg-accent' : null
             )}
           >

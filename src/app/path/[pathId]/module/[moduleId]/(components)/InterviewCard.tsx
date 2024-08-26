@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import {
   HiOutlineClipboardDocumentList,
-  HiOutlineMicrophone,
   HiOutlineRocketLaunch,
 } from 'react-icons/hi2';
 import { LuLoader2 } from 'react-icons/lu';
@@ -16,6 +15,7 @@ import { IInterviewActivity } from '@/db/models/Activity';
 import { useServerActionMutation } from '@/hooks/server-action-hooks';
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { Button, buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 type InterviewCardType = {
   interviewActivity: IInterviewActivity;
@@ -58,7 +58,7 @@ const InterviewCard = ({
       title={title}
       type={type}
       completed={completed}
-      comment='Interview • Final assesment'
+      comment='Final assesment'
       menuContent={
         !completed ? (
           <>
@@ -81,14 +81,16 @@ const InterviewCard = ({
           </>
         ) : null
       }
-      icon={<HiOutlineMicrophone className='size-5' strokeWidth={1.5} />}
       actionButton={
         <>
           {!passed ? (
             <>
               {!completed && interviewId ? (
                 <Link
-                  className={buttonVariants({ size: 'sm' })}
+                  className={cn(
+                    buttonVariants({ size: 'sm' }),
+                    'min-w-[150px]'
+                  )}
                   href={{
                     pathname: `/interview/${interviewId}`,
                     query: {
@@ -103,6 +105,7 @@ const InterviewCard = ({
               ) : (
                 <Button
                   size='sm'
+                  variant={completed ? 'secondary' : 'default'}
                   onClick={() =>
                     createInterview({
                       pathId,
@@ -111,6 +114,7 @@ const InterviewCard = ({
                     })
                   }
                   disabled={isPending}
+                  className='min-w-[150px]'
                 >
                   {!isPending ? (
                     <>Generate interview</>
@@ -125,7 +129,10 @@ const InterviewCard = ({
             </>
           ) : (
             <Link
-              className={buttonVariants({ size: 'sm', variant: 'secondary' })}
+              className={cn(
+                buttonVariants({ size: 'sm', variant: 'secondary' }),
+                'min-w-[150px]'
+              )}
               href={`/interview/${interviewId}/results?pathId=${pathId}&moduleId=${moduleId}`}
             >
               See feedback

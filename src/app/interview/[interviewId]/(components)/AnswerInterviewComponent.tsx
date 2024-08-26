@@ -1,11 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import {
-  HiMiniArrowLongRight,
-  HiOutlineLightBulb,
-  HiOutlineMicrophone,
-} from 'react-icons/hi2';
+import { HiMiniArrowLongRight, HiOutlineLightBulb } from 'react-icons/hi2';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { LuLoader2 } from 'react-icons/lu';
@@ -16,6 +12,7 @@ import { useSpeechRecognition } from '@/hooks/useSpeechRecognition';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useServerActionMutation } from '@/hooks/server-action-hooks';
 import { createInterviewAttemptFeedbackAction } from '@/actions/interviewAttempt';
+import { FaMicrophone, FaMicrophoneSlash } from 'react-icons/fa';
 
 type AnswerComponentPropsType = {
   interviewId: string;
@@ -147,13 +144,15 @@ const AnswerComponent = ({
               }
             }}
           >
-            <HiOutlineMicrophone className='size-4 mr-1.5' /> Stop recording
+            <FaMicrophoneSlash strokeWidth={2} className='size-4 mr-1.5' /> Stop
+            recording
           </Button>
         )}
 
         {!isListening && !hasAnswered && (
           <Button className='w-full' onClick={startListening}>
-            <HiOutlineMicrophone className='size-4 mr-1.5' /> Start recording
+            <FaMicrophone strokeWidth={2} className='size-4 mr-1.5' /> Start
+            recording
           </Button>
         )}
         {hasAnswered && !isListening && isLastQuestion && (

@@ -6,7 +6,6 @@ import { toast } from 'sonner';
 import { LuLoader2 } from 'react-icons/lu';
 import {
   HiOutlineClipboardDocumentList,
-  HiOutlineDocumentText,
   HiOutlineRocketLaunch,
 } from 'react-icons/hi2';
 
@@ -16,6 +15,7 @@ import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { useServerActionMutation } from '@/hooks/server-action-hooks';
 import { createExamForModuleAction } from '@/actions/modules';
 import { Button, buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 type ExamCardType = {
   examActivity: IExamActivity;
@@ -57,7 +57,7 @@ const ExamCard = ({
       title={title}
       type={type}
       completed={completed}
-      comment={`Exam • ${
+      comment={`${
         difficulty[0].toUpperCase() + difficulty.slice(1)
       } difficulty`}
       menuContent={
@@ -82,14 +82,16 @@ const ExamCard = ({
           </>
         ) : null
       }
-      icon={<HiOutlineDocumentText className='size-5' strokeWidth={1.5} />}
       actionButton={
         <>
           {!passed ? (
             <>
               {!completed && examId ? (
                 <Link
-                  className={buttonVariants({ size: 'sm' })}
+                  className={cn(
+                    buttonVariants({ size: 'sm' }),
+                    'min-w-[150px]'
+                  )}
                   href={{
                     pathname: `/exam/${examId}`,
                     query: {
@@ -104,6 +106,7 @@ const ExamCard = ({
               ) : (
                 <Button
                   size='sm'
+                  variant={completed ? 'secondary' : 'default'}
                   onClick={() =>
                     createExam({
                       pathId,
@@ -114,6 +117,7 @@ const ExamCard = ({
                     })
                   }
                   disabled={isPending}
+                  className='min-w-[150px]'
                 >
                   {!isPending ? (
                     <>Generate exam</>
@@ -128,7 +132,10 @@ const ExamCard = ({
             </>
           ) : (
             <Link
-              className={buttonVariants({ size: 'sm', variant: 'secondary' })}
+              className={cn(
+                buttonVariants({ size: 'sm', variant: 'secondary' }),
+                'min-w-[150px]'
+              )}
               href={`/exam/${examId}/results?pathId=${pathId}&moduleId=${moduleId}`}
             >
               See results

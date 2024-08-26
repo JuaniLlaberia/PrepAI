@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
-import { HiOutlineHome } from 'react-icons/hi2';
 
 import LogoutBtn from './LogoutBtn';
 import ThemeMenu from './ThemeMenu';
@@ -21,7 +20,7 @@ const UserMenu = async () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger aria-label='user dropdown menu'>
-        <div className='flex items-center gap-2 cursor-pointer lg:hover:bg-accent lg:p-1 lg:rounded-lg lg:transition-colors'>
+        <div className='flex items-center gap-2 cursor-pointer lg:hover:bg-accent lg:p-2 lg:px-3.5 lg:rounded-lg lg:transition-colors'>
           <Avatar className='size-9 border border-border'>
             <AvatarFallback>{user?.given_name?.at(0)}</AvatarFallback>
             <AvatarImage
@@ -38,13 +37,21 @@ const UserMenu = async () => {
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className='lg:w-[200px]'>
-        <DropdownMenuLabel>My account</DropdownMenuLabel>
+        <DropdownMenuLabel className='flex flex-col items-start lg:hidden'>
+          <span>
+            {user?.given_name} {user?.family_name}
+          </span>
+          <span className='text-muted-foreground'>{user?.email}</span>
+        </DropdownMenuLabel>
+        <DropdownMenuLabel className='hidden lg:flex'>
+          My account
+        </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link href='/'>
-            <HiOutlineHome className='size-4 mr-1.5' />
-            Home
-          </Link>
+          <Link href='/settings/profile'>Profile</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild className='lg:hidden'>
+          <Link href='/settings/suscriptions'>Suscriptions</Link>
         </DropdownMenuItem>
         <ThemeMenu />
         <DropdownMenuSeparator />

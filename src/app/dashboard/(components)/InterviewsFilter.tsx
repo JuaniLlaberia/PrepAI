@@ -16,7 +16,9 @@ import { cn } from '@/lib/utils';
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
@@ -143,12 +145,18 @@ const InterviewsFilters = ({
           setSeachParam('sortBy', val);
         }}
       >
-        <SelectTrigger className='w-[240px] bg-background hidden md:flex'>
+        <SelectTrigger
+          icon={<BsSortDown />}
+          className='w-[180px] bg-background hidden md:ml-3 md:flex'
+        >
           <SelectValue placeholder='Sort by' />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value='createdAt'>Sorty by creation</SelectItem>
-          <SelectItem value='name'>Sorty by name</SelectItem>
+          <SelectGroup>
+            <SelectLabel>Sort by</SelectLabel>
+            <SelectItem value='createdAt'>Creation</SelectItem>
+            <SelectItem value='name'>Name</SelectItem>
+          </SelectGroup>
         </SelectContent>
       </Select>
     </>
