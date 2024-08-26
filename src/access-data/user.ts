@@ -16,3 +16,18 @@ export const createUser = async ({
 
   await User.create(user);
 };
+
+export const updateUser = async ({
+  userId,
+  user,
+}: {
+  userId: string;
+  user: Partial<IUserDocument>;
+}) => {
+  await User.findByIdAndUpdate(userId, user);
+};
+
+export const deleteUser = async ({ userId }: { userId: string }) => {
+  //DELETE USER
+  //DELETE ALL USER DATA (INTERVIEWS, ATTEMPTS, EXAMS, PATHS, MODULES, ETC...)
+};
