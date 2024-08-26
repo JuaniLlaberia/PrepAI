@@ -26,7 +26,7 @@ export const createExamAction = authenticatedAction
       });
 
       const { id } = await createExam({
-        exam: { userId, subject, difficulty, questions },
+        exam: { userId, subject, difficulty, questions, examType: type },
       });
 
       revalidatePath('/dashboard/exams');
