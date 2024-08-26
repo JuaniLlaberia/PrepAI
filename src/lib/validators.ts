@@ -59,3 +59,11 @@ export const PathSchema = z.object({
     .min(20, { message: 'Must be at least 20 characters.' })
     .max(300, { message: 'Must have less than 300 characters.' }),
 });
+
+export const FeedbackSchema = z.object({
+  email: z.string().email(),
+  feedback: z
+    .string()
+    .min(1, 'Must be at least 1 character')
+    .max(300, { message: 'Must have less than 300 characters.' }),
+});
