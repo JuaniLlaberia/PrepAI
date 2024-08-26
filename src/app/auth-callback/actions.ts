@@ -16,7 +16,10 @@ export const authenticateUser = async () => {
       user: {
         kindeId: user.id,
         email: user.email,
-        name: `${user.given_name} ${user.family_name}` ?? '',
+        name:
+          user.given_name || user.family_name
+            ? `${user.given_name} ${user.family_name}`
+            : '',
       },
     });
   }
