@@ -10,3 +10,12 @@ export const formatTimer = (seconds: number) => {
     .toString()
     .padStart(2, '0')}`;
 };
+
+export const formatDate = (date: Date) => {
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  });
+  return formatter.format(date);
+};
