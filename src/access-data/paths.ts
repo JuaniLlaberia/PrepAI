@@ -6,7 +6,7 @@ import InterviewAttempt from '@/db/models/InterviewAttempt';
 import ExamAttempt from '@/db/models/ExamAttempt';
 import Exam from '@/db/models/Exam';
 import Path, { IPathDocument } from '@/db/models/Path';
-import { getAuthUser } from '@/actions/user';
+import { getAuthUser } from '@/actions/auth';
 import { generateModulesWithGemini } from '@/gemini/functions';
 
 export const getUserPaths = async ({

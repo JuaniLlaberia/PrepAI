@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 import ExamAttempt from '@/db/models/ExamAttempt';
 import Exam, { IExamDocument } from '@/db/models/Exam';
-import { getAuthUser } from '@/actions/user';
+import { getAuthUser } from '@/actions/auth';
 
 export const getUserExams = async ({
   sort,
@@ -18,7 +18,7 @@ export const getUserExams = async ({
   if (filter !== 'all') examQuery.where({ difficulty: filter });
 
   return await examQuery
-    .select('_id subject difficulty taken pinned passed createdAt')
+    .select('_id subject difficulty taken pinned passed examType createdAt')
     .sort(
       sort === 'createdAt'
         ? { pinned: 'desc', createdAt: 'desc' }

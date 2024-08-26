@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 import InterviewAttempt from '@/db/models/InterviewAttempt';
 import Interview, { IInterviewDocument } from '@/db/models/Interview';
-import { getAuthUser } from '@/actions/user';
+import { getAuthUser } from '@/actions/auth';
 import { generateInterviewWithGemini } from '@/gemini/functions';
 
 export const getUserInterviews = async ({

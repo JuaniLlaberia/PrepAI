@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 import Interview from '@/db/models/Interview';
 import InterviewAttempt from '@/db/models/InterviewAttempt';
-import { getAuthUser } from '@/actions/user';
+import { getAuthUser } from '@/actions/auth';
 import { generateInterviewFeedbackWithGemini } from '@/gemini/functions';
 
 export const getInterviewFeedback = async ({
