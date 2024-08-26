@@ -1,14 +1,12 @@
 import { ReactElement, ReactNode } from 'react';
 import { HiOutlineDocumentText, HiOutlineSquares2X2 } from 'react-icons/hi2';
 import { PiTreeStructureLight } from 'react-icons/pi';
-import { MdOutlineFeedback } from 'react-icons/md';
 
+import UserFeedback from './(components)/UserFeedback';
 import UserMenu from './(components)/UserMenu';
 import DashboardTabs from './(components)/NavbarTabs';
 import SidebarLinks from './(components)/Sidebar';
 import Logo from '@/components/Logo';
-import { Button } from '@/components/ui/button';
-import UserFeedback from './(components)/UserFeedback';
 
 export type NavigationLinksType = {
   id: string;
