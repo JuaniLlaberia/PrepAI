@@ -4,6 +4,7 @@ export interface IUser {
   kindeId: string;
   name: string;
   email: string;
+  profileImg: string;
 }
 
 export interface IUserDocument extends IUser, Document {
@@ -27,6 +28,9 @@ const userSchema = new mongoose.Schema<IUserDocument>({
       },
       message: 'Invalid email format',
     },
+  },
+  profileImg: {
+    type: String,
   },
 });
 
