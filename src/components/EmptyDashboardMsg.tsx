@@ -9,7 +9,7 @@ const EmptyDashboardMsg = ({
   crrLink,
   newPageLink,
 }: {
-  type: 'path' | 'interview' | 'exam';
+  type: 'path' | 'interview' | 'exam' | 'question';
   crrLink: string;
   newPageLink: string;
 }) => {
