@@ -261,3 +261,28 @@ export const generateActivitiesWithGemini = async ({
 
   return activities;
 };
+
+export const generateQuestionAnswerWithGemini = async ({
+  question,
+}: {
+  question: string;
+}) => {
+  const prompt = `Act as an interview candidate. You are given the following question in the interview: ${question}.
+   Answer the question in an explanatory manner using plain text (no bullet points, no titles, no markup) in no less than 450 words.
+   In addition based on the question difficulty label it as easy, medium or hard. And also include what type of question it is (behavioral, technical or analytical).
+   Finally add an explanation to the question (what the interviewer may be looking with this question and how it should be approach). The output should be in JSON format
+   following this schema: {answer: string, difficulty: string(lowercase), type: string (lowercase), explanation: string}.`;
+
+  const result = await model.generateContent(prompt);
+  const response = await result.response;
+  const jsonData = response.text();
+
+  const generatedQuestion: {
+    answer: string;
+    difficulty: string;
+    type: string;
+    explanation: string;
+  } = JSON.parse(jsonData);
+
+  return generatedQuestion;
+};
