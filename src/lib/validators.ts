@@ -67,3 +67,10 @@ export const FeedbackSchema = z.object({
     .min(1, 'Must be at least 1 character')
     .max(300, { message: 'Must have less than 300 characters.' }),
 });
+
+export const QuestionSchema = z.object({
+  question: z
+    .string()
+    .min(10, { message: 'Must be at least 10 characters.' })
+    .max(200, { message: 'Must have less than 200 characters.' }),
+});
