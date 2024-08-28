@@ -1,6 +1,7 @@
 import { ReactElement, ReactNode } from 'react';
-import { HiOutlineDocumentText, HiOutlineSquares2X2 } from 'react-icons/hi2';
-import { PiTreeStructureLight } from 'react-icons/pi';
+import { HiOutlineDocumentText } from 'react-icons/hi2';
+import { PiLaptop, PiTreeStructureLight } from 'react-icons/pi';
+import { TbMessageQuestion } from 'react-icons/tb';
 
 import UserFeedback from './(components)/UserFeedback';
 import UserMenu from './(components)/UserMenu';
@@ -26,13 +27,19 @@ const navigationLinks: NavigationLinksType[] = [
     id: 'interviews',
     label: 'Mock interviews',
     link: '/dashboard/interviews',
-    icon: <HiOutlineSquares2X2 strokeWidth={1.5} className='size-[1.1rem]' />,
+    icon: <PiLaptop strokeWidth={1.5} className='size-[1.1rem]' />,
   },
   {
     id: 'mock-exams',
     label: 'Mock exams',
     link: '/dashboard/exams',
     icon: <HiOutlineDocumentText strokeWidth={1.5} className='size-[1.1rem]' />,
+  },
+  {
+    id: 'questions-bank',
+    label: 'Questions bank',
+    link: '/dashboard/questions',
+    icon: <TbMessageQuestion strokeWidth={1.5} className='size-[1.1rem]' />,
   },
 ];
 
