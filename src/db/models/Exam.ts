@@ -1,9 +1,10 @@
 import mongoose, { Document, Model, ObjectId } from 'mongoose';
+import { DifficultyEnum, ExamTypeEnum } from '@/lib/validators';
 
 export interface IExam {
   subject: string;
-  difficulty: 'easy' | 'medium' | 'hard';
-  examType: 'multiple-choice' | 'true-false';
+  difficulty: DifficultyEnum;
+  examType: ExamTypeEnum;
   passed: boolean;
   taken: boolean;
   pinned: boolean;
