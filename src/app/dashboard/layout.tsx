@@ -1,5 +1,5 @@
 import { ReactElement, ReactNode } from 'react';
-import { HiOutlineDocumentText } from 'react-icons/hi2';
+import { HiOutlineDocumentText, HiOutlineSquare2Stack } from 'react-icons/hi2';
 import { PiLaptop, PiTreeStructureLight } from 'react-icons/pi';
 import { TbMessageQuestion } from 'react-icons/tb';
 
@@ -33,7 +33,7 @@ const navigationLinks: NavigationLinksType[] = [
     id: 'mock-exams',
     label: 'Mock exams',
     link: '/dashboard/exams',
-    icon: <HiOutlineDocumentText strokeWidth={1.5} className='size-[1.1rem]' />,
+    icon: <HiOutlineSquare2Stack strokeWidth={1.5} className='size-[1.1rem]' />,
   },
   {
     id: 'questions-bank',
