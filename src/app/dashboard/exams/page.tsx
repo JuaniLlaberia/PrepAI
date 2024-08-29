@@ -13,6 +13,7 @@ import PinExamBtn from './(components)/PinExamBtn';
 import DeleteExamModal from './(components)/DeleteExamModal';
 import DashboardCard from '../(components)/DashboardCard';
 import ExamFilters from './(components)/ExamsFilters';
+import Badge from '@/components/ui/badge';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import {
@@ -73,14 +74,12 @@ const ExamsPage = async ({
                   title={subject}
                   level={difficulty}
                   createdAt={createdAt}
-                  taken={taken}
                   pinned={pinned}
                   type={
                     examType === 'true-false'
-                      ? 'True or False'
-                      : 'Multiple Choice'
+                      ? 'True or false'
+                      : 'Multiple choice'
                   }
-                  passed={passed}
                   link={taken ? `/exam/${_id}/results` : `/exam/${_id}`}
                   dialog={
                     <Dialog>
@@ -143,6 +142,12 @@ const ExamsPage = async ({
                         />
                       </DialogContent>
                     </Dialog>
+                  }
+                  customBadges={
+                    <Badge
+                      text={passed ? 'Passed' : taken ? 'Taken' : 'New'}
+                      color={passed ? 'green' : taken ? 'gray' : 'orange'}
+                    />
                   }
                 />
               )

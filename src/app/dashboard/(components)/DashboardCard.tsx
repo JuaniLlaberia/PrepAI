@@ -4,38 +4,35 @@ import {
   HiOutlineBriefcase,
   HiOutlineTag,
 } from 'react-icons/hi2';
+import type { ReactNode } from 'react';
 
 import Badge from '@/components/ui/badge';
-
+import AnimatedProgress from '@/components/AnimatedProgress';
 import { formatDate } from '@/lib/helpers';
 import { Separator } from '@/components/ui/separator';
-import { ReactNode } from 'react';
-import AnimatedProgress from '@/components/AnimatedProgress';
 
 type DashboardCardType = {
   title: string;
   level: string;
-  passed?: boolean;
   pinned: boolean;
   createdAt: Date;
   link: string;
   type?: string;
-  taken?: boolean;
   completedModules?: number;
   totalModules?: number;
   dialog?: ReactNode;
+  customBadges?: ReactNode;
 };
 
 const DashboardCard = ({
   title,
   level,
-  taken,
-  passed,
   createdAt,
   pinned,
   type,
   link,
   dialog,
+  customBadges,
   completedModules,
   totalModules,
 }: DashboardCardType) => {
@@ -44,18 +41,7 @@ const DashboardCard = ({
       <Link href={link} className='flex flex-col gap-4'>
         <h3 className='text-xl font-medium pr-3 line-clamp-4'>{title}</h3>
         <div className='flex items-center gap-2'>
-          {totalModules ? (
-            passed ? (
-              <Badge text='Completed' color='green' />
-            ) : (
-              <Badge text='In progress' color='orange' />
-            )
-          ) : passed ? (
-            <Badge
-              text={passed ? 'Passed' : taken ? 'Taken' : 'New'}
-              color={passed ? 'green' : taken ? 'gray' : 'orange'}
-            />
-          ) : null}
+          {customBadges}
           {pinned ? <Badge text='Pinned' color='blue' /> : null}
         </div>
         {totalModules ? (
@@ -78,7 +64,9 @@ const DashboardCard = ({
 
         <div className='flex flex-col gap-1.5 mt-2.5'>
           <p className='flex items-center justify-between text-start'>
-            <span className='capitalize'>{level} level</span>
+            <span>
+              <span className='capitalize'>{level}</span> level
+            </span>
             <span>
               <HiOutlineBriefcase className='size-5 text-muted-foreground' />
             </span>
@@ -87,7 +75,7 @@ const DashboardCard = ({
           {type ? (
             <>
               <p className='flex items-center justify-between text-start'>
-                <span className='capitalize'>{type}</span>
+                <span>{type[0].toLocaleUpperCase() + type.slice(1)}</span>
                 <span>
                   <HiOutlineTag className='size-5 text-muted-foreground' />
                 </span>

@@ -13,6 +13,7 @@ import DashboardCard from '../(components)/DashboardCard';
 import InterviewsFilters from '../(components)/InterviewsFilter';
 import EmptyDashboardMsg from '@/components/EmptyDashboardMsg';
 import PinInterviewBtn from '../(components)/PinInterviewBtn';
+import Badge from '@/components/ui/badge';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import {
@@ -72,10 +73,7 @@ const InterviewsPage = async ({
                   title={jobRole}
                   level={jobExperience}
                   createdAt={createdAt}
-                  taken={taken}
                   pinned={pinned}
-                  type='Mock interview'
-                  passed={passed}
                   link={
                     taken ? `/interview/${_id}/feedback` : `/interview/${_id}`
                   }
@@ -143,6 +141,12 @@ const InterviewsPage = async ({
                         />
                       </DialogContent>
                     </Dialog>
+                  }
+                  customBadges={
+                    <Badge
+                      text={passed ? 'Passed' : taken ? 'Taken' : 'New'}
+                      color={passed ? 'green' : taken ? 'gray' : 'orange'}
+                    />
                   }
                 />
               )

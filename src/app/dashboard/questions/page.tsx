@@ -9,6 +9,7 @@ import EmptyDashboardMsg from '@/components/EmptyDashboardMsg';
 import QuestionsFilter from './(components)/QuestionsFilter';
 import DashboardCard from '../(components)/DashboardCard';
 import PinQuestionBtn from './(components)/PinQuestionBtn';
+import Badge from '@/components/ui/badge';
 import DeleteQuestionModal from './(components)/DeleteQuestionModal';
 import { buttonVariants } from '@/components/ui/button';
 import { Button } from '@/components/ui/button';
@@ -61,7 +62,6 @@ const QuestionsBankPage = async ({
                 title={question}
                 level={difficulty}
                 createdAt={createdAt}
-                type={`${type} question`}
                 pinned={pinned}
                 link={`/question/${String(_id)}`}
                 dialog={
@@ -103,6 +103,7 @@ const QuestionsBankPage = async ({
                     </DialogContent>
                   </Dialog>
                 }
+                customBadges={<Badge text={type} color='purple' />}
               />
             )
           )
