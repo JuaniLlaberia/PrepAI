@@ -8,11 +8,11 @@ import {
 } from 'react-icons/hi2';
 import { PiArrowClockwiseLight } from 'react-icons/pi';
 
-import DeleteInterviewModal from '../(components)/DeleteInterviewModal';
+import DeleteInterviewModal from './(components)/DeleteInterviewModal';
 import DashboardCard from '../(components)/DashboardCard';
-import InterviewsFilters from '../(components)/InterviewsFilter';
+import InterviewsFilters from './(components)/InterviewsFilter';
 import EmptyDashboardMsg from '@/components/EmptyDashboardMsg';
-import PinInterviewBtn from '../(components)/PinInterviewBtn';
+import PinInterviewBtn from './(components)/PinInterviewBtn';
 import Badge from '@/components/ui/badge';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
