@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
 import { FeaturesBento } from '@/components/landing-ui/FeaturesBento';
 import { Faq } from '@/components/landing-ui/Faq';
+import { Separator } from '@/components/ui/separator';
 
 const Home = () => {
   return (
@@ -111,10 +112,25 @@ const Home = () => {
         <TextRevealByWord text='PrepAI will change the way you prepare for interviews.' />
       </section>
       <CallToAction />
-      <footer className='px-4 pb-4'>
-        <p className='text-xs md:text-sm text-center text-muted-foreground'>
-          PrepAI &copy; {new Date().getFullYear()} All rights reserved
-        </p>
+      <footer className='flex flex-col items-center px-4 md:px-20 lg:px:40 2xl:px-80 mt-6'>
+        <Separator />
+        <div className='flex w-full items-center justify-between py-4'>
+          <p className='text-xs md:text-sm text-muted-foreground'>
+            PrepAI &copy; {new Date().getFullYear()} All rights reserved
+          </p>
+          <ul className='flex flex-row items-center gap-2 text-xs md:text-sm text-muted-foreground'>
+            <li>
+              <Link className='hover:underline' href='/tos'>
+                Terms
+              </Link>
+            </li>
+            <li>
+              <Link className='hover:underline' href='/privacy-policy'>
+                Privacy
+              </Link>
+            </li>
+          </ul>
+        </div>
       </footer>
     </>
   );
