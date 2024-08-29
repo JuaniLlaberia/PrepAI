@@ -72,7 +72,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
             <UserMenu />
           </div>
         </aside>
-        <section className='w-full pt-4 lg:pt-8 px-4 md:px-16 lg:px-20 2xl:px-48 bg-background-2 dark:bg-background h-full lg:overflow-y-auto'>
+        <section className='w-full pt-4 lg:pt-8 px-4 md:px-16 lg:px-20 2xl:px-40 bg-background-2 dark:bg-background h-full lg:overflow-y-auto'>
           {children}
         </section>
       </div>

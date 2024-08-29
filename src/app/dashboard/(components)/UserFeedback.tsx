@@ -1,6 +1,6 @@
 'use client';
 
-import { HiOutlineCheck, HiOutlineXMark } from 'react-icons/hi2';
+import { HiOutlineCheck } from 'react-icons/hi2';
 import { MdOutlineFeedback } from 'react-icons/md';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -11,13 +11,7 @@ import { useState } from 'react';
 import InputWrapper from '@/components/InputWrapper';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTrigger,
-} from '@/components/ui/drawer';
+import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
@@ -124,13 +118,6 @@ const UserFeedback = () => {
           <UserFeedbackBtn className='lg:hidden' />
         </DrawerTrigger>
         <DrawerContent className='p-3'>
-          <DrawerHeader className='relative'>
-            <DrawerClose asChild className='absolute top-0 right-0'>
-              <Button size='icon' variant='ghost'>
-                <HiOutlineXMark className='size-4' />
-              </Button>
-            </DrawerClose>
-          </DrawerHeader>
           <UserFeedbackForm />
         </DrawerContent>
       </Drawer>

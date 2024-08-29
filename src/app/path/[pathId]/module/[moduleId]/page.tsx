@@ -18,7 +18,7 @@ const ModulePage = async ({
     <>
       <PageHeader link={`/path/${pathId}`} />
       <div className='flex flex-col items-center mt-2'>
-        <section className='w-full max-w-[1000px] overflow-x-hidden pb-3'>
+        <section className='w-full max-w-[700px] overflow-x-hidden pb-3'>
           <div className='bg-background-2 p-4 rounded-xl border-[1px] border-b-[3.5px] border-[#ebebeb] dark:border-accent'>
             <h1 className='font-semibold text-sm mb-1 text-muted-foreground'>
               STAGE {order}
@@ -30,7 +30,7 @@ const ModulePage = async ({
             <h2 className='text-sm lg:text-base xl:text-lg font-semibold mb-1'>
               Activities
             </h2>
-            <ul className='grid grid-cols-1 lg:grid-cols-3 gap-3'>
+            <ul className='grid grid-cols-1 lg:grid-cols-2 gap-3'>
               {activities.map((activity, i) => (
                 <ActivityCard
                   key={i}
