@@ -42,7 +42,7 @@ export const generateExamWithGemini = async ({
   return questions;
 };
 
-export const test = async ({
+export const generateAnswersExplanationWithGemini = async ({
   data,
 }: {
   data: {
