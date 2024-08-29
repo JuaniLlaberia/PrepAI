@@ -7,27 +7,32 @@ export interface IUserFeedback {
 
 export interface IUserFeedbackDocument extends IUserFeedback, Document {
   createdAt: Date;
-  updatedAt: Date;
 }
 
-const userFeedbackSchema = new mongoose.Schema<IUserFeedbackDocument>({
-  email: {
-    type: String,
-    required: true,
-    validate: {
-      validator: function (val: string) {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+const userFeedbackSchema = new mongoose.Schema<IUserFeedbackDocument>(
+  {
+    email: {
+      type: String,
+      required: true,
+      validate: {
+        validator: function (val: string) {
+          return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+        },
+        message: 'Invalid email format',
       },
-      message: 'Invalid email format',
+    },
+    feedback: {
+      type: String,
+      required: true,
+      minlength: 1,
+      maxlength: 300,
     },
   },
-  feedback: {
-    type: String,
-    required: true,
-    minlength: 1,
-    maxlength: 300,
-  },
-});
+  {
+    timestamps: { createdAt: true, updatedAt: false },
+    versionKey: false,
+  }
+);
 
 userFeedbackSchema.index({ kindeId: 1 });
 

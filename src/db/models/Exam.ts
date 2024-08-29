@@ -21,7 +21,6 @@ export interface IExam {
 
 export interface IExamDocument extends IExam, Document {
   createdAt: Date;
-  updatedAt: Date;
 }
 
 const examSchema = new mongoose.Schema<IExamDocument>(
@@ -60,7 +59,10 @@ const examSchema = new mongoose.Schema<IExamDocument>(
       },
     ],
   },
-  { timestamps: true }
+  {
+    timestamps: { createdAt: true, updatedAt: false },
+    versionKey: false,
+  }
 );
 
 examSchema.index({ userId: 1 });

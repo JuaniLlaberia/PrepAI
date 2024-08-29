@@ -44,7 +44,6 @@ export interface IInterviewActivity extends IActivity {
 
 const baseOptions = {
   discriminatorKey: 'type',
-  // _id: false,
 };
 
 const activitySchema = new mongoose.Schema<IActivity>(

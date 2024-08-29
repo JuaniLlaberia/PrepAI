@@ -13,7 +13,6 @@ export interface IPath {
 
 export interface IPathDocument extends IPath, Document {
   createdAt: Date;
-  updatedAt: Date;
 }
 
 const pathSchema = new mongoose.Schema<IPathDocument>(
@@ -52,7 +51,10 @@ const pathSchema = new mongoose.Schema<IPathDocument>(
     userId: { type: mongoose.Schema.ObjectId, ref: 'User', required: true },
     totalModules: Number,
   },
-  { timestamps: true }
+  {
+    timestamps: { createdAt: true, updatedAt: false },
+    versionKey: false,
+  }
 );
 
 pathSchema.index({ userId: 1, completed: 1 });

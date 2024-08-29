@@ -13,7 +13,6 @@ export interface IQuestion {
 
 export interface IQuestionDocument extends IQuestion, Document {
   createdAt: Date;
-  updatedAt: Date;
 }
 
 const questionSchema = new mongoose.Schema<IQuestionDocument>(
@@ -34,7 +33,10 @@ const questionSchema = new mongoose.Schema<IQuestionDocument>(
     pinned: { type: Boolean },
     userId: { type: mongoose.Schema.ObjectId, ref: 'User' },
   },
-  { timestamps: true }
+  {
+    timestamps: { createdAt: true, updatedAt: false },
+    versionKey: false,
+  }
 );
 
 questionSchema.index({ userId: 1 });

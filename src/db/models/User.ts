@@ -9,30 +9,35 @@ export interface IUser {
 
 export interface IUserDocument extends IUser, Document {
   createdAt: Date;
-  updatedAt: Date;
 }
 
-const userSchema = new mongoose.Schema<IUserDocument>({
-  kindeId: { type: String, required: true },
-  name: {
-    type: String,
-    required: true,
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    validate: {
-      validator: function (val: string) {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+const userSchema = new mongoose.Schema<IUserDocument>(
+  {
+    kindeId: { type: String, required: true },
+    name: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      validate: {
+        validator: function (val: string) {
+          return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+        },
+        message: 'Invalid email format',
       },
-      message: 'Invalid email format',
+    },
+    profileImg: {
+      type: String,
     },
   },
-  profileImg: {
-    type: String,
-  },
-});
+  {
+    timestamps: { createdAt: true, updatedAt: false },
+    versionKey: false,
+  }
+);
 
 userSchema.index({ kindeId: 1 });
 
