@@ -1,12 +1,5 @@
 import mongoose, { ObjectId } from 'mongoose';
-import { DifficultyEnum, ExamTypeEnum } from '@/lib/validators';
-
-export enum ActivityTypeEnum {
-  REVISION = 'revision',
-  EXAM = 'exam',
-  PROJECT = 'project',
-  INTERVIEW = 'interview',
-}
+import { ActivityTypeEnum, DifficultyEnum, ExamTypeEnum } from '@/lib/enum';
 
 export interface IActivity {
   _id: string | ObjectId;

@@ -11,9 +11,9 @@ import {
   generateInterviewWithGemini,
 } from '@/gemini/functions';
 import { getAuthUser } from '@/actions/auth';
-import { DifficultyEnum, ExamTypeEnum } from '@/lib/validators';
 import { IPathDocument } from '@/db/models/Path';
 import { IProjectActivity, IRevisionActivity } from '@/db/models/Activity';
+import { DifficultyEnum, ExamTypeEnum } from '@/lib/enum';
 
 export const getModules = async ({
   pathId,

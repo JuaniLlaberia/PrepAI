@@ -1,23 +1,5 @@
 import { z } from 'zod';
-
-export enum ExperienceEnum {
-  INTERSHIP = 'intership',
-  JUNIOR = 'junior',
-  SRR = 'ssr',
-  SENIOR = 'senior',
-  LEAD = 'lead',
-}
-
-export enum DifficultyEnum {
-  EASY = 'easy',
-  MEDIUM = 'medium',
-  HARD = 'hard',
-}
-
-export enum ExamTypeEnum {
-  MULTIPLE = 'multiple-choice',
-  TRUTH = 'true-false',
-}
+import { DifficultyEnum, ExamTypeEnum, ExperienceEnum } from './enum';
 
 export const InterviewSchema = z.object({
   jobRole: z

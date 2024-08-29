@@ -1,12 +1,12 @@
 import mongoose, { Document, Model, ObjectId } from 'mongoose';
-import { DifficultyEnum } from '@/lib/validators';
+import { DifficultyEnum, QuestionTypeEnum } from '@/lib/enum';
 
 export interface IQuestion {
   question: string;
   answer: string;
   explanation: string;
   difficulty: DifficultyEnum;
-  type: 'behavioral' | 'technical' | 'analytical';
+  type: QuestionTypeEnum;
   userId: ObjectId | string;
   pinned: boolean;
 }

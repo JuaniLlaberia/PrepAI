@@ -4,12 +4,12 @@ import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
 import { authenticatedAction } from '@/lib/safe-actions';
-import { ExperienceEnum } from '@/lib/validators';
 import {
   createInterview,
   deleteInterview,
   updateInterview,
 } from '@/access-data/interview';
+import { ExperienceEnum } from '@/lib/enum';
 
 export const createInterviewAction = authenticatedAction
   .createServerAction()

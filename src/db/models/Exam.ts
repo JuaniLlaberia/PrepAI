@@ -1,5 +1,5 @@
 import mongoose, { Document, Model, ObjectId } from 'mongoose';
-import { DifficultyEnum, ExamTypeEnum } from '@/lib/validators';
+import { DifficultyEnum, ExamTypeEnum } from '@/lib/enum';
 
 export interface IExam {
   subject: string;

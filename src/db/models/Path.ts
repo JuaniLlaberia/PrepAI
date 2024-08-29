@@ -1,8 +1,9 @@
 import mongoose, { Document, Model, ObjectId } from 'mongoose';
+import { ExperienceEnum } from '@/lib/enum';
 
 export interface IPath {
   jobPosition: string;
-  jobExperience: 'intership' | 'junior' | 'ssr' | 'senior' | 'lead';
+  jobExperience: ExperienceEnum;
   topics: string;
   completed: boolean;
   pinned: boolean;

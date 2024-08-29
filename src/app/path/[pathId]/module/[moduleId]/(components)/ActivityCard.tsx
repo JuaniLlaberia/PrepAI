@@ -7,7 +7,6 @@ import InterviewCard from './InterviewCard';
 import RevisionCard from './RevisionCard';
 import ProjectCard from './ProjectCard';
 import {
-  ActivityTypeEnum,
   IActivity,
   IExamActivity,
   IInterviewActivity,
@@ -16,6 +15,7 @@ import {
 } from '@/db/models/Activity';
 import { useServerActionMutation } from '@/hooks/server-action-hooks';
 import { skipActivityAction } from '@/actions/modules';
+import { ActivityTypeEnum } from '@/lib/enum';
 
 // Type guards
 const isRevisionActivity = (

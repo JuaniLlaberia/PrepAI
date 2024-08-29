@@ -1,9 +1,10 @@
 import mongoose, { Document, Model, ObjectId } from 'mongoose';
+import { ExperienceEnum } from '@/lib/enum';
 
 export interface IInterview {
   jobRole: string;
   jobDescription: string;
-  jobExperience: 'intership' | 'junior' | 'ssr' | 'senior' | 'lead';
+  jobExperience: ExperienceEnum;
   taken: boolean;
   pinned: boolean;
   passed: boolean;

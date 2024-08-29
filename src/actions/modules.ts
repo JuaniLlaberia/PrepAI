@@ -10,8 +10,8 @@ import {
   createInterviewForModule,
   updateModule,
 } from '@/access-data/modules';
-import { DifficultyEnum, ExamTypeEnum } from '@/lib/validators';
 import { generateActivitiesWithGemini } from '@/gemini/functions';
+import { DifficultyEnum, ExamTypeEnum } from '@/lib/enum';
 
 export const startModuleAction = authenticatedAction
   .createServerAction()
