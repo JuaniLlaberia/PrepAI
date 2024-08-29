@@ -64,7 +64,6 @@ const QuestionsBankPage = async ({
                 type={`${type} question`}
                 pinned={pinned}
                 link={`/question/${String(_id)}`}
-                passed={false}
                 dialog={
                   <Dialog>
                     <DropdownMenu>
@@ -110,7 +109,7 @@ const QuestionsBankPage = async ({
         ) : (
           <EmptyDashboardMsg
             type='question'
-            crrLink='/dashboard/question'
+            crrLink='/dashboard/questions'
             newPageLink='/question/new'
           />
         )}

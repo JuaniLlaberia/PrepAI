@@ -13,7 +13,7 @@ export const getUserQuestions = async ({
 
   const questionQuery = Question.find({ userId });
 
-  if (filter !== 'all') questionQuery.where({ difficulty: filter });
+  if (filter !== 'all') questionQuery.where({ type: filter });
 
   return await questionQuery
     .select('_id question difficulty pinned type createdAt')

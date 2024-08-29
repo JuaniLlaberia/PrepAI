@@ -15,7 +15,7 @@ import AnimatedProgress from '@/components/AnimatedProgress';
 type DashboardCardType = {
   title: string;
   level: string;
-  passed: boolean;
+  passed?: boolean;
   pinned: boolean;
   createdAt: Date;
   link: string;
@@ -42,7 +42,7 @@ const DashboardCard = ({
   return (
     <li className='relative p-4 bg-background rounded-xl border-[1px] border-b-[3.5px] border-[#ebebeb] dark:border-accent dark:bg-background-2 hover:border-[#cdcdcd] dark:hover:border-[#474747] transition-colors'>
       <Link href={link} className='flex flex-col gap-4'>
-        <h3 className='text-xl font-medium'>{title}</h3>
+        <h3 className='text-xl font-medium pr-3 line-clamp-4'>{title}</h3>
         <div className='flex items-center gap-2'>
           {totalModules ? (
             passed ? (
@@ -50,12 +50,12 @@ const DashboardCard = ({
             ) : (
               <Badge text='In progress' color='orange' />
             )
-          ) : (
+          ) : passed ? (
             <Badge
               text={passed ? 'Passed' : taken ? 'Taken' : 'New'}
               color={passed ? 'green' : taken ? 'gray' : 'orange'}
             />
-          )}
+          ) : null}
           {pinned ? <Badge text='Pinned' color='blue' /> : null}
         </div>
         {totalModules ? (
