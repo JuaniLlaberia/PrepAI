@@ -10,7 +10,7 @@ export const findUserByKindeId = async (kindeId: string) => {
 export const getUserData = async (kindeId: string): Promise<IUserDocument> => {
   await connectToDB();
 
-  const userDB = await User.findById({ kindeId }).lean();
+  const userDB = await User.findOne({ kindeId }).lean();
   if (!userDB) throw new Error('User not found');
 
   return userDB;
