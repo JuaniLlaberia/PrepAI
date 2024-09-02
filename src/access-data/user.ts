@@ -1,5 +1,3 @@
-import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
-
 import { connectToDB } from '@/db';
 import User, { IUserDocument } from '@/db/models/User';
 
@@ -9,13 +7,11 @@ export const findUserByKindeId = async (kindeId: string) => {
   return await User.findOne({ kindeId }).lean();
 };
 
-export const getUserData = async (): Promise<IUserDocument | null> => {
-  const { getUser } = getKindeServerSession();
-  const user = await getUser();
-
+export const getUserData = async (kindeId: string): Promise<IUserDocument> => {
   await connectToDB();
 
-  const userDB = await User.findOne({ kindeId: user?.id }).lean();
+  const userDB = await User.findById({ kindeId }).lean();
+  if (!userDB) throw new Error('User not found');
 
   return userDB;
 };
