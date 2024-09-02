@@ -42,7 +42,7 @@ const ProfileCards = ({ userData }: { userData: IUserDocument }) => {
         <CardHeader>
           <CardTitle>Full Name</CardTitle>
           <CardDescription>
-            Used to identify your store in the marketplace.
+            The name that will be display in your account.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -68,9 +68,7 @@ const ProfileCards = ({ userData }: { userData: IUserDocument }) => {
       <Card x-chunk='dashboard-04-chunk-1'>
         <CardHeader>
           <CardTitle>Email Address</CardTitle>
-          <CardDescription>
-            Used to identify your store in the marketplace.
-          </CardDescription>
+          <CardDescription>Your account authentication email.</CardDescription>
         </CardHeader>
         <CardContent>
           <Input
@@ -86,7 +84,7 @@ const ProfileCards = ({ userData }: { userData: IUserDocument }) => {
           </p>
         </CardFooter>
       </Card>
-      <Card x-chunk='dashboard-04-chunk-1'>
+      {/* <Card x-chunk='dashboard-04-chunk-1'>
         <CardHeader>
           <div className='flex items-center justify-between gap-6'>
             <div>
@@ -106,7 +104,7 @@ const ProfileCards = ({ userData }: { userData: IUserDocument }) => {
             The profile image is optional.
           </p>
         </CardFooter>
-      </Card>
+      </Card> */}
     </div>
   );
 };
