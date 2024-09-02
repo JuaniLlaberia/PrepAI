@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
+import { notFound } from 'next/navigation';
 
 import LogoutBtn from './LogoutBtn';
 import ThemeMenu from './ThemeMenu';
@@ -14,7 +16,12 @@ import {
 import { getUserData } from '@/access-data/user';
 
 const UserMenu = async () => {
-  const userData = await getUserData();
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
+
+  if (!user) return notFound();
+
+  const userData = await getUserData(user?.id);
   const { name, email, profileImg } = userData;
 
   return (
