@@ -9,14 +9,13 @@ export const findUserByKindeId = async (kindeId: string) => {
   return await User.findOne({ kindeId }).lean();
 };
 
-export const getUserData = async (): Promise<IUserDocument> => {
+export const getUserData = async (): Promise<IUserDocument | null> => {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
   await connectToDB();
 
   const userDB = await User.findOne({ kindeId: user?.id }).lean();
-  if (!userDB) throw new Error('User not found');
 
   return userDB;
 };
