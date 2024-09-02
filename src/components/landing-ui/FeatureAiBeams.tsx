@@ -65,7 +65,7 @@ export function AiBeamsComponent({ className }: { className?: string }) {
             ref={div2Ref}
             className='w-auto rounded-xl text-sm font-semibold'
           >
-            Guided paths
+            Speech analysis
           </Circle>
           <Circle
             ref={div3Ref}
@@ -77,7 +77,7 @@ export function AiBeamsComponent({ className }: { className?: string }) {
             ref={div4Ref}
             className='w-auto rounded-xl text-sm font-semibold'
           >
-            Speech analysis
+            Guided paths
           </Circle>
         </div>
       </div>

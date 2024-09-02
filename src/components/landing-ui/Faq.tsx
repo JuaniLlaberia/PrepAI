@@ -40,18 +40,10 @@ const questions = [
 
 export function Faq() {
   return (
-    <Accordion
-      type='single'
-      collapsible
-      className='w-full border border-border rounded-xl p-2 max-w-[900px]'
-    >
+    <Accordion type='single' collapsible className='w-full p-2 max-w-[900px]'>
       {questions.map((question, i) => (
-        <AccordionItem
-          key={i}
-          value={`item-${i}`}
-          className='border border-border rounded-xl bg-background-2 mb-2'
-        >
-          <AccordionTrigger className='text-base lg:text-lg font-semibold px-6 text-start'>
+        <AccordionItem key={i} value={`item-${i}`} className='mb-2 border-0'>
+          <AccordionTrigger className='text-base lg:text-lg font-semibold px-6 text-start border-0'>
             {question.label}
           </AccordionTrigger>
           <AccordionContent className='text-base text-muted-foreground px-6'>

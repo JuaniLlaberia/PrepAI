@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 
 const BentoGrid = ({
@@ -23,32 +23,42 @@ const BentoGrid = ({
 const BentoCard = ({
   name,
   className,
-  background = <div></div>,
+  background,
   Icon,
   description,
+  small,
 }: {
   name: string;
   className: string;
   background?: ReactNode;
   Icon: any;
   description: string;
+  small?: boolean;
 }) => (
   <div
     key={name}
     className={cn(
       'group relative col-span-3 flex flex-col justify-between overflow-hidden rounded-xl',
-      'bg-white [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)]',
+      'bg-white [box-shadow:0_0_0_1px_rgba(0,0,0,.06),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)]',
       'dark:bg-background dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]',
+      'hover:scale-[101%] hover:[box-shadow:0_0_0_1px_rgba(0,0,0,.06),0_2px_4px_rgba(0,0,0,.07),0_12px_24px_rgba(0,0,0,.07)] transition-all',
       className
     )}
   >
-    <div>{background}</div>
-    <div className='pointer-events-none z-10 flex flex-col gap-1 p-6'>
-      <Icon className='h-10 w-10 origin-left text-neutral-700' />
-      <h3 className='text-xl font-medium text-neutral-700 dark:text-neutral-300'>
-        {name}
-      </h3>
-      <p className='max-w-lg text-neutral-400'>{description}</p>
+    <div className='flex flex-col py-5'>
+      <div
+        className={cn(
+          'flex flex-col px-6',
+          !small ? 'items-center lg:items-start' : 'items-center'
+        )}
+      >
+        <div className='border border-border rounded-lg p-2 bg-background-2 z-40'>
+          <Icon className='h-7 w-7 text-muted-foreground' />
+        </div>
+        <h3 className='text-lg font-medium mt-3'>{name}</h3>
+        <p className='text-sm text-muted-foreground'>{description}</p>
+      </div>
+      <div className='flex justify-center mt-8'>{background}</div>
     </div>
   </div>
 );

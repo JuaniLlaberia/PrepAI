@@ -1,15 +1,15 @@
 import {
-  HiCalendarDays,
+  HiOutlineQuestionMarkCircle,
   HiOutlineSparkles,
   HiOutlineTrophy,
 } from 'react-icons/hi2';
 import { PiTreeStructureLight } from 'react-icons/pi';
 
 import { BentoCard, BentoGrid } from '../ui/bento-grid';
-import { Calendar } from '../ui/calendar';
 import { AiBeamsComponent } from './FeatureAiBeams';
 import { FeatureScoreBar } from './FeatureScoreBar';
 import { FeaturePathsList } from './FeaturePathsList';
+import { QuestionsMarque } from './QuestionsMarque';
 
 const features = [
   {
@@ -19,6 +19,7 @@ const features = [
       'Receive scores, personalized feedback and speech analysis to improve your performance.',
     className: 'col-span-3 lg:col-span-1',
     background: <FeatureScoreBar />,
+    small: true,
   },
   {
     Icon: PiTreeStructureLight,
@@ -27,7 +28,7 @@ const features = [
       'Follow tailored paths to master interview skills and land your next job.',
     className: 'col-span-3 lg:col-span-2',
     background: (
-      <FeaturePathsList className='absolute left-0 lg:right-2 top-4 h-[300px] w-[600px] lg:w-auto border-none transition-all duration-300 ease-out [mask-image:linear-gradient(to_top,transparent_10%,#000_100%)] group-hover:scale-105' />
+      <FeaturePathsList className='absolute left-0 lg:right-2 -bottom-28 h-[300px] w-[600px] lg:w-auto border-none transition-all duration-300 ease-out [mask-image:linear-gradient(to_top,transparent_10%,#000_100%)] group-hover:scale-105' />
     ),
   },
   {
@@ -37,23 +38,17 @@ const features = [
       'Experience AI-generated interviews and exams personalized for you.',
     className: 'col-span-3 lg:col-span-2',
     background: (
-      <AiBeamsComponent className='absolute right-2 top-4 h-[300px] w-[600px] border-none transition-all duration-300 ease-out [mask-image:linear-gradient(to_top,transparent_10%,#000_100%)] group-hover:scale-105' />
+      <AiBeamsComponent className='absolute -right-16 -bottom-28 lg:-right-0 h-[300px] w-[600px] border-none transition-all duration-300 ease-out' />
     ),
   },
   {
-    Icon: HiCalendarDays,
-    name: 'Streaks (Comming soon)',
+    Icon: HiOutlineQuestionMarkCircle,
+    name: 'AI Questions bank',
     description:
       'Keep learning on track with daily streaks. Stay motivated and consistent.',
     className: 'col-span-3 lg:col-span-1',
-    background: (
-      <Calendar
-        disableNavigation
-        mode='single'
-        selected={new Date(2022, 4, 11, 0, 0, 0)}
-        className='absolute right-0 top-10 origin-top rounded-md border transition-all duration-300 ease-out [mask-image:linear-gradient(to_top,transparent_40%,#000_100%)] group-hover:scale-105'
-      />
-    ),
+    background: <QuestionsMarque />,
+    small: true,
   },
 ];
 

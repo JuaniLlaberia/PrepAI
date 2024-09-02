@@ -85,23 +85,14 @@ const Home = () => {
           </Link>
         </div>
       </section>
-      <section className='pt-28 xl:pt-36 px-4 md:px-16 lg:px-32 xl:px-60'>
-        <h2 className='text-sm md:text-base lg:text-lg text-center uppercase font-medium text-muted-foreground mb-2'>
-          Functionality
-        </h2>
-        <p className='flex justify-center items-center'>
-          <span className='text-center max-w-[600px] text-2xl md:text-3xl lg:text-4xl font-medium'>
-            It&apos;s super simple to use it. Let&apos;s see how to get started
-            with PrepAI.
-          </span>
-        </p>
-        <div className='flex items-center justify-center w-full mt-6 md:mt-8 lg:mt-10'>
-          <div className='w-full max-w-[1100px] min-h-[250px] sm:min-h-[350px] md:min-h-[450px] lg:min-h-[550px] bg-background-2 rounded-xl border border-border' />
+
+      <section className=' flex flex-col justify-center w-full pt-28 xl:pt-36 px-4 md:px-16 lg:px-32 xl:px-80'>
+        <div className='flex flex-col lg:flex-row items-start gap-6'>
+          <h2 className='text-4xl text-center px-4 lg:text-start lg:px-0 lg:text-5xl font-semibold'>
+            Common questions for the curious
+          </h2>
+          <Faq />
         </div>
-      </section>
-      <section className=' flex flex-col items-center justify-center w-full pt-28 xl:pt-36 px-4 md:px-16 lg:px-32 xl:px-80'>
-        <h2 className='text-4xl font-medium mb-8'>FAQs answered</h2>
-        <Faq />
         <div className='flex items-center justify-center mt-12'>
           <Link href='/login' className={cn(buttonVariants({}), 'text-base')}>
             Get started free
