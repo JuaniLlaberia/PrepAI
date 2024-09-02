@@ -13,8 +13,6 @@ export const getUserData = async (): Promise<IUserDocument> => {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
-  if (!user) throw new Error('User is not logged in');
-
   await connectToDB();
 
   const userDB = await User.findOne({ kindeId: user?.id }).lean();
