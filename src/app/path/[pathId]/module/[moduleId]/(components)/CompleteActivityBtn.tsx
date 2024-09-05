@@ -34,7 +34,7 @@ const CompleteActivityBtn = ({
 
   return (
     <Button
-      className='w-full'
+      className='w-full md:w-auto'
       disabled={isPending}
       onClick={() => completeActivity({ pathId, moduleId, activityId })}
     >

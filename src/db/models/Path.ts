@@ -1,8 +1,9 @@
 import mongoose, { Document, Model, ObjectId } from 'mongoose';
+import { ExperienceEnum } from '@/lib/enum';
 
 export interface IPath {
   jobPosition: string;
-  jobExperience: 'intership' | 'junior' | 'ssr' | 'senior' | 'lead';
+  jobExperience: ExperienceEnum;
   topics: string;
   completed: boolean;
   pinned: boolean;
@@ -13,7 +14,6 @@ export interface IPath {
 
 export interface IPathDocument extends IPath, Document {
   createdAt: Date;
-  updatedAt: Date;
 }
 
 const pathSchema = new mongoose.Schema<IPathDocument>(
@@ -52,7 +52,10 @@ const pathSchema = new mongoose.Schema<IPathDocument>(
     userId: { type: mongoose.Schema.ObjectId, ref: 'User', required: true },
     totalModules: Number,
   },
-  { timestamps: true }
+  {
+    timestamps: { createdAt: true, updatedAt: false },
+    versionKey: false,
+  }
 );
 
 pathSchema.index({ userId: 1, completed: 1 });

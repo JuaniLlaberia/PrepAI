@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 import Exam from '@/db/models/Exam';
 import ExamAttempt, { IExamAttemptDocument } from '@/db/models/ExamAttempt';
-import { getAuthUser } from '@/actions/user';
+import { getAuthUser } from '@/actions/auth';
 
 export const createExamAttempt = async ({
   examId,

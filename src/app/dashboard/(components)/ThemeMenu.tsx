@@ -1,7 +1,6 @@
 'use client';
 
 import { useTheme } from 'next-themes';
-import { PiPalette } from 'react-icons/pi';
 
 import {
   DropdownMenuItem,
@@ -16,10 +15,7 @@ const ThemeMenu = () => {
 
   return (
     <DropdownMenuSub>
-      <DropdownMenuSubTrigger>
-        <PiPalette className='size-4 mr-1.5' />
-        Theme
-      </DropdownMenuSubTrigger>
+      <DropdownMenuSubTrigger>Theme</DropdownMenuSubTrigger>
       <DropdownMenuSubContent className='flex flex-col gap-1'>
         <DropdownMenuItem
           className={cn(theme === 'light' ? 'bg-accent' : '')}

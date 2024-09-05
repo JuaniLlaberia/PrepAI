@@ -16,11 +16,11 @@ const ModuleRevisionPage = async ({
     <>
       <PageHeader link={`/path/${pathId}/module/${moduleId}`} />
       <div className='flex flex-col items-center mt-2'>
-        <section className='w-full max-w-[800px] bg-background-2 p-4 rounded-xl border-[1px] border-b-[3.5px] border-[#ebebeb] dark:border-accent'>
+        <section className='w-full max-w-[700px] bg-background-2 p-4 rounded-xl border-[1px] border-b-[3.5px] border-[#ebebeb] dark:border-accent'>
           <h1 className='text-2xl font-medium mb-2'>{title}</h1>
           <p className='text-muted-foreground'>{description}</p>
         </section>
-        <section className='w-full max-w-[800px] mt-6'>
+        <section className='w-full max-w-[700px] mt-6'>
           <h2 className='text-sm lg:text-base xl:text-lg font-semibold mb-1'>
             References
           </h2>
@@ -36,7 +36,7 @@ const ModuleRevisionPage = async ({
                   className='flex items-center justify-between font-medium'
                 >
                   <span>{ref.label}</span>
-                  <span>
+                  <span className='text-violet-500'>
                     <HiOutlineArrowTopRightOnSquare />
                   </span>
                 </a>
@@ -44,7 +44,7 @@ const ModuleRevisionPage = async ({
             ))}
           </ul>
           {!completed ? (
-            <div className='mt-5'>
+            <div className='mt-5 pt-2 pb-6 md:flex md:items-center md:justify-end'>
               <CompleteActivityBtn
                 pathId={pathId}
                 moduleId={moduleId}

@@ -16,18 +16,20 @@ import { cn } from '@/lib/utils';
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-const InterviewsFilters = ({
+const QuestionsFilter = ({
   filter = 'all',
   sortBy = 'createdAt',
 }: {
-  filter: 'all' | 'taken' | 'new';
+  filter: 'all' | 'behavioral' | 'technical' | 'analytical';
   sortBy: 'createdAt' | 'name';
 }) => {
   const pathname = usePathname();
@@ -84,7 +86,7 @@ const InterviewsFilters = ({
                 onClick={() => setSeachParam('filter', 'all')}
                 className='py-3 px-2 flex justify-between items-center hover:bg-accent rounded-md'
               >
-                All interviews
+                All questions
                 <HiOutlineCheck
                   className={cn(
                     'size-4',
@@ -95,28 +97,42 @@ const InterviewsFilters = ({
             </DrawerClose>
             <DrawerClose asChild aria-label='filter button'>
               <li
-                onClick={() => setSeachParam('filter', 'new')}
+                onClick={() => setSeachParam('filter', 'behavioral')}
                 className='py-3 px-2 flex justify-between items-center hover:bg-accent rounded-md'
               >
-                New interviews
+                Behavioral questions
                 <HiOutlineCheck
                   className={cn(
                     'size-4',
-                    filter === 'new' ? 'block' : 'hidden'
+                    filter === 'behavioral' ? 'block' : 'hidden'
                   )}
                 />
               </li>
             </DrawerClose>
             <DrawerClose asChild aria-label='filter button'>
               <li
-                onClick={() => setSeachParam('filter', 'taken')}
+                onClick={() => setSeachParam('filter', 'technical')}
                 className='py-3 px-2 flex justify-between items-center hover:bg-accent rounded-md'
               >
-                Taken interviews
+                Technical questions
                 <HiOutlineCheck
                   className={cn(
                     'size-4',
-                    filter === 'taken' ? 'block' : 'hidden'
+                    filter === 'technical' ? 'block' : 'hidden'
+                  )}
+                />
+              </li>
+            </DrawerClose>
+            <DrawerClose asChild aria-label='filter button'>
+              <li
+                onClick={() => setSeachParam('filter', 'analytical')}
+                className='py-3 px-2 flex justify-between items-center hover:bg-accent rounded-md'
+              >
+                Analytical questions
+                <HiOutlineCheck
+                  className={cn(
+                    'size-4',
+                    filter === 'analytical' ? 'block' : 'hidden'
                   )}
                 />
               </li>
@@ -133,8 +149,9 @@ const InterviewsFilters = ({
       >
         <TabsList>
           <TabsTrigger value='all'>All</TabsTrigger>
-          <TabsTrigger value='new'>New</TabsTrigger>
-          <TabsTrigger value='taken'>Taken</TabsTrigger>
+          <TabsTrigger value='behavioral'>Behavioral</TabsTrigger>
+          <TabsTrigger value='technical'>Technical</TabsTrigger>
+          <TabsTrigger value='analytical'>Analytical</TabsTrigger>
         </TabsList>
       </Tabs>
       <Select
@@ -143,16 +160,22 @@ const InterviewsFilters = ({
           setSeachParam('sortBy', val);
         }}
       >
-        <SelectTrigger className='w-[240px] bg-background hidden md:flex'>
+        <SelectTrigger
+          icon={<BsSortDown />}
+          className='w-[180px] bg-background hidden md:ml-3 md:flex'
+        >
           <SelectValue placeholder='Sort by' />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value='createdAt'>Sorty by creation</SelectItem>
-          <SelectItem value='name'>Sorty by name</SelectItem>
+          <SelectGroup>
+            <SelectLabel>Sort by</SelectLabel>
+            <SelectItem value='createdAt'>Creation</SelectItem>
+            <SelectItem value='name'>Name</SelectItem>
+          </SelectGroup>
         </SelectContent>
       </Select>
     </>
   );
 };
 
-export default InterviewsFilters;
+export default QuestionsFilter;

@@ -1,22 +1,31 @@
-import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
+'use server';
+
 import { redirect } from 'next/navigation';
+import { z } from 'zod';
+import { revalidatePath } from 'next/cache';
 
-import User from '@/db/models/User';
-import { connectToDB } from '@/db';
+import { deleteUser, updateUser } from '@/access-data/user';
+import { authenticatedAction } from '@/lib/safe-actions';
+import { cookies } from 'next/headers';
 
-export const getAuthUser = async (): Promise<string> => {
-  const { getUser } = getKindeServerSession();
-  const user = await getUser();
+export const updateUserAction = authenticatedAction
+  .createServerAction()
+  .input(z.object({ name: z.string() }))
+  .handler(async ({ input, ctx: { userId } }) => {
+    await updateUser({ userId, user: input });
+    revalidatePath('/settings/profile');
+  });
 
-  if (!user) {
-    console.log('You need to log in.');
-    redirect('/login');
-  }
+export const deleteUserAction = authenticatedAction
+  .createServerAction()
+  .input(z.object({}))
+  .handler(async ({ ctx: { userId } }) => {
+    await deleteUser({ userId });
 
-  await connectToDB();
-  const userDB = await User.findOne({ kindeId: user.id }).select('_id');
-
-  if (!userDB) throw new Error('User not found.');
-
-  return String(userDB._id);
-};
+    //Delete cookies
+    cookies().delete('access_token');
+    cookies().delete('id_token');
+    cookies().delete('refresh_token');
+    //Redirect to home page
+    redirect('/');
+  });

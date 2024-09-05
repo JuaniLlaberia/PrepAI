@@ -37,6 +37,22 @@ const LoginPage = async () => {
       >
         <Logo />
       </Link>
+      <div className='absolute bottom-2.5'>
+        <p className='text-muted-foreground text-xs md:text-sm'>
+          By accessing PrepAI, you agree to our{' '}
+          <span>
+            <Link className='underline' href='/tos'>
+              Terms
+            </Link>
+          </span>{' '}
+          &{' '}
+          <span>
+            <Link className='underline' href='/privacy-policy'>
+              Privacy
+            </Link>
+          </span>
+        </p>
+      </div>
     </section>
   );
 };

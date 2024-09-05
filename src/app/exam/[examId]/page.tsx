@@ -21,7 +21,7 @@ const ExamPage = ({
           moduleId ? "Let's start the assigment" : "Let's start your mock exam"
         }
         options={[
-          'Answer 10-15 questions',
+          'Answer 10 questions',
           'Get your results feedback',
           'Score 60% or more to pass',
         ]}

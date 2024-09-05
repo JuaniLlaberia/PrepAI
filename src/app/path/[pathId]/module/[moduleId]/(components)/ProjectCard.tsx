@@ -1,16 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import {
-  HiOutlineRocketLaunch,
-  HiOutlineWrenchScrewdriver,
-} from 'react-icons/hi2';
+import { HiOutlineRocketLaunch } from 'react-icons/hi2';
 import { usePathname } from 'next/navigation';
 
 import Card from './Card';
 import { IProjectActivity } from '@/db/models/Activity';
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 type ProjectCardType = {
   projectActivity: IProjectActivity;
@@ -26,7 +24,7 @@ const ProjectCard = ({ projectActivity, skipActivity }: ProjectCardType) => {
       title={title}
       type={type}
       completed={completed}
-      comment='Project • Optional'
+      comment='Optional'
       menuContent={
         !completed ? (
           <DropdownMenuItem onClick={() => skipActivity(String(_id))}>
@@ -35,14 +33,16 @@ const ProjectCard = ({ projectActivity, skipActivity }: ProjectCardType) => {
           </DropdownMenuItem>
         ) : null
       }
-      icon={<HiOutlineWrenchScrewdriver className='size-5' strokeWidth={1.5} />}
       actionButton={
         <Link
           href={`${pathname}/project`}
-          className={buttonVariants({
-            size: 'sm',
-            variant: completed ? 'secondary' : 'default',
-          })}
+          className={cn(
+            buttonVariants({
+              size: 'sm',
+              variant: completed ? 'secondary' : 'default',
+            }),
+            'min-w-[150px]'
+          )}
         >
           {completed ? 'Review project' : 'Start project'}
         </Link>

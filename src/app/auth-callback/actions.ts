@@ -1,7 +1,7 @@
 'use server';
 
-import { createUser, findUserByKindeId } from '@/access-data/user';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
+import { createUser, findUserByKindeId } from '@/access-data/user';
 
 export const authenticateUser = async () => {
   const { getUser } = getKindeServerSession();
@@ -16,7 +16,11 @@ export const authenticateUser = async () => {
       user: {
         kindeId: user.id,
         email: user.email,
-        name: `${user.given_name} ${user.family_name}` ?? '',
+        name:
+          user.given_name || user.family_name
+            ? `${user.given_name} ${user.family_name}`
+            : undefined,
+        profileImg: user.picture || undefined,
       },
     });
   }

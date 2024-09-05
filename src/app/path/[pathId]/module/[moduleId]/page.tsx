@@ -18,7 +18,7 @@ const ModulePage = async ({
     <>
       <PageHeader link={`/path/${pathId}`} />
       <div className='flex flex-col items-center mt-2'>
-        <section className='w-full max-w-[800px] overflow-x-hidden pb-3'>
+        <section className='w-full max-w-[700px] overflow-x-hidden pb-3'>
           <div className='bg-background-2 p-4 rounded-xl border-[1px] border-b-[3.5px] border-[#ebebeb] dark:border-accent'>
             <h1 className='font-semibold text-sm mb-1 text-muted-foreground'>
               STAGE {order}

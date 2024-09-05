@@ -44,7 +44,9 @@ const FeedbackComponent = async ({ interviewId }: { interviewId: string }) => {
               <h2 className='text-sm lg:text-base xl:text-lg font-semibold'>
                 Your max score
               </h2>
-              <p className='text-sm text-muted-foreground'>{score}/10</p>
+              <p className='text-sm text-muted-foreground'>
+                {Math.round(score)}/10
+              </p>
             </div>
             <AnimatedProgress value={score * 10} />
           </div>
@@ -59,7 +61,7 @@ const FeedbackComponent = async ({ interviewId }: { interviewId: string }) => {
                     <CollapsibleTrigger className='flex w-full items-center justify-between gap-3 border-[1px] border-b-[2.5px] border-border bg-background-2 rounded-xl p-3'>
                       <p className='flex items-center justify-between font-medium w-full'>
                         <span>Question {i + 1}</span>
-                        {score > 6 ? (
+                        {feedback.score >= 6 ? (
                           <span className='flex items-center gap-1 text-green-500'>
                             <HiOutlineCheck strokeWidth={2} />
                             Correct

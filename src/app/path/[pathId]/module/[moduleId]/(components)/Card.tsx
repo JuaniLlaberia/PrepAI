@@ -1,7 +1,12 @@
-import type { ReactElement, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { DropdownMenu } from '@radix-ui/react-dropdown-menu';
-import { HiOutlineCheck, HiOutlineEllipsisHorizontal } from 'react-icons/hi2';
+import {
+  HiOutlineBookOpen,
+  HiOutlineEllipsisHorizontal,
+} from 'react-icons/hi2';
+import { TbProgress, TbProgressCheck } from 'react-icons/tb';
 
+import Badge from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenuContent,
@@ -13,7 +18,6 @@ type CardType = {
   title: string;
   comment: string;
   type: string;
-  icon: ReactElement;
   completed: boolean;
   menuContent: ReactNode;
   actionButton?: ReactNode;
@@ -22,8 +26,8 @@ type CardType = {
 const Card = ({
   title,
   comment,
-  icon,
   menuContent,
+  type,
   completed,
   actionButton,
 }: CardType) => {
@@ -31,33 +35,37 @@ const Card = ({
     <li
       className={cn(
         'relative flex flex-col gap-6 p-4 rounded-xl border-[1px] border-b-[3.5px] border-[#ebebeb] dark:border-accent',
-        completed ? 'bg-green-100' : 'bg-background-2'
+        completed ? 'bg-green-100 border-green-200' : 'bg-background-2'
       )}
     >
-      <div className='flex items-center gap-2'>
-        <div
-          className={cn(
-            'flex items-center justify-center size-10 bg-background border border-boreder rounded-lg',
-            completed ? 'bg-green-500 border border-green-500' : null
-          )}
-        >
-          {completed ? (
-            <HiOutlineCheck className='size-5 text-white' strokeWidth={2.5} />
-          ) : (
-            <>{icon}</>
-          )}
-        </div>
-      </div>
-      <h2
+      <h2 className='text-lg font-medium'>{title}</h2>
+      <ul
         className={cn(
-          'text-xl font-medium',
-          completed ? 'text-muted-foreground' : 'text-primary'
+          'flex flex-col gap-1 text-sm',
+          completed ? 'text-green-500' : 'text-muted-foreground'
         )}
       >
-        {title}
-      </h2>
-      <p className='text-sm text-muted-foreground'>{comment}</p>
-      {actionButton}
+        <li className='[&_span]:flex [&_span]:items-center [&_span]:gap-1.5 '>
+          {completed ? (
+            <span>
+              <TbProgressCheck className='size-4' />
+              Completed
+            </span>
+          ) : (
+            <span>
+              <TbProgress className='size-4' /> In progress
+            </span>
+          )}
+        </li>
+        <li className='flex items-center gap-1.5'>
+          <HiOutlineBookOpen className='size-4' />
+          {comment}
+        </li>
+      </ul>
+      <div className='flex items-center justify-between'>
+        <Badge text={type} color='gray' />
+        {actionButton}
+      </div>
       {menuContent && (
         <DropdownMenu>
           <DropdownMenuTrigger className='absolute top-4 right-4' asChild>

@@ -10,10 +10,10 @@ import {
   generateInterviewFeedbackWithGemini,
   generateInterviewWithGemini,
 } from '@/gemini/functions';
-import { getAuthUser } from '@/actions/user';
-import { DifficultyEnum, ExamTypeEnum } from '@/lib/validators';
+import { getAuthUser } from '@/actions/auth';
 import { IPathDocument } from '@/db/models/Path';
 import { IProjectActivity, IRevisionActivity } from '@/db/models/Activity';
+import { DifficultyEnum, ExamTypeEnum } from '@/lib/enum';
 
 export const getModules = async ({
   pathId,

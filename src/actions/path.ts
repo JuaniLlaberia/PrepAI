@@ -4,8 +4,8 @@ import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
 import { authenticatedAction } from '@/lib/safe-actions';
-import { ExperienceEnum } from '@/lib/validators';
 import { createPath, deletePath, updatePath } from '@/access-data/paths';
+import { ExperienceEnum } from '@/lib/enum';
 
 export const createPathAction = authenticatedAction
   .createServerAction()

@@ -1,7 +1,9 @@
 import { ReactElement, ReactNode } from 'react';
-import { HiOutlineDocumentText, HiOutlineSquares2X2 } from 'react-icons/hi2';
-import { PiTreeStructureLight } from 'react-icons/pi';
+import { HiOutlineDocumentText, HiOutlineSquare2Stack } from 'react-icons/hi2';
+import { PiLaptop, PiTreeStructureLight } from 'react-icons/pi';
+import { TbMessageQuestion } from 'react-icons/tb';
 
+import UserFeedback from './(components)/UserFeedback';
 import UserMenu from './(components)/UserMenu';
 import DashboardTabs from './(components)/NavbarTabs';
 import SidebarLinks from './(components)/Sidebar';
@@ -25,13 +27,19 @@ const navigationLinks: NavigationLinksType[] = [
     id: 'interviews',
     label: 'Mock interviews',
     link: '/dashboard/interviews',
-    icon: <HiOutlineSquares2X2 strokeWidth={1.5} className='size-[1.1rem]' />,
+    icon: <PiLaptop strokeWidth={1.5} className='size-[1.1rem]' />,
   },
   {
     id: 'mock-exams',
     label: 'Mock exams',
     link: '/dashboard/exams',
-    icon: <HiOutlineDocumentText strokeWidth={1.5} className='size-[1.1rem]' />,
+    icon: <HiOutlineSquare2Stack strokeWidth={1.5} className='size-[1.1rem]' />,
+  },
+  {
+    id: 'questions-bank',
+    label: 'Questions bank',
+    link: '/dashboard/questions',
+    icon: <TbMessageQuestion strokeWidth={1.5} className='size-[1.1rem]' />,
   },
 ];
 
@@ -41,7 +49,10 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
       <nav className='flex flex-col justify-between items-center w-full border-b border-border px-4 md:px-16 lg:px-32 xl:px-56 pt-2 lg:hidden'>
         <div className='flex items-center justify-between w-full py-1 pb-2'>
           <Logo />
-          <UserMenu />
+          <div className='flex items-center gap-3'>
+            <UserFeedback />
+            <UserMenu />
+          </div>
         </div>
         <DashboardTabs links={navigationLinks} />
       </nav>
@@ -51,16 +62,17 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
             <div className='flex items-center justify-center mb-12'>
               <Logo />
             </div>
-            <h2 className='px-1 mb-1 text-xs font-medium text-muted-foreground'>
+            <h2 className='px-1 mb-1 text-xs font-medium text-muted-foreground uppercase'>
               Features
             </h2>
             <SidebarLinks links={navigationLinks} />
           </div>
           <div className='flex flex-col gap-4'>
+            <UserFeedback />
             <UserMenu />
           </div>
         </aside>
-        <section className='w-full pt-4 lg:pt-8 px-4 md:px-16 lg:px-20 2xl:px-48 bg-background-2 dark:bg-background h-full lg:overflow-y-auto'>
+        <section className='w-full pt-4 lg:pt-8 px-4 md:px-16 lg:px-20 2xl:px-40 bg-background-2 dark:bg-background h-full lg:overflow-y-auto'>
           {children}
         </section>
       </div>

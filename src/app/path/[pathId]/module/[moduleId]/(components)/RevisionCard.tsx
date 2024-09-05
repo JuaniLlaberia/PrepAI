@@ -11,6 +11,7 @@ import Card from './Card';
 import { IRevisionActivity } from '@/db/models/Activity';
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 type RevisionCardType = {
   revisionActivity: IRevisionActivity;
@@ -26,7 +27,7 @@ const RevisionCard = ({ revisionActivity, skipActivity }: RevisionCardType) => {
       title={title}
       type={type}
       completed={completed}
-      comment='Revision • References'
+      comment='References'
       menuContent={
         !completed ? (
           <DropdownMenuItem onClick={() => skipActivity(String(_id))}>
@@ -35,16 +36,16 @@ const RevisionCard = ({ revisionActivity, skipActivity }: RevisionCardType) => {
           </DropdownMenuItem>
         ) : null
       }
-      icon={
-        <HiOutlineArrowTopRightOnSquare className='size-5' strokeWidth={1.5} />
-      }
       actionButton={
         <Link
           href={`${pathname}/revision`}
-          className={buttonVariants({
-            size: 'sm',
-            variant: completed ? 'secondary' : 'default',
-          })}
+          className={cn(
+            buttonVariants({
+              size: 'sm',
+              variant: completed ? 'secondary' : 'default',
+            }),
+            'min-w-[150px]'
+          )}
         >
           {completed ? 'Review activity' : 'Go to references'}
         </Link>

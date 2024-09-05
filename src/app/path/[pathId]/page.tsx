@@ -33,20 +33,20 @@ const PathPage = async ({
       {path.completed ? <ConfettiComponent /> : null}
       <PageHeader link='/dashboard/paths' />
       <div className='flex flex-col items-center mt-2'>
-        <section className='w-full max-w-[800px] overflow-x-hidden pb-3'>
+        <section className='w-full max-w-[700px] overflow-x-hidden pb-3'>
           <div>
-            <h1 className='text-xl font-medium mb-2 xl:text-2xl'>
-              {jobPosition} path
-            </h1>
-            <div className='flex gap-2'>
-              <Badge text={`${jobExperience} level`} color='purple' />
-              {completed ? (
-                <Badge text='Completed' color='green' />
-              ) : (
-                <Badge text='In progress' color='orange' />
-              )}
-            </div>
-            <div className='mt-6 flex flex-col bg-background-2 rounded-xl p-4 border-[1px] border-b-[3.5px] border-[#ebebeb] dark:border-accent'>
+            <div className='flex flex-col bg-background-2 rounded-xl p-4 border-[1px] border-b-[3.5px] border-[#ebebeb] dark:border-accent'>
+              <h1 className='text-xl font-medium mb-2 xl:text-2xl'>
+                {jobPosition} path
+              </h1>
+              <div className='flex gap-2 mb-6'>
+                <Badge text={`${jobExperience} level`} color='purple' />
+                {completed ? (
+                  <Badge text='Completed' color='green' />
+                ) : (
+                  <Badge text='In progress' color='orange' />
+                )}
+              </div>
               <h2 className='text-base xl:text-lg font-semibold mb-1'>
                 Your progress
               </h2>
@@ -68,7 +68,7 @@ const PathPage = async ({
             <h2 className='mb-2 text-sm lg:text-base xl:text-lg font-semibold'>
               Stages
             </h2>
-            <ul className='grid grid-cols-1 lg:grid-cols-2 gap-3'>
+            <ul className='grid grid-cols-1 gap-3'>
               {modules.map(
                 (
                   {

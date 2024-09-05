@@ -1,8 +1,10 @@
 import mongoose, { Document, Model, ObjectId } from 'mongoose';
+import { DifficultyEnum, ExamTypeEnum } from '@/lib/enum';
 
 export interface IExam {
   subject: string;
-  difficulty: 'easy' | 'medium' | 'hard';
+  difficulty: DifficultyEnum;
+  examType: ExamTypeEnum;
   passed: boolean;
   taken: boolean;
   pinned: boolean;
@@ -19,7 +21,6 @@ export interface IExam {
 
 export interface IExamDocument extends IExam, Document {
   createdAt: Date;
-  updatedAt: Date;
 }
 
 const examSchema = new mongoose.Schema<IExamDocument>(
@@ -35,6 +36,11 @@ const examSchema = new mongoose.Schema<IExamDocument>(
     },
     taken: { type: Boolean, default: false },
     passed: { type: Boolean, default: false },
+    examType: {
+      type: String,
+      required: true,
+      enum: ['multiple-choice', 'true-false'],
+    },
     pinned: { type: Boolean },
     //userId for interviews created by an user
     userId: { type: mongoose.Schema.ObjectId, ref: 'User' },
@@ -53,7 +59,10 @@ const examSchema = new mongoose.Schema<IExamDocument>(
       },
     ],
   },
-  { timestamps: true }
+  {
+    timestamps: { createdAt: true, updatedAt: false },
+    versionKey: false,
+  }
 );
 
 examSchema.index({ userId: 1 });

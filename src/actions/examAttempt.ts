@@ -9,7 +9,7 @@ import {
   updateExamAttempt,
 } from '@/access-data/examAttempts';
 import { updateExamAttemptFromModule } from '@/access-data/modules';
-import { test } from '@/gemini/functions';
+import { generateAnswersExplanationWithGemini } from '@/gemini/functions';
 
 export const createExamAttemptAction = authenticatedAction
   .createServerAction()
@@ -42,7 +42,9 @@ export const updateExamAttemptAction = authenticatedAction
     const passed = score > data.answers?.length! - score;
     const time = data.time;
 
-    const answers = await test({ data: data.answers });
+    const answers = await generateAnswersExplanationWithGemini({
+      data: data.answers,
+    });
 
     if (!moduleId)
       await updateExamAttempt({

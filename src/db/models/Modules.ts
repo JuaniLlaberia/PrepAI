@@ -23,7 +23,6 @@ export interface IModule {
 
 export interface IModuleDocument extends IModule, Document {
   createdAt: Date;
-  updatedAt: Date;
 }
 
 const moduleSchema = new mongoose.Schema<IModuleDocument>(
@@ -60,7 +59,10 @@ const moduleSchema = new mongoose.Schema<IModuleDocument>(
       default: 0,
     },
   },
-  { timestamps: true }
+  {
+    timestamps: { createdAt: true, updatedAt: false },
+    versionKey: false,
+  }
 );
 
 moduleSchema.index({ pathId: 1 });

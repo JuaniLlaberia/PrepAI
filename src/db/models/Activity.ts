@@ -1,12 +1,5 @@
 import mongoose, { ObjectId } from 'mongoose';
-import { DifficultyEnum, ExamTypeEnum } from '@/lib/validators';
-
-export enum ActivityTypeEnum {
-  REVISION = 'revision',
-  EXAM = 'exam',
-  PROJECT = 'project',
-  INTERVIEW = 'interview',
-}
+import { ActivityTypeEnum, DifficultyEnum, ExamTypeEnum } from '@/lib/enum';
 
 export interface IActivity {
   _id: string | ObjectId;
@@ -44,7 +37,6 @@ export interface IInterviewActivity extends IActivity {
 
 const baseOptions = {
   discriminatorKey: 'type',
-  // _id: false,
 };
 
 const activitySchema = new mongoose.Schema<IActivity>(

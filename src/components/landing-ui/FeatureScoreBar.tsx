@@ -20,7 +20,7 @@ export function FeatureScoreBar() {
 
   return (
     <AnimatedCircularProgressBar
-      className='absolute right-6 top-8 origin-top transition-all duration-300 ease-out [mask-image:linear-gradient(to_top,transparent_40%,#000_100%)] group-hover:scale-105'
+      className='transition-all duration-300 ease-out [mask-image:linear-gradient(to_top,transparent_40%,#000_100%)] group-hover:scale-105'
       max={100}
       min={0}
       value={value}

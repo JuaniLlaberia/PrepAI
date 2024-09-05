@@ -4,16 +4,16 @@ import Link from 'next/link';
 import { HiMiniArrowLongRight } from 'react-icons/hi2';
 import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs';
 
+import Logo from '../Logo';
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '../ui/button';
-import Logo from '../Logo';
 import { Skeleton } from '../ui/skeleton';
 
 const Navbar = () => {
   const { isAuthenticated: isAuth, isLoading } = useKindeBrowserClient();
 
   return (
-    <nav className='fixed top-0 left-0 flex items-center justify-between w-full h-16 bg-background border-b border-border px-4 md:px-16 lg:px-20 2xl:px-80 z-[1000]'>
+    <nav className='fixed top-0 left-0 flex items-center justify-between w-full h-16 bg-background border-b border-border px-4 md:px-20 lg:px:40 2xl:px-80 z-[1000]'>
       <Logo />
       <div className='flex items-center gap-3'>
         {!isLoading ? (

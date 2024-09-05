@@ -17,7 +17,6 @@ export interface IInterviewAttempt {
 
 export interface IInterviewAttemptDocument extends IInterviewAttempt, Document {
   createdAt: Date;
-  updatedAt: Date;
 }
 
 const interviewAttemptSchema = new mongoose.Schema<IInterviewAttemptDocument>(
@@ -46,7 +45,10 @@ const interviewAttemptSchema = new mongoose.Schema<IInterviewAttemptDocument>(
     score: Number,
     passed: Boolean,
   },
-  { timestamps: true }
+  {
+    timestamps: { createdAt: true, updatedAt: false },
+    versionKey: false,
+  }
 );
 
 interviewAttemptSchema.index({ interviewId: 1 });

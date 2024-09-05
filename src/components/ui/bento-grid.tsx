@@ -1,7 +1,4 @@
-import { ReactNode } from 'react';
-import { HiOutlineArrowRight } from 'react-icons/hi2';
-
-import { Button } from '@/components/ui/button';
+import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 
 const BentoGrid = ({
@@ -26,51 +23,43 @@ const BentoGrid = ({
 const BentoCard = ({
   name,
   className,
-  background = <div></div>,
+  background,
   Icon,
   description,
-  href,
-  cta,
+  small,
 }: {
   name: string;
   className: string;
   background?: ReactNode;
   Icon: any;
   description: string;
-  href: string;
-  cta: string;
+  small?: boolean;
 }) => (
   <div
     key={name}
     className={cn(
       'group relative col-span-3 flex flex-col justify-between overflow-hidden rounded-xl',
-      'bg-white [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)]',
+      'bg-white [box-shadow:0_0_0_1px_rgba(0,0,0,.06),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)]',
       'dark:bg-background dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]',
+      'hover:scale-[101%] hover:[box-shadow:0_0_0_1px_rgba(0,0,0,.06),0_2px_4px_rgba(0,0,0,.07),0_12px_24px_rgba(0,0,0,.07)] transition-all',
       className
     )}
   >
-    <div>{background}</div>
-    <div className='pointer-events-none z-10 flex transform-gpu flex-col gap-1 p-6 transition-all duration-300 group-hover:-translate-y-10'>
-      <Icon className='h-12 w-12 origin-left transform-gpu text-neutral-700 transition-all duration-300 ease-in-out group-hover:scale-75' />
-      <h3 className='text-xl font-medium text-neutral-700 dark:text-neutral-300'>
-        {name}
-      </h3>
-      <p className='max-w-lg text-neutral-400'>{description}</p>
+    <div className='flex flex-col py-5'>
+      <div
+        className={cn(
+          'flex flex-col px-6',
+          !small ? 'items-center lg:items-start' : 'items-center'
+        )}
+      >
+        <div className='border border-border rounded-lg p-2 bg-background-2 z-40'>
+          <Icon className='h-7 w-7 text-muted-foreground' />
+        </div>
+        <h3 className='text-lg font-medium mt-3'>{name}</h3>
+        <p className='text-sm text-muted-foreground'>{description}</p>
+      </div>
+      <div className='flex justify-center mt-8'>{background}</div>
     </div>
-
-    <div
-      className={cn(
-        'pointer-events-none absolute bottom-0 flex w-full translate-y-10 transform-gpu flex-row items-center p-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100'
-      )}
-    >
-      <Button variant='ghost' asChild size='sm' className='pointer-events-auto'>
-        <a href={href}>
-          {cta}
-          <HiOutlineArrowRight className='ml-2 h-4 w-4' />
-        </a>
-      </Button>
-    </div>
-    <div className='pointer-events-none absolute inset-0 transform-gpu transition-all duration-300 group-hover:bg-black/[.03] group-hover:dark:bg-neutral-800/10' />
   </div>
 );
 

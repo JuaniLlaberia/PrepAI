@@ -12,7 +12,6 @@ export interface IExamAttempt {
 
 export interface IExamAttemptDocument extends IExamAttempt, Document {
   createdAt: Date;
-  updatedAt: Date;
 }
 
 const examAttemptSchema = new mongoose.Schema<IExamAttemptDocument>(
@@ -38,7 +37,10 @@ const examAttemptSchema = new mongoose.Schema<IExamAttemptDocument>(
       },
     ],
   },
-  { timestamps: true }
+  {
+    timestamps: { createdAt: true, updatedAt: false },
+    versionKey: false,
+  }
 );
 
 examAttemptSchema.index({ examId: 1 });

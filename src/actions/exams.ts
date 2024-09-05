@@ -5,8 +5,8 @@ import { revalidatePath } from 'next/cache';
 
 import { generateExamWithGemini } from '@/gemini/functions';
 import { authenticatedAction } from '@/lib/safe-actions';
-import { DifficultyEnum, ExamTypeEnum } from '@/lib/validators';
 import { createExam, deleteExam, updateExam } from '@/access-data/exams';
+import { DifficultyEnum, ExamTypeEnum } from '@/lib/enum';
 
 export const createExamAction = authenticatedAction
   .createServerAction()
@@ -26,7 +26,7 @@ export const createExamAction = authenticatedAction
       });
 
       const { id } = await createExam({
-        exam: { userId, subject, difficulty, questions },
+        exam: { userId, subject, difficulty, questions, examType: type },
       });
 
       revalidatePath('/dashboard/exams');
